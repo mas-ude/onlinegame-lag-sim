@@ -29,6 +29,7 @@ for i=1:par.N
     W(i,3)=displayTickR-arrivalAtClient;
 
     F(i)=displayTickR;
+    
 end
 
 res.y=F-A;
