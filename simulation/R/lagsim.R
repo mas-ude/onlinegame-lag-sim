@@ -16,6 +16,8 @@ library(scales) # for muted()
 library(latticeExtra) # for cloud and 3dbars
 library(parallel) # for clusterMap
 
+
+##################################################################################
 ## parameters
 
 net.delay.mean <- 20         # one-way network delay (ms)
@@ -30,15 +32,18 @@ client.framerates <- sort(rep(seq(10,200,10),20))
 client.input.rate   <- 20    # user input / sec
 client.input.events <- 1000 # number of simulated user inputs
 
+sim.rounds <- 1000
+
 
 args <- list(net.delay.mean = net.delay.mean, net.delay.sd = net.delay.sd, 
              server.delay.mean = server.delay.mean, server.delay.sd = server.delay.sd, 
              client.input.rate = client.input.rate, client.input.events = client.input.events)
 
+
+##################################################################################
 ## main sim function definition
 lagsim <- function(client.framerate, server.tickrate, args){
   ## init sim
-  
   net.delay.mean      <- args$net.delay.mean
   net.delay.sd        <- args$net.delay.sd
   server.delay.mean   <- args$server.delay.mean
@@ -61,6 +66,7 @@ lagsim <- function(client.framerate, server.tickrate, args){
   server.delay   <- pmax(0, rnorm(client.input.events, mean = server.delay.mean, sd = server.delay.sd))        # (ms) processing delay
   
   
+  ##################################################################################
   ## main sim loop
   for(i in 1:client.input.events){
     
@@ -84,15 +90,24 @@ lagsim <- function(client.framerate, server.tickrate, args){
 }
 
 
+##################################################################################
 ## execute the sim function for our parameter vectors
 # parallel execution with clusterMap
 
+df <- data.frame()
+
 cluster <- makeCluster(detectCores())
-results <- clusterMap(cluster, lagsim, client.framerate = client.framerates, server.tickrate = server.tickrates, MoreArgs = list(args))
-results <- do.call('rbind', results)
+
+for(i in sim.rounds){
+  results <- clusterMap(cluster, lagsim, client.framerate = client.framerates, server.tickrate = server.tickrates, MoreArgs = list(args))
+  results <- do.call('rbind', results)
+  df <- rbind(df, results)
+}
+
 stopCluster(cluster)
+results <- df
 
-
+##################################################################################
 ## plotting
 # ggplots
 ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
