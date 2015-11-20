@@ -13,6 +13,7 @@
 
 library(ggplot2)
 library(scales) # for muted()
+library(latticeExtra)
 
 ## parameters
 
@@ -76,5 +77,12 @@ for (server.tickrate in server.tickrates){
 
 ## plotting
 ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
-ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"))
+ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
 
+
+## lattice.extra 3d bar plot
+results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
+rot <- diag(4)
+rot[1,1] <- -1
+rot[2,2] <- -1
+cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1))
