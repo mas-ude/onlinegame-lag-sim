@@ -53,28 +53,32 @@ lagsim <- function(client.framerate, server.tickrate, args){
   client.input.rate   <- args$client.input.rate
   client.input.events <- args$client.input.events
   
-  server.tickrate.timedelta  <- 1 / server.tickrate  * 1e3 # time interval between game ticks (ms) (ts)
-  client.framerate.timedelta <- 1 / client.framerate * 1e3 # time interval between frame ticks (ms) (tr)
+  server.tickrate.timedelta  <- 1 / server.tickrate  * 1000 # time interval between game ticks (ms) (ts)
+  client.framerate.timedelta <- 1 / client.framerate * 1000 # time interval between frame ticks (ms) (tr)
   
   ## first ticks are uniformly distributed in intervals
   server.tickrate.firsttick  <- runif(1) * server.tickrate.timedelta  # (ms)
   client.framerate.firsttick <- runif(1) * client.framerate.timedelta # (ms)
   
   ## derived variables
-  arrival.time   <- cumsum(rexp(client.input.events, rate = client.input.rate) * 1e3) # arrivals time points (ms)
-  finish.time    <- cumsum(rexp(client.input.events, rate = client.input.rate))       # finish time points (ms)
-  net.delay.up   <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd)) # (ms) network delay up
-  net.delay.down <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd)) # (ms) network delay down
-  server.delay   <- pmax(0, rnorm(client.input.events, mean = server.delay.mean, sd = server.delay.sd))        # (ms) processing delay
+  arrival.time   <- cumsum(rexp(client.input.events, rate = client.input.rate) * 1000)                  # arrivals time (in ms)
+  finish.time    <- array(dim = client.input.events)                                                    # initialize array for the complete interaction finish time (in ms)
+  net.delay.up   <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd))       # (ms) network delay up
+  net.delay.down <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd))       # (ms) network delay down
+  server.delay   <- pmax(0, rnorm(client.input.events, mean = server.delay.mean, sd = server.delay.sd)) # (ms) processing delay
   
   
   ##################################################################################
   ## main sim loop
   for(i in 1:client.input.events){
     
-    # waiting for input and processing in next tick
+    # Describes the time, the client sends the input to the server.
+    # At the moment this is the next time the client renders a frame,
+    # but it should be changed to the next command message send interval.
     client.frame.time <- ceiling((arrival.time[i] -  client.framerate.firsttick) / client.framerate.timedelta) * client.framerate.timedelta + client.framerate.firsttick 
-    server.input.arrival.time <- client.frame.time + net.delay.up[1] # uplink
+    
+    # arrival time of the command message at the server 
+    server.input.arrival.time <- client.frame.time + net.delay.up[i] # uplink
     
     # processing input at next game tick
     server.tick.time <- ceiling((server.input.arrival.time - server.tickrate.firsttick) / server.tickrate.timedelta) * server.tickrate.timedelta + server.tickrate.firsttick 
