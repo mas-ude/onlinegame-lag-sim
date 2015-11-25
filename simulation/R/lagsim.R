@@ -26,13 +26,15 @@ net.delay.mean <- 20         # one-way network delay (ms)
 net.delay.sd   <- 5          # owd standard deviation (ms)
 
 # does the server have a delay or do the events just snap to the next update event?
-server.tickrates <- rep(seq(10,200,10),20)
+server.tick.rates <- rep(seq(10,200,10),20)
 server.delay.mean <- 3       # mean game server delay (ms)
 server.delay.sd   <- 0.1     # mean game server delay (ms)
 
-client.framerates <- sort(rep(seq(10,200,10),20))
+client.frame.rates <- sort(rep(seq(10,200,10),20))
 client.input.rate   <- 20    # user input / sec
 client.input.events <- 10000 # number of simulated user inputs
+
+# client.command.rate <-     # for this sim defined as the same value as the server's tickrate
 
 sim.rounds <- 1000
 
@@ -44,7 +46,7 @@ args <- list(net.delay.mean = net.delay.mean, net.delay.sd = net.delay.sd,
 
 ##################################################################################
 ## main sim function definition
-lagsim <- function(client.framerate, server.tickrate, args){
+lagsim <- function(client.frame.rate, server.tick.rate, args){
   ## init sim
   net.delay.mean      <- args$net.delay.mean
   net.delay.sd        <- args$net.delay.sd
@@ -53,12 +55,16 @@ lagsim <- function(client.framerate, server.tickrate, args){
   client.input.rate   <- args$client.input.rate
   client.input.events <- args$client.input.events
   
-  server.tickrate.timedelta  <- 1 / server.tickrate  * 1000 # time interval between game ticks (ms) (ts)
-  client.framerate.timedelta <- 1 / client.framerate * 1000 # time interval between frame ticks (ms) (tr)
+  client.command.rate <- server.tick.rate
+  
+  server.tick.timedelta  <- 1 / server.tick.rate  * 1000  # time interval between game ticks (ms)
+  client.frame.timedelta <- 1 / client.frame.rate * 1000  # time interval between frames (ms)
+  client.command.timedelta <- 1 / client.command.rate * 1000 # time interval between command messages (ms)
   
   ## first ticks are uniformly distributed in intervals
-  server.tickrate.firsttick  <- runif(1) * server.tickrate.timedelta  # (ms)
-  client.framerate.firsttick <- runif(1) * client.framerate.timedelta # (ms)
+  server.tick.firsttick  <- runif(1) * server.tick.timedelta  # (ms)
+  client.frame.firsttick <- runif(1) * client.frame.timedelta # (ms)
+  client.command.firstmessage <- runif(1) * client.command.timedelta
   
   ## derived variables
   arrival.time   <- cumsum(rexp(client.input.events, rate = client.input.rate) * 1000)                  # arrivals time (in ms)
@@ -76,14 +82,15 @@ lagsim <- function(client.framerate, server.tickrate, args){
     # Describes the time, the client sends the input to the server.
     # At the moment this is the next time the client renders a frame,
     # TODO: but it should be changed to the next command message send interval.
-    client.frame.time <- ceiling((arrival.time[i] -  client.framerate.firsttick) / client.framerate.timedelta) * client.framerate.timedelta + client.framerate.firsttick 
+    # client.frame.time <- ceiling((arrival.time[i] -  client.frame.firsttick) / client.frame.timedelta) * client.frame.timedelta + client.frame.firsttick
+    client.command.time <- ceiling((arrival.time[i] -  client.command.firstmessage) / client.command.timedelta) * client.command.timedelta + client.command.firstmessage
     
     # arrival time of the command message at the server
-    server.input.arrival.time <- client.frame.time + net.delay.up[i]
+    server.input.arrival.time <- client.command.time + net.delay.up[i]
     
     # Calculates the next time the server 'ticks' after the command has arrived.
     # Determined by the tickrate and the time of the first tick
-    server.tick.time <- ceiling((server.input.arrival.time - server.tickrate.firsttick) / server.tickrate.timedelta) * server.tickrate.timedelta + server.tickrate.firsttick 
+    server.tick.time <- ceiling((server.input.arrival.time - server.tick.firsttick) / server.tick.timedelta) * server.tick.timedelta + server.tick.firsttick 
     
     # time the processing of the game state after the server 'ticks' is completed
     server.tick.processing.end.time <- server.tick.time + server.delay[i]
@@ -93,7 +100,7 @@ lagsim <- function(client.framerate, server.tickrate, args){
     
     # The update needs to be available before the frame is being processed/renderen
     # We therefore take the time of the frame *after* the next (i + 1) to accommodate this.
-    client.finish.frame.time <- (ceiling((client.update.arrival.time - client.framerate.firsttick) / client.framerate.timedelta) + 1) * client.framerate.timedelta + client.framerate.firsttick 
+    client.finish.frame.time <- (ceiling((client.update.arrival.time - client.frame.firsttick) / client.frame.timedelta) + 1) * client.frame.timedelta + client.frame.firsttick 
     
     # TODO: Add constant screen delay here
     
@@ -105,7 +112,7 @@ lagsim <- function(client.framerate, server.tickrate, args){
   e2e.lag <- finish.time - arrival.time
   
   # Combine all data into a data.frame and return it
-  results <- data.frame(e2e.lag = e2e.lag, framerate = as.factor(client.framerate), tickrate = as.factor(server.tickrate))
+  results <- data.frame(e2e.lag = e2e.lag, framerate = as.factor(client.frame.rate), tickrate = as.factor(server.tick.rate))
   return(results)
 }
 
@@ -118,7 +125,7 @@ cluster <- makeCluster(detectCores())
 registerDoParallel(cores = 2)
 
 results <- foreach(sim.rounds, .combine = rbind, .packages='parallel') %dopar% {
-  results <- clusterMap(cluster, lagsim, client.framerate = client.framerates, server.tickrate = server.tickrates, MoreArgs = list(args))
+  results <- clusterMap(cluster, lagsim, client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, MoreArgs = list(args))
   do.call('rbind', results)
 }
 
