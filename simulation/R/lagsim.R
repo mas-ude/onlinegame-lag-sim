@@ -15,6 +15,8 @@ library(ggplot2)
 library(scales) # for muted()
 library(latticeExtra) # for cloud and 3dbars
 library(parallel) # for clusterMap
+library(foreach)
+library(doParallel) # for foreach %dopar%
 
 
 ##################################################################################
@@ -30,7 +32,7 @@ server.delay.sd   <- 0.1     # mean game server delay (ms)
 
 client.framerates <- sort(rep(seq(10,200,10),20))
 client.input.rate   <- 20    # user input / sec
-client.input.events <- 1000 # number of simulated user inputs
+client.input.events <- 10000 # number of simulated user inputs
 
 sim.rounds <- 1000
 
@@ -97,11 +99,11 @@ lagsim <- function(client.framerate, server.tickrate, args){
 df <- data.frame()
 
 cluster <- makeCluster(detectCores())
+registerDoParallel(cores = 2)
 
-for(i in sim.rounds){
+df <- foreach(sim.rounds, .combine = rbind, .packages='parallel') %dopar% {
   results <- clusterMap(cluster, lagsim, client.framerate = client.framerates, server.tickrate = server.tickrates, MoreArgs = list(args))
-  results <- do.call('rbind', results)
-  df <- rbind(df, results)
+  do.call('rbind', results)
 }
 
 stopCluster(cluster)
@@ -110,7 +112,7 @@ results <- df
 ##################################################################################
 ## plotting
 # ggplots
-ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
+# ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
 ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
 
 # lattice.extra 3d bar plot
