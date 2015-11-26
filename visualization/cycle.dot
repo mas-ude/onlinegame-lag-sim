@@ -1,0 +1,47 @@
+digraph G {
+  // Modelled after http://www.graphviz.org/content/cluster
+  // Thanks guys!
+
+  subgraph cluster_human {
+    label = "Human";
+    color = blue;
+    branes -> hands;
+    eyes -> branes;
+    ears -> branes;
+    intrinsic_ideas -> branes;
+  }
+
+  subgraph cluster_streaming_client {
+    label = "Streaming Client";
+    color = orange;
+    io_devices -> local_input;
+    decode -> display;
+    decode -> audio_output;
+  }
+
+  subgraph cluster_game_client {
+    label = "Game Client";
+    color = red;
+    client_input -> client_state -> render -> encode;
+  }
+
+  subgraph cluster_game_server {
+    label = "Game Server";
+    color = green;
+    server_input -> global_state;
+  }
+
+  hands -> io_devices;
+  local_input -> client_input -> server_input;
+
+  global_state -> client_state;
+
+  other_clients -> server_input;
+  global_state -> other_clients;
+
+  encode -> decode;
+
+  display -> eyes;
+  audio_output -> ears;
+}
+
