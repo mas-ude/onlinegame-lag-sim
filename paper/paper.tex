@@ -4,16 +4,16 @@
 \usepackage{hyperxmp}
 
 \usepackage{ifluatex}
-  \ifluatex
-    \usepackage{fontspec}
-	\usepackage{polyglossia} % babel replacement for use with fontspec
-	\setdefaultlanguage[variant=american]{english}
-	\selectlanguage[variant=american]{english}
-  \else
-    \usepackage[utf8]{inputenc}
-    \usepackage[T1]{fontenc}
-	\usepackage[american]{babel}
-  \fi
+\ifluatex
+  \usepackage{fontspec}
+  \usepackage{polyglossia} % babel replacement for use with fontspec
+  \setdefaultlanguage[variant=american]{english}
+  \selectlanguage[variant=american]{english}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage[american]{babel}
+\fi
 
 \usepackage[acronym, nomain, nowarn]{glossaries}
 \loadglsentries{acronyms}
@@ -32,11 +32,10 @@
 \addbibresource{literature.bib}
 \usepackage[inline]{enumitem}
 
-\hypersetup{
-pdftitle = {Understanding Online Video Games in Order to Improve QoS Measurements},
-pdfauthor = {Florian Metzger, Tobias Hoßfeld}
-}
-
+%\hypersetup{
+%pdftitle = {Understanding Online Video Games in Order to Improve QoS Measurements},
+%pdfauthor = {Florian Metzger, Tobias Hoßfeld}
+%}
 
 \makeatletter
 \newcommand{\removelatexerror}{\let\@latex@error\@gobble}
@@ -47,22 +46,37 @@ pdfauthor = {Florian Metzger, Tobias Hoßfeld}
 %\title{Things to Keep in Mind When Measuring Online or Streamed Video Games}
 %\title{QoS Measurement Approaches for Online Video Games from Basic Game Mechanics}
 %\title{Best Practices for QoS Measurements of Online Video Games}
-\title{Understanding Online Video Games in Order to Improve QoS Measurements}
+\title{A Comprehensive End-to-End Lag Model for Online and Cloud-based Video Games}
 
-\author{\IEEEauthorblockN{Florian Metzger\IEEEauthorrefmark{1}, and Tobias Hoßfeld\IEEEauthorrefmark{1}}
+\author{\IEEEauthorblockN{Florian Metzger\IEEEauthorrefmark{1}, Tobias Hoßfeld\IEEEauthorrefmark{1}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}
 Chair of Modeling of Adaptive Systems\\
 University of Duisburg-Essen\\
 Essen, Germany\\
-\{florian.metzger,tobias.hossfeld\}@uni-due.de}}
+\{florian.metzger,tobias.hossfeld\}@uni-due.de}
+\and
+\IEEEauthorblockN{Albert Rafetseder}
+\IEEEauthorblockA{\IEEEauthorrefmark{2}
+Datenkugerl\\
+Austria\\
+albert.rafetseder@univie.ac.at}
+% \and
+% \IEEEauthorblockN{Christian Schwartz}
+% \IEEEauthorblockA{\IEEEauthorrefmark{2}
+% UoWü\\
+% Wü, G\\
+% cs@uowü.d}
+}
 
 \maketitle
+
+Note: Networking Conference, 9 pages limit!
 
 \input{abstract}
 \input{introduction}
 \input{relatedwork}
-\input{gamemechanics}
-\input{measurements}
+\input{model}
+\input{simulation}
 \input{conclusion}
 
 \printbibliography 

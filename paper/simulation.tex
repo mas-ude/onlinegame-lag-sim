@@ -3,6 +3,26 @@
 \section{Conducting Measurements}
 \label{sec:measurementgoals}
 
+
+% ripped from previous game mechanics section
+% basis for new simulation section
+\begin{figure}[!t]
+	\centering
+	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
+	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/matlab-framerate-lag.pdf}
+	\caption{\acrshort{ECDF} of a simulated online video game interaction and the resulting end-to-end lag depending on the game's frame rate. One-way network delay followed a Gaussian distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$. The server's tickrate was set to \SI{60}{\hertz}.}
+\label{fig:e2e-delay-sim}
+\end{figure}
+
+
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
+	\caption{Process model of TODO.}
+\label{fig:3dbars-framerate-tickrate-lag}
+\end{figure}
+
 Before proposing actual measurement methods, three equally important aspects relating to any game measurement approch are discussed: the metrics to evaluate, the parameters to use, as well as the selection of games. 
 
 Finding fitting objective \gls{QoE} metrics is strongly game-dependent. They need to reflect the game's mechanics in a meaningful manner. But this is beyond the scope of this paper, which will only concern itself with game-independent metrics, of which three are considered here: The framerate, the frame \gls{IAT}, and the end-to-end lag (or parts thereof as some measurement methods might not be able to record the full lag).
@@ -40,7 +60,7 @@ With these metrics, test parameters, and categorizations in mind, one can now at
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=1.0\columnwidth]{images/e2e-lag.pdf}
+    \includegraphics[width=1.0\columnwidth]{../models/e2e-lag.pdf}
     \caption{Location of the three measurement approaches to capture end-to-end latency inside a usual online video game lag chain.}
 \label{fig:measurement-methods}
 \end{figure}

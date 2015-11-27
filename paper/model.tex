@@ -1,7 +1,24 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Fundamental Game Properties}
-\label{sec:gamemechanics}
+\section{An End-to-End Lag Model}
+\label{sec:model}
+
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=1.0\columnwidth]{../models/cycle.pdf}
+	\caption{Interaction of TODO.}
+\label{fig:component-model}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=1.0\columnwidth]{../models/e2e-lag-model.pdf}
+	\caption{Process model of TODO.}
+\label{fig:queuing-model}
+\end{figure}
+
+
 
 This section will focus on describing the main game loop and the framerate and both their implications for properly measuring video games. On a technical level these two properties distinguish passively consumed videos and video games the most.
 
@@ -62,7 +79,7 @@ Online video games complicate this update logic a bit. In online games, the clie
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=1.0\columnwidth]{images/game-tick-rate-streamed.pdf}
+	\includegraphics[width=1.0\columnwidth]{../models/game-tick-rate-streamed.pdf}
 	\caption{Interaction of client and server in streamed online games.}
 \label{fig:tickrate-streamed}
 \end{figure}
@@ -77,7 +94,7 @@ It is evident that latency is a critically important factor for online games, fo
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=1.0\columnwidth]{images/tickrate-timeseries.pdf}
+	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
 	\caption{Exemplary time series of an online video game's client-server interaction and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
 \label{fig:tickrate-timeseries}
 \end{figure}
@@ -85,16 +102,6 @@ It is evident that latency is a critically important factor for online games, fo
 To demonstrate the effects of all the involved parameters, a MATLAB-based queuing simulation closely resembling the interactions given in Fig.~\ref{fig:tickrate-timeseries} was set up. With this the influence of any of the lag sources can be easily simulated and the biggest culprits identified. For example, the influence of the framerate on online games becomes evident in Fig.~\ref{fig:e2e-delay-sim}, where increasing the framerate from \SI{15}{\hertz} up to \SI{120}{\hertz} can significantly reduce the game's lag, a result that can also be easily applied to cloud games, where streaming often operates at a lower framerate to conserve bandwidth.
 
 %All in all, if possible, video game measurements should always consider the full \textbf{end-to-end} lag factoring in every possible source of delay but also the presence latency compensation and concealment techniques.
-
-
-\begin{figure}[!t]
-	\centering
-	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
-	\includegraphics[width=1.0\columnwidth]{images/R-gamesim.pdf}
-	\caption{\acrshort{ECDF} of a simulated online video game interaction and the resulting end-to-end lag depending on the game's frame rate. One-way network delay followed a Gaussian distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$. The server's tickrate was set to \SI{60}{\hertz}.}
-\label{fig:e2e-delay-sim}
-\end{figure}
-
 
 
 

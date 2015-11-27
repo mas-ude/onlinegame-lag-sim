@@ -143,4 +143,7 @@ results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="m
 rot <- diag(4)
 rot[1,1] <- -1
 rot[2,2] <- -1
-cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1))
+
+pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
+print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
+dev.off()
