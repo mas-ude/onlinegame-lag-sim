@@ -4,18 +4,21 @@
 ## fixed frame and tickrates
 ## specific exponentially distributed user input rate
 
+## DONE: more than one simulation run per parameter setting
+## DONE partially: don't couple sending the input events to the framerate but instead to the client's command send rate
+#### command rate is still set to the same value as the server's tickrate
+
 ## TODO: make the delay, and input and other distributions exchangeable
-## TODO: don't couple sending the input events to the framerate but instead to the client's command send rate
-## TODO: incorporate the lag on an additonal game streaming path (i.e. simulate cloud gaming)
-## TODO: more than one simulation run per parameter setting
+## TODO: pure cloud gaming e2e simulation variant
 ## TODO: give the option to add more sources of delay to the e2e-lag, 
-##       e.g. display lag, input device lag, video driver pipeline lag, input events that take more than one turn to process, ...
+####     e.g. display lag, input device lag, video driver pipeline lag, input events that take more than one turn to process, ...
+## TODO: aggregate results early (inside the parallel loop) to increase performance and reduce memload
 
 library(ggplot2)
 library(scales) # for muted()
 library(latticeExtra) # for cloud and 3dbars
-library(parallel) # for clusterMap
 library(foreach)
+library(parallel)
 library(doParallel) # for foreach %dopar%
 
 
@@ -156,9 +159,19 @@ results.median.round <- aggregate(e2e.lag ~ framerate + tickrate + round, data =
 results.median.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results.median.round, FUN="mean")
 print(cloud(e2e.lag~framerate+tickrate, results.median.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
 
+
+## SD and coefficient of variation graphs
+results.sd <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="sd")
+print(cloud(e2e.lag ~ framerate+tickrate, results.sd, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
+results.sd$varcoff <- results.sd$e2e.lag / results.mean$e2e.lag
+print(cloud(varcoff ~ framerate+tickrate, results.sd, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
+
+
+
 ## TODO: convert axis from rates to IATs
-# results$frameduration <- as.factor(1000/as.numeric(levels(results$framerate)))
-# results$tickduration <- as.factor(1000/as.numeric(levels(results$tickrate)))
-# results.mean <- aggregate(e2e.lag ~ frameduration + tickduration, data = results, FUN="mean")
-# 
-# print(cloud(e2e.lag~frameduration+tickduration, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
+# broken: just displays one line of results
+results.mean$frameduration <- as.factor(1000/as.numeric(levels(results.mean$framerate)))
+results.mean$tickduration <- as.factor(1000/as.numeric(levels(results.mean$tickrate)))
+#results.mean <- aggregate(e2e.lag ~ frameduration + tickduration, data = results, FUN="mean")
+ 
+print(cloud(e2e.lag~frameduration+tickduration, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
