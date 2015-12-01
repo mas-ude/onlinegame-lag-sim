@@ -32,11 +32,11 @@ server.delay.sd   <- 0.1     # mean game server delay (ms)
 
 client.frame.rates <- sort(rep(seq(10,200,10),20))
 client.input.rate   <- 20    # user input / sec
-client.input.events <- 10000 # number of simulated user inputs
+client.input.events <- 1000 # number of simulated user inputs
 
 # client.command.rate <-     # for this sim defined as the same value as the server's tickrate
 
-sim.rounds <- 1000
+sim.rounds <- 100
 
 
 args <- list(net.delay.mean = net.delay.mean, net.delay.sd = net.delay.sd, 
@@ -54,6 +54,7 @@ lagsim <- function(client.frame.rate, server.tick.rate, args){
   server.delay.sd     <- args$server.delay.sd
   client.input.rate   <- args$client.input.rate
   client.input.events <- args$client.input.events
+  
   
   client.command.rate <- server.tick.rate
   
@@ -121,22 +122,22 @@ lagsim <- function(client.frame.rate, server.tick.rate, args){
 ## execute the sim function for our parameter vectors
 # parallel execution with clusterMap
 
-cluster <- makeCluster(detectCores())
-registerDoParallel(cores = 2)
+registerDoParallel(cores = detectCores())
 
-results <- foreach(sim.rounds, .combine = rbind, .packages='parallel') %dopar% {
-  results <- clusterMap(cluster, lagsim, client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, MoreArgs = list(args))
-  do.call('rbind', results)
+results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
+  results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
+    lagsim(client.frame.rate, server.tick.rate, args)
+  }
+  results$round <- round
+  results
 }
-
-stopCluster(cluster)
 
 
 ##################################################################################
 ## plotting
 # ggplots
 # ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
-ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
+#ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
 
 # lattice.extra 3d bar plot
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
@@ -147,3 +148,17 @@ rot[2,2] <- -1
 pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
 print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
 dev.off()
+
+
+## mean lag of the median lag of each sim round
+# no significant deviation from overall mean
+results.median.round <- aggregate(e2e.lag ~ framerate + tickrate + round, data = results, FUN="median")
+results.median.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results.median.round, FUN="mean")
+print(cloud(e2e.lag~framerate+tickrate, results.median.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
+
+## TODO: convert axis from rates to IATs
+# results$frameduration <- as.factor(1000/as.numeric(levels(results$framerate)))
+# results$tickduration <- as.factor(1000/as.numeric(levels(results$tickrate)))
+# results.mean <- aggregate(e2e.lag ~ frameduration + tickduration, data = results, FUN="mean")
+# 
+# print(cloud(e2e.lag~frameduration+tickduration, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1)))
