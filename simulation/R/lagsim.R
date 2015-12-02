@@ -21,7 +21,6 @@ library(foreach)
 library(parallel)
 library(doParallel) # for foreach %dopar%
 
-
 ##################################################################################
 ## parameters
 
@@ -39,97 +38,53 @@ client.input.events <- 1000  # number of simulated user inputs
 
 # client.command.rate        # for this sim defined as the same value as the server's tickrate
 
-sim.rounds <- 100
-
-
-args <- list(net.delay.mean = net.delay.mean, net.delay.sd = net.delay.sd, 
-             server.delay.mean = server.delay.mean, server.delay.sd = server.delay.sd, 
-             client.input.rate = client.input.rate, client.input.events = client.input.events)
+## extra cloud parameters
+encode.delay <- 10
+decode.delay <- 5
+server.frame.rates <- c(3, 15, 30, 60)
 
 
 ##################################################################################
-## main sim function definition
-lagsim <- function(client.frame.rate, server.tick.rate, args){
-  ## init sim
-  net.delay.mean      <- args$net.delay.mean
-  net.delay.sd        <- args$net.delay.sd
-  server.delay.mean   <- args$server.delay.mean
-  server.delay.sd     <- args$server.delay.sd
-  client.input.rate   <- args$client.input.rate
-  client.input.events <- args$client.input.events
-  
-  
-  client.command.rate <- server.tick.rate
-  
-  server.tick.timedelta  <- 1 / server.tick.rate  * 1000  # time interval between game ticks (ms)
-  client.frame.timedelta <- 1 / client.frame.rate * 1000  # time interval between frames (ms)
-  client.command.timedelta <- 1 / client.command.rate * 1000 # time interval between command messages (ms)
-  
-  ## first ticks are uniformly distributed in intervals
-  server.tick.firsttick  <- runif(1) * server.tick.timedelta  # (ms)
-  client.frame.firsttick <- runif(1) * client.frame.timedelta # (ms)
-  client.command.firstmessage <- runif(1) * client.command.timedelta
-  
-  ## derived variables
-  arrival.time   <- cumsum(rexp(client.input.events, rate = client.input.rate) * 1000)                  # arrivals time (in ms)
-  finish.time    <- array(dim = client.input.events)                                                    # initialize array for the complete interaction finish time (in ms)
-  net.delay.up   <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd))       # (ms) network delay up
-  net.delay.down <- pmax(0, rnorm(client.input.events, mean = net.delay.mean, sd = net.delay.sd))       # (ms) network delay down
-  server.delay   <- pmax(0, rnorm(client.input.events, mean = server.delay.mean, sd = server.delay.sd)) # (ms) processing delay
-  
-  
-  ##################################################################################
-  ## main sim loop
-  # in its current form represents the case of a client-server online videogame
-  for(i in 1:client.input.events){
-    
-    # Describes the time, the client sends the input to the server.
-    # At the moment this is the next time the client renders a frame,
-    # TODO: but it should be changed to the next command message send interval.
-    # client.frame.time <- ceiling((arrival.time[i] -  client.frame.firsttick) / client.frame.timedelta) * client.frame.timedelta + client.frame.firsttick
-    client.command.time <- ceiling((arrival.time[i] -  client.command.firstmessage) / client.command.timedelta) * client.command.timedelta + client.command.firstmessage
-    
-    # arrival time of the command message at the server
-    server.input.arrival.time <- client.command.time + net.delay.up[i]
-    
-    # Calculates the next time the server 'ticks' after the command has arrived.
-    # Determined by the tickrate and the time of the first tick
-    server.tick.time <- ceiling((server.input.arrival.time - server.tick.firsttick) / server.tick.timedelta) * server.tick.timedelta + server.tick.firsttick 
-    
-    # time the processing of the game state after the server 'ticks' is completed
-    server.tick.processing.end.time <- server.tick.time + server.delay[i]
-    
-    # time the update message arrives back at the client
-    client.update.arrival.time <- server.tick.processing.end.time + net.delay.down[i]
-    
-    # The update needs to be available before the frame is being processed/renderen
-    # We therefore take the time of the frame *after* the next (i + 1) to accommodate this.
-    client.finish.frame.time <- (ceiling((client.update.arrival.time - client.frame.firsttick) / client.frame.timedelta) + 1) * client.frame.timedelta + client.frame.firsttick 
-    
-    # TODO: Add constant screen delay here
-    
-    # Write the finish time back into the array
-    finish.time[i] <- client.finish.frame.time
-  }
-  
-  # full end-to-end lag calculates from the difference between start and end time
-  e2e.lag <- finish.time - arrival.time
-  
-  # Combine all data into a data.frame and return it
-  results <- data.frame(e2e.lag = e2e.lag, framerate = as.factor(client.frame.rate), tickrate = as.factor(server.tick.rate))
-  return(results)
-}
+## set the path first if needed or if calling this file manually
+setwd("git/onlinegame-lag-sim/simulation/R/")
+source("onlinegaming-lag.R", chdir = TRUE)
 
 
 ##################################################################################
 ## execute the sim function for our parameter vectors
 # parallel execution with foreach %dopar%
 
+sim.rounds <- 10
+
 registerDoParallel(cores = detectCores())
 
 results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
   results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
-    lagsim(client.frame.rate, server.tick.rate, args)
+    onlinegame.lagsim(client.frame.rate, server.tick.rate, net.delay.mean, net.delay.sd,
+           server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
+  }
+  results$round <- round
+  results
+}
+
+
+
+
+
+##################################################################################
+## execute the sim function for our parameter vectors
+# parallel execution with foreach %dopar%
+
+source("cloudgaming-lag.R", chdir = TRUE)
+
+sim.rounds <- 100
+
+registerDoParallel(cores = detectCores())
+
+results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
+  results <- foreach(server.frame.rate = server.frame.rates, .combine = rbind) %do% {
+    cloudgaming.lagsim(server.frame.rate, encode.delay, decode.delay, net.delay.mean, net.delay.sd,
+                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
   }
   results$round <- round
   results
@@ -162,8 +117,12 @@ labels <- c(10, 30, 60, 120, 144, 200)
 at <- labels / 200 * 20
 
 pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
-print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', zlim=c(0,300),R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
+print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars,
+            col.facet='grey', zlim=c(0,300), R.mat=rot,
+            par.settings = list(axis.line = list(col = "transparent")),
+            scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
 dev.off()
+
 
 ##################################################################################
 ## plotting
