@@ -35,9 +35,9 @@ server.delay.sd   <- 0.1     # mean game server delay (ms)
 
 client.frame.rates <- sort(rep(seq(10,200,10),20))
 client.input.rate   <- 20    # user input / sec
-client.input.events <- 1000 # number of simulated user inputs
+client.input.events <- 1000  # number of simulated user inputs
 
-# client.command.rate <-     # for this sim defined as the same value as the server's tickrate
+# client.command.rate        # for this sim defined as the same value as the server's tickrate
 
 sim.rounds <- 100
 
@@ -123,7 +123,7 @@ lagsim <- function(client.frame.rate, server.tick.rate, args){
 
 ##################################################################################
 ## execute the sim function for our parameter vectors
-# parallel execution with clusterMap
+# parallel execution with foreach %dopar%
 
 registerDoParallel(cores = detectCores())
 
@@ -135,6 +135,33 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
   results
 }
 
+
+
+##################################################################################
+## alternate version of the main loop that attempts to aggregate early
+## in order to increase execution speed
+# TODO: Use data.table functionality instead of aggregate to speed things up
+# library(data.table)
+registerDoParallel(cores = detectCores())
+
+sim.rounds <- 1000
+
+results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
+  results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
+    lagsim(client.frame.rate, server.tick.rate, args)
+  }
+  results <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="median")
+  results$round <- round
+  results
+}
+
+results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
+pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
+at <- seq(1, 20, length.out = 6)
+labels <- c(10, 30, 60, 120, 144, 200)
+at <- labels / 200 * 20
+print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "black")), scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
+dev.off()
 
 ##################################################################################
 ## plotting
