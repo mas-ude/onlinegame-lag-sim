@@ -21,8 +21,12 @@ The second topic covers the game's framerate, its interaction with the monitor r
 Derived from these properties are suggestions for three different measurement approaches that are suited to capture the full or parts of the end-to-end lag experienced by players. The explanations and best practices given in this paper are a novel input to the scientific literature and have been derived, e.g., from mechanisms described in the gaming press but also from the first author's personal experiences in online and multiplayer video games.
 
 ~\newline
-This paper is structured as follows. Section~\ref{sec:relatedwork} surveys the past literature on evaluating online video games, both in terms of \gls{QoS} and \gls{QoE}. Section~\ref{sec:gamemechanics} then discusses the two mentioned game engine properties and related effects. Section~\ref{sec:measurementapproaches} introduces the three conceptual approaches to measuring video games, including a discussion of suitable evaluation metrics, such as the game's latency or the \gls{IAT} of game frames, and adequate parametrization ranges. Afterwards, Section~\ref{sec:conclusion} concludes the paper.
-
+This paper is structured as follows.
+First, in Section~\ref{sec:big-picture} we give an introduction to video game engine terminology and properties, which is used to provide a big-picture of game components relevant to the scientific study of video game technologies.
+In Section~\ref{sec:relatedwork} we survey prior work on \gls{QoS} and \gls{QoE} for video games.
+Then, in Section~\ref{sec:latency} we propose a model to evaluate a major \gls{QoS} factor for video games, end to end latency.
+Based on this model, we describe the implemented \gls{DES} and perform a parameter study in order to identify main influence factors for the end to end latency in Section~\ref{sec:measurementgoals}.
+Finally, in Section~\ref{sec:conclusion} we discuss our key findings and conclude this paper.
 
 %With the recent successes of competitive video games, the commercial failure of many cloud gaming services, and the rise of local game streaming offerings it might also be time to critically investigate methods used evaluate those video games. as the scientific view on these matters does not seem to be very aligned with actual mechanics and events.
 
