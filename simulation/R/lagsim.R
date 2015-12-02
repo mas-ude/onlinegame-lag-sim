@@ -156,11 +156,13 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
 }
 
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
-pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
+
 at <- seq(1, 20, length.out = 6)
 labels <- c(10, 30, 60, 120, 144, 200)
 at <- labels / 200 * 20
-print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', R.mat=rot, par.settings = list(axis.line = list(col = "black")), scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
+
+pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
+print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars, col.facet='grey', zlim=c(0,300),R.mat=rot, par.settings = list(axis.line = list(col = "transparent")), scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
 dev.off()
 
 ##################################################################################
