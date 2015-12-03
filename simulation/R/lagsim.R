@@ -41,7 +41,7 @@ client.input.events <- 1000  # number of simulated user inputs
 ## extra cloud parameters
 encode.delay <- 10
 decode.delay <- 5
-server.frame.rates <- c(3, 15, 30, 60)
+server.frame.rates <- c(5, 10, 15, 30, 60, 120)
 
 
 ##################################################################################
@@ -77,7 +77,7 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
 
 source("cloudgaming-lag.R", chdir = TRUE)
 
-sim.rounds <- 100
+sim.rounds <- 10
 
 registerDoParallel(cores = detectCores())
 
@@ -89,6 +89,8 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
   results$round <- round
   results
 }
+ggplot(results, aes(x = e2e.lag, color = framerate)) + stat_ecdf()
+ggsave("cloudgaming-lag-cdf.pdf")
 
 
 

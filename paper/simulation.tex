@@ -1,45 +1,50 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Simulation Model}
-\label{sec:measurementgoals}
+\label{sec:simulation}
+
+To demonstrate the effects of all the involved parameters, a R-based queuing simulation closely resembling the interactions given in Fig.~\ref{fig:tickrate-timeseries} was set up. With this the influence of any of the lag sources can be easily simulated and the biggest culprits identified. For example, the influence of the framerate on online games becomes evident in Fig.~\ref{fig:e2e-delay-sim}, where increasing the framerate from \SI{15}{\hertz} up to \SI{120}{\hertz} can significantly reduce the game's lag, a result that can also be easily applied to cloud games, where streaming often operates at a lower framerate to conserve bandwidth.
 
 \subsection{Implementation}
 
 \subsection{Parameters}
 
-\subsection{Simplifications}
-
 \subsection{Local Games}
 
 \subsection{Online Gaming}
+
+To note here: Variance on the framerate axis is much higher than for the tickrate. This has practical implications for gaming studies. Experiment that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
 
 \subsection{Cloud Gaming}
 
 % ripped from previous game mechanics section
 % basis for new simulation section
+% \begin{figure}[!t]
+% 	\centering
+% 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
+% 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/matlab-framerate-lag.pdf}
+% 	\caption{\acrshort{ECDF} of a simulated online video game interaction and the resulting end-to-end lag depending on the game's frame rate. One-way network delay followed a Gaussian distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$. The server's tickrate was set to \SI{60}{\hertz}.}
+% \label{fig:online-e2e-delay-sim}
+% \end{figure}
+
 \begin{figure}[!t]
 	\centering
-	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
-	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/matlab-framerate-lag.pdf}
-	\caption{\acrshort{ECDF} of a simulated online video game interaction and the resulting end-to-end lag depending on the game's frame rate. One-way network delay followed a Gaussian distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$. The server's tickrate was set to \SI{60}{\hertz}.}
-\label{fig:online-e2e-delay-sim}
+	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
+	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}
+\label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
+
 
 \begin{figure}[!t]
 	\centering
 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{TODO.}
+	\caption{\acrshort{ECDF} of the influence of the server's rendering and streaming framerate on the end-to-end lag in the cloud gaming scenario.}
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
 
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
-	\caption{Process model of TODO.}
-\label{fig:3dbars-framerate-tickrate-lag}
-\end{figure}
+
 
 Before proposing actual measurement methods, three equally important aspects relating to any game measurement approch are discussed: the metrics to evaluate, the parameters to use, as well as the selection of games. 
 
@@ -69,46 +74,6 @@ It is quite difficult to find games that are representative for certain input an
 \end{itemize}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Measurement Approaches}
-\label{sec:measurementapproaches}
-
-With these metrics, test parameters, and categorizations in mind, one can now attempt to conduct the actual measurements of which there are three distinct methods each situated at a unique vantage point as depicted in Fig.~\ref{fig:measurement-methods}.
-
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=1.0\columnwidth]{../models/e2e-lag.pdf}
-    \caption{Location of the three measurement approaches to capture end-to-end latency inside a usual online video game lag chain.}
-\label{fig:measurement-methods}
-\end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Screen Recording Software Method}
-
-Recording the output stream of a video game might be the simplest approach. It can capture both the framerate and \gls{IAT} at a driver level, and the recorded video can be used for image and quality analyses as well as to correlate it to additionally recorded input events to calculate the lag. This is not the the complete end-to-end lag however, as both the controller and screen output latency are missing. The need to install additional software might make it unsuitable for some scenarios, e.g., when measuring console video games. As a variant of this method, one can also record the output stream with a video capture card on a secondary computer, which does not negatively effect the game's performance as the software method does.
-
-Examples of this approach include both \cite{Chen:2011:MLC:2072298.2071991} and \cite{6670099} which measured the end-to-end latency of cloud gaming services in the game client. They do this by invoking the system menu in games and measuring the time until it is displayed. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (i.e., the lag) as well as image quality by employing software recording methods on the client's computer.
-%However, this method assumes a constant delay of game actions and may not capture the actual end-to-end lag of many of real game actions, as they are typically different from and longer as the latency of displaying a menu. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (latency) as well as image quality by employing software recording methods on the client's computer. With these techniques the challenges regarding the quality are discussed.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Passive Network Measurements}
-
-In some cases it may also be advantageous to tap into the network interactions of the games and record the command and update messages sent between server and clients. While this is not a direct measure of game quality, it can give insights into the game's inner workings, such as the tick rates, and one can derive, e.g., the lowest achievable end-to-end lag from this.
-
-%Can only investigate command and update messages, not tick rate directly. Evaluate rate, IAT, and bandwidth, estimate latency (though there may be no direct link between commands and updates).
-
-Besides simple flow-based or packet-counting network metrics, many games also allow for deeper packet-dissecting analyses, as the often rely on standardized protocols or data formats, such as Protobuf\footnote{\url{https://developers.google.com/protocol-buffers/}} or incorporate well-known third-party multiplayer-enabling libraries. %And cloud games sometimes use derivates from the RTP-family or XMPP-based(VERIFY) protocols. 
-Additionally, almost no game encrypts its time-critical messages, enabling an easy read-out. Through these means, the specific commands can be read from the network and potentially linked to their effect on the game state in the corresponding state update messages.
-%, but also potentially allowing malicious actions to be taken easily.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Camera Recordings}
-
-The only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is, that the game and the computers remain unaltered and are therefore not affecting any game mechanics. This approach is often used in the gaming press and by game developers to evaluate a game's control fidelity. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
 
 
 % Ultimately, to capture any and all latency sources in gaming you would need to rely on external recording gear.

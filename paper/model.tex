@@ -35,13 +35,13 @@ In general, there is no commonly established upper limit to the framerate that h
 The benefit of motion blur lies in its ability to conceal stutters in apparent movement due to the object and its edges being blurred, thereby reducing the positional information available on it.%, Figure~\ref{fig:framerate} illustrates this. 
 Therefore, typical movie sequences usually appear to be perfectly fluid. Only for example when the camera pans at a high speed stutters in object movement or the viewport updates become apparent. Intrinsic motion blur is absent in computer generated imagery but can be artificially added to the images. While adding blur to video games can improve fluidity, it also reduces the spatial information available to the player and hampers the precision of the player's actions. Therefore it is often avoided, especially for objects in focus.
 
-Video games add two more factors to the frame rate consideration. The first is the issue of the monitor's refresh rate. Monitors work with a fixed, configurable image refresh rate, typically always including \SI{60}{\hertz}. If the game outputs images at an inconsistent rate or a rate lower than the monitor's refresh rate or if the framerate is not an integer multiple of the refresh rate or vice versa one of two things will happen: %(depending on the implementation and the presence of vsync)
+Video games add two more factors to the frame rate consideration. The first is the issue of the monitor's refresh rate. Monitors work with a fixed, configurable image refresh rate, typically always including \SI{60}{\hertz}. If the game outputs images at an inconsistent rate or a rate lower than the monitor's refresh rate or if the framerate is not an integer multiple of the refresh rate or vice versa one of two things will happen: tearing or stuttering. % TODO: shorten and rephrase this section
 
-\begin{itemize}
-	\item If the monitor fetches a frame from the graphics card's buffer while the frame is still being rendered, the result will be a mixture of the new frame in the upper half of the image and a frame which is one time interval older. This artifact is called \textbf{tearing} and should be avoided.
-	% only the upper portion of the frame  finished, One frame split up between two refresh cycles
-	\item Games can also be configured to postpone the rendering of a new frame until the monitor has already fetched and displayed the current frame, this is called waiting for vertical synchronization or \textbf{VSYNC}. No tearing will occur, but the \gls{IAT} of new frames might become very irregular, displaying some frames more often than others just to match the monitors refresh rate, resulting in a stuttering display. This latter stuttering effect also occurs for \SI{24}{\hertz} movies being displayed on a \SI{60}{\hertz} TV screen. Therefore most TVs additionally provide a dedicated \SI{24}{\hertz} refresh rate mode to remove the stuttering.
-\end{itemize}
+% \begin{itemize}
+% 	\item If the monitor fetches a frame from the graphics card's buffer while the frame is still being rendered, the result will be a mixture of the new frame in the upper half of the image and a frame which is one time interval older. This artifact is called \textbf{tearing} and should be avoided.
+% 	% only the upper portion of the frame  finished, One frame split up between two refresh cycles
+% 	\item Games can also be configured to postpone the rendering of a new frame until the monitor has already fetched and displayed the current frame, this is called waiting for vertical synchronization or \textbf{VSYNC}. No tearing will occur, but the \gls{IAT} of new frames might become very irregular, displaying some frames more often than others just to match the monitors refresh rate, resulting in a stuttering display. This latter stuttering effect also occurs for \SI{24}{\hertz} movies being displayed on a \SI{60}{\hertz} TV screen. Therefore most TVs additionally provide a dedicated \SI{24}{\hertz} refresh rate mode to remove the stuttering.
+% \end{itemize}
 
 Finally, video games also distinguish themselves from video material by being highly interactive. Specifically this means that video games constantly require inputs on short time scales to which the game reacts and displays the feedback. Therefore, the framerate also influences the reactivity of a game and can be a source of latency as discussed further in Section~\ref{sec:latency}.
 
@@ -92,7 +92,7 @@ It is evident that latency is a critically important factor for online games, fo
 \label{fig:tickrate-timeseries}
 \end{figure}
 
-To demonstrate the effects of all the involved parameters, a MATLAB-based queuing simulation closely resembling the interactions given in Fig.~\ref{fig:tickrate-timeseries} was set up. With this the influence of any of the lag sources can be easily simulated and the biggest culprits identified. For example, the influence of the framerate on online games becomes evident in Fig.~\ref{fig:e2e-delay-sim}, where increasing the framerate from \SI{15}{\hertz} up to \SI{120}{\hertz} can significantly reduce the game's lag, a result that can also be easily applied to cloud games, where streaming often operates at a lower framerate to conserve bandwidth.
+
 
 %All in all, if possible, video game measurements should always consider the full \textbf{end-to-end} lag factoring in every possible source of delay but also the presence latency compensation and concealment techniques.
 
