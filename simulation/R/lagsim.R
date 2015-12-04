@@ -64,28 +64,34 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %:%
   }
 
 
-
-
-
 ##################################################################################
 ## execute the sim function for our parameter vectors
 # parallel execution with foreach %dopar%
 
 source("cloudgaming-lag.R", chdir = TRUE)
 
-sim.rounds <- 10
+
 
 registerDoParallel(cores = detectCores())
 
-results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
+sim.rounds <- 10
+
+results <- foreach(round = 1:sim.rounds, .combine = rbind, .packages="foreach") %dopar% {
   results <- foreach(server.frame.rate = server.frame.rates, .combine = rbind) %do% {
     cloudgaming.lagsim(server.frame.rate, encode.delay, decode.delay, net.delay.mean, net.delay.sd,
                       server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
   }
-  
-ggplot(results, aes(x = e2e.lag, color = framerate)) + stat_ecdf()
-ggsave("cloudgaming-lag-cdf.pdf")
+}
 
+saveRDS(results, "../data/cloud-lagsim-10rounds.rds")
+# results <- readRDS("../data/cloud-lagsim-10rounds.rds")
+
+p <- ggplot(results, aes(x = e2e.lag, color = framerate)) + stat_ecdf()
+p <- p + xlab("E2E lag (ms)") + ylab("ECDF")
+p <- p + scale_color_discrete(name = "framerate (Hz)", guide = guide_legend(ncol=2))
+p <- p + theme(text = element_text(size=24))
+p
+ggsave("../visualization/cloudgaming-lag-cdf.pdf", width=12, height=8)
 
 
 ##################################################################################
@@ -108,22 +114,53 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind, .packages="foreach") 
 }
 
 
+saveRDS(results, "../data/online-lagsim-1000rounds.rds")
+# results <- readRDS("../data/online-lagsim-1000rounds.rds")
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
 
 at <- seq(1, 20, length.out = 6)
 labels <- c(10, 30, 60, 120, 144, 200)
 at <- labels / 200 * 20
 
-pdf(file="e2e-lag-3dbars.pdf", width=13, height=13)
+rot <- diag(4)
+rot[1,1] <- -1
+rot[2,2] <- -1
+
+
+theme.novpadding <-list(axis.line = list(col = "transparent"),
+  layout.heights = list(
+              top.padding = 0,
+              main.key.padding = 0,
+              key.axis.padding = 0,
+              axis.xlab.padding = 0,
+              xlab.key.padding = 0,
+              key.sub.padding = 0,
+              bottom.padding = 0),
+       layout.widths =
+         list(left.padding = 0,
+              key.ylab.padding = 0,
+              ylab.axis.padding = 0,
+              axis.key.padding = 0,
+              right.padding = 0))
+
+pdf(file="../visualization/e2e-lag-3dbars.pdf", width=12, height=12)
 print(cloud(e2e.lag~framerate+tickrate, results.mean, panel.3d.cloud=panel.3dbars,
             col.facet='grey', zlim=c(0,300), R.mat=rot,
-            par.settings = list(axis.line = list(col = "transparent")),
-            scales=list(arrows=FALSE, col=1, x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
+            xlab=list(label = "framerate (Hz)", cex = 1.5), 
+            ylab=list(label = "tickrate (Hz)", cex = 1.5), 
+            zlab=list(label = "E2E lag\n(ms)", cex = 1.5),
+            par.settings = theme.novpadding,
+            scales=list(
+              arrows=FALSE, col=1, cex = 1.2,  x=list(at=at, labels=labels), y=list(at=at, labels=labels))))
 dev.off()
 
 
+
+
+
+
 ##################################################################################
-## plotting
+## additional plotting
 # ggplots
 # ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
 #ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
