@@ -3,7 +3,59 @@
 \section{Simulation Model}
 \label{sec:simulation}
 
-To demonstrate the effects of all the involved parameters, a R-based queuing simulation closely resembling the interactions given in Fig.~\ref{fig:tickrate-timeseries} was set up. With this the influence of any of the lag sources can be easily simulated and the biggest culprits identified. For example, the influence of the framerate on online games becomes evident in Fig.~\ref{fig:e2e-delay-sim}, where increasing the framerate from \SI{15}{\hertz} up to \SI{120}{\hertz} can significantly reduce the game's lag, a result that can also be easily applied to cloud games, where streaming often operates at a lower framerate to conserve bandwidth.
+It is evident from the discussion in Sections \ref{sec:background} 
+and \ref{sec:model} that multiple different components contribute to 
+the end-to-end lag in games, and that multiple potential models and 
+levels of granularity exist for each game type.
+Let's discuss therefore the model boundaries and level of detail 
+used in the current implementation of our simulation model.
+
+First, we define the end-to-end latency to be the time elapsed 
+from when the player supplies commands to the input devices until the 
+output of the render process. We assume that the actual presentation of 
+audio and video content happens instantaneously after rendering 
+(ignoring any screen synchronization issues), and simulate the player 
+input as a stochastic process. % future work!1!!
+Furthermore, as also found in practice, input events are queued up  
+and sent en bloc at a specific, configurable interval.
+
+Second, for our treatment of client-server games, we focus on modeling 
+a single connected client and its interaction with the game server. 
+While other clients might be connected to the same server, it is 
+solely the server that controls when game state updates are sent. 
+Thus, the client we are looking at does not need to account for the 
+behavior of other clients.
+% probaby not future work
+
+Next, we associated a static (but individually parametrizable) tick 
+rate with the computation process of the game server, and a frame rate 
+with the render process. 
+% dynamic rates: future work (of course)!
+The server updates the state of the game world at every tick, and may 
+spend some processing time in order to do so. Once finished, an update 
+message is sent to the client.
+Independent of update process, the game client outputs the next 
+video frame in accordance to the frame rate. The game client's state 
+might not get updated by the server between rendered frames. Still, 
+output is generated\footnote{A practical game implementation will use state prediction for this}.
+
+Note that while the delay between frames is constant, the lag between 
+an input event and the earliest frame that may contain perceptible 
+results of that event can be multiple frame times.
+
+Since we are simulating online games, the simulation obviously includes 
+the network paths between the different components. The delay distributions 
+are freely configurable, but may be omitted entirely as well.
+
+
+Lastly, \textbf{TODO TODO TODO} 
+mention that we offset the phase of the various 
+rates and ticks and things by individual \texttt{runif}s because 
+otherwise you'll get unwanted synchronization effects. See the Python sim 
+script where this was done kind of on purpose. 
+\textbf{END TODO END TODO END TODO.}
+
+
 
 \subsection{Implementation}
 
