@@ -1,8 +1,6 @@
 %!TEX program = lualatex
 \documentclass[conference, 10pt, a4paper]{IEEEtran}
 
-\usepackage{hyperxmp}
-
 \usepackage{ifluatex}
 \ifluatex
   \usepackage{fontspec}
@@ -17,6 +15,7 @@
 
 \usepackage[acronym, nomain, nowarn]{glossaries}
 \loadglsentries{acronyms}
+\usepackage{csquotes}
 \usepackage{booktabs}
 \usepackage[hyphens]{url}
 \usepackage[pdfhighlight=/O, hidelinks, unicode=true]{hyperref}
@@ -32,14 +31,13 @@
 \addbibresource{literature.bib}
 \usepackage[inline]{enumitem}
 
-%\hypersetup{
-%pdftitle = {Understanding Online Video Games in Order to Improve QoS Measurements},
-%pdfauthor = {Florian Metzger, Tobias Hoßfeld}
-%}
 
 \makeatletter
 \newcommand{\removelatexerror}{\let\@latex@error\@gobble}
 \makeatother
+
+% masks an issue with polyglossia, not sure of side effects
+\AtBeginDocument{\let\textlabel\label}
 
 \begin{document}
 

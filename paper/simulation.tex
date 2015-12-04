@@ -9,23 +9,20 @@ To demonstrate the effects of all the involved parameters, a R-based queuing sim
 
 \subsection{Parameters}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
 
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
+	\caption{Scatterplot of the median E2E lag under various frame and tick durations in a scenario where the game is running fully local.}
+\label{fig:nwless-scatter}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
-
-To note here: Variance on the framerate axis is much higher than for the tickrate. This has practical implications for gaming studies. Experiment that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
-
-\subsection{Cloud Gaming}
-
-% ripped from previous game mechanics section
-% basis for new simulation section
-% \begin{figure}[!t]
-% 	\centering
-% 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
-% 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/matlab-framerate-lag.pdf}
-% 	\caption{\acrshort{ECDF} of a simulated online video game interaction and the resulting end-to-end lag depending on the game's frame rate. One-way network delay followed a Gaussian distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$. The server's tickrate was set to \SI{60}{\hertz}.}
-% \label{fig:online-e2e-delay-sim}
-% \end{figure}
 
 \begin{figure}[!t]
 	\centering
@@ -35,6 +32,13 @@ To note here: Variance on the framerate axis is much higher than for the tickrat
 \end{figure}
 
 
+To note here: Variance on the framerate axis is much higher than for the tickrate. This has practical implications for gaming studies. Experiment that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Cloud Gaming}
+
+
 \begin{figure}[!t]
 	\centering
 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
@@ -42,6 +46,12 @@ To note here: Variance on the framerate axis is much higher than for the tickrat
 	\caption{\acrshort{ECDF} of the influence of the server's rendering and streaming framerate on the end-to-end lag in the cloud gaming scenario.}
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
+
+
+
+
+
+
 
 
 

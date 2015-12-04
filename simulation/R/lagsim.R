@@ -18,7 +18,6 @@ library(ggplot2)
 library(scales) # for muted()
 library(latticeExtra) # for cloud and 3dbars
 library(foreach)
-library(parallel)
 library(doParallel) # for foreach %dopar%
 
 ##################################################################################
@@ -46,7 +45,7 @@ server.frame.rates <- c(5, 10, 15, 30, 60, 120)
 
 ##################################################################################
 ## set the path first if needed or if calling this file manually
-setwd("git/onlinegame-lag-sim/simulation/R/")
+#setwd("git/onlinegame-lag-sim/simulation/R/")
 source("onlinegaming-lag.R", chdir = TRUE)
 
 
@@ -58,14 +57,11 @@ sim.rounds <- 10
 
 registerDoParallel(cores = detectCores())
 
-results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
-  results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
+results <- foreach(round = 1:sim.rounds, .combine = rbind) %:%
+  foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %dopar% {
     onlinegame.lagsim(client.frame.rate, server.tick.rate, net.delay.mean, net.delay.sd,
-           server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
+                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
   }
-  results$round <- round
-  results
-}
 
 
 
@@ -86,9 +82,7 @@ results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
     cloudgaming.lagsim(server.frame.rate, encode.delay, decode.delay, net.delay.mean, net.delay.sd,
                       server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
   }
-  results$round <- round
-  results
-}
+  
 ggplot(results, aes(x = e2e.lag, color = framerate)) + stat_ecdf()
 ggsave("cloudgaming-lag-cdf.pdf")
 
@@ -103,14 +97,16 @@ registerDoParallel(cores = detectCores())
 
 sim.rounds <- 1000
 
-results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
+results <- foreach(round = 1:sim.rounds, .combine = rbind, .packages="foreach") %dopar% {
   results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
-    lagsim(client.frame.rate, server.tick.rate, args)
+    onlinegame.lagsim(client.frame.rate, server.tick.rate, net.delay.mean, net.delay.sd,
+                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
   }
   results <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="median")
   results$round <- round
   results
 }
+
 
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
 
