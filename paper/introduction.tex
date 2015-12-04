@@ -3,32 +3,38 @@
 \section{Introduction}
 \label{sec:introduction}
 
-The video games industry currently is one of the largest entertainment sectors in terms of revenue, having grossed an estimated \SI{81}[\$]{Bn} in 2014 \footnote{\url{http://www.newzoo.com/insights/top-100-countries-represent-99-6-81-5bn-global-games-market/}}. However, video games were generally not highly regarded especially in western countries in the past. With casual and mobile games serving as an ``gateway drug'' this opinion began to change in recent years. Games like \textsc{League of Legends} are played by more than $27$ million each day\footnote{\url{http://www.riotgames.com/articles/20140711/1322/league-players-reach-new-heights-2014}}. Especially competitive gaming has been on the rise, with some video game tournaments offering price pools in the millions.\footnote{E.g. \textsc{Dota 2}'s The International 5  is the largest tournament to date with a prize pool of about \SI{17}[M]{\$} \url{http://www.dota2.com/international/overview/}.} 
-% far exceeding that of many regular sports while also filling stadiums with spectators and live streams that are sometimes watched by millions.
 
-% On the other hand, many of the much-hyped cloud gaming services have been a commercial failure, with the recent shutdown and asset sale of OnLive being one of the more recent examples. The exact reasons for this development are not known, but it can be argued that it is largely due to three issues: The unattractiveness of the prizing models due to the operational costs, the unavailability of recent, popular games, as well as the insufficient streaming quality (both in terms of image quality as well as latency).
+The video games industry currently is one of the largest entertainment sectors in terms of revenue, having grossed an estimated \SI{81}[\$]{Bn} in 2014 \footnote{\url{http://www.newzoo.com/insights/top-100-countries-represent-99-6-81-5bn-global-games-market/}}. However, video games were generally not highly regarded especially in western countries in the past. With casual and mobile games serving as a ``gateway drug'' this opinion began to change in recent years. Games like \textsc{League of Legends} are played by more than $27$ million each day\footnote{\url{http://www.riotgames.com/articles/20140711/1322/league-players-reach-new-heights-2014}}. Especially competitive gaming has been on the rise, with some video game tournaments offering price pools in the millions.\footnote{E.g. \textsc{Dota 2}'s The International 5  is the largest tournament to date with a prize pool of about \SI{18}[M]{\$} \url{http://www.dota2.com/international/overview/}.}
 
-% While the former two issues may be a topic for later discussions, the latter quality issue still remains to be a topic of investigation and research. Many of the past publications regarded the \gls{QoE} of online and cloud video games as ``good enough''. This statement is probably true when looking at a wider audience and looking only at certain games, but does not go very well with the core audience group, that shows real interest in those games.
+On the other hand, many of the new praised cloud gaming services have been a commercial failure, with the shutdown and asset sale of OnLive being one of the more recent examples. The exact reasons for this development are not known, but it can be argued that it is largely due to three issues: The unattractiveness of the prizing models due to the operational costs, the unavailability of recent, popular games, as well as the insufficient streaming quality (both in terms of image quality as well as latency).
 
-One might therefore think that the topic of online video games is equally popular in research, but efforts are often solely focussed on cloud gaming and its subjective \gls{QoE} through user studies. Looking at those past studies many of them also seem to take very peculiar choices in their selection of measurement parameters, seemingly oblivious to central game properties. For example one paper \cite{claypool2007} examines user actions in \textsc{Quake 3} running at framerates down to \SI{3}{\hertz}, which is considerably below the limit where one can still perceive movement. Compared to plain video streaming, the inner properties of video games are not that straight-forward to observe from the outside. But to conduct proper measurements, it is essential to understand them. 
+While the former two issues are a topic for later discussions, the latter quality issue still remains to be a topic of investigation and research. The quality of online and cloud gaming might even be the next-big-thing after \acrshort{HTTP} adaptive video streaming for the fields of computer network performance evaluation and \acrshort{QoE} modeling. A quickly growing number of publications concerns itself with assessing the subjective quality of those game types. These assessments are usually conducted through meticulously set up user studies in a lab environment and can produce quite fitting results.
 
-% At the moment, the gaming press understands games better than their scientific counterparts and their measurement approaches seem much more suited the games in mind, even though their statistical evaluation of the results might be lacking.
+However, due to the inherent diversity of games and their accompanying game mechanics, it is nigh impossible to transfer any of these results from one game to another. Games are an interactive medium and are not just consumed as videos are, which makes study setups for video quality assessments hard to apply on to gaming. Instead, gaming is governed by much more intricate and engaging properties, that need to be factored in for such investigations. Compared to plain video streaming, these underlying properties of video games are not that straight-forward to observe from the outside. But to conduct proper measurements, it is essential to understand them. 
 
-This paper aims to give insights to the bespoke core properties and their influence on setting up online gaming (which also includes cloud gaming) measurements as well as properly parameterizing them. The first topic discussed here is the game loop and tick rate of online games. Resulting from this process are some interesting consequences in terms of latency and interactivity for online video games, which usually have very stringent requirements regarding input lag. 
-%Casual games requirements are usually more relaxed, e.g., due to the social, temporal, and spatial context factors they are played under (reducing the attention of the player) or inadequate or slow input methods (e.g., touch controls). 
-The second topic covers the game's framerate, its interaction with the monitor refresh rate and their implications.
+The process of understanding these game properties results in two distinct benefits:
+\begin{enumerate*}
+	\item A better, quantitative classification of games based on game properties and not on (for quality assessment) meaningless categories like \gls{FPS} or \gls{RPG}, and
+	\item a basis for an objective quality assessment model that is independent of individual games and can be applied to all sorts of scenarios.
+\end{enumerate*}
 
-Derived from these properties are suggestions for three different measurement approaches that are suited to capture the full or parts of the end-to-end lag experienced by players. The explanations and best practices given in this paper are a novel input to the scientific literature and have been derived, e.g., from mechanisms described in the gaming press but also from the first author's personal experiences in online and multiplayer video games.
+This paper aims to give insights to one of the bespoke core properties, namely the ``\textit{end-to-end lag}'', and its influence in online and cloud gaming scenarios. To this end, we create a model, which describes this lag on the basis of other intrinsic game factors, such as the framerate and tickrate, and its influence on several distinct scenarios, such as online and cloud gaming.
+
+To demonstrate the model, this paper also provides a stochastic simulation implementing these exact scenarios. Initial results from this simulation visualize what has been assumed by many for quite some time: The influence of the framerate and tickrate on the end-to-end lag, and therefore also on the subjective interaction quality of the game, is much larger than expected. Which means, that these two parameters need to be tightly controlled and kept in certain ranges to improve the results of future subjective quality assessment studies.
 
 ~\newline
 This paper is structured as follows.
-First, in Section~\ref{sec:big-picture} we give an introduction to video game engine terminology and properties, which is used to provide a big-picture of game components relevant to the scientific study of video game technologies.
+First, in Section~\ref{sec:background} we give an introduction to important parts of video game engine terminology and properties, which provides a big-picture for game components relevant to this scientific study of video game technologies.
 In Section~\ref{sec:relatedwork} we survey prior work on \gls{QoS} and \gls{QoE} for video games.
-Then, in Section~\ref{sec:latency} we propose a model to evaluate a major \gls{QoS} factor for video games, end to end latency.
-Based on this model, we describe the implemented \gls{DES} and perform a parameter study in order to identify main influence factors for the end to end latency in Section~\ref{sec:measurementgoals}.
-Finally, in Section~\ref{sec:conclusion} we discuss our key findings and conclude this paper.
+Afterwards, in Section~\ref{sec:model}, we propose an abstract model to describe end-to-end lag, a major factor of \gls{QoS} in any video games. Based on this model, we describe the implemented \gls{DES} and perform a parameter study in order to identify main influence factors for the end-to-end lag in Section~\ref{sec:simulation}. Finally, in Section~\ref{sec:conclusion} the key findings are discussed in addition to providing some concluding remarks and pointers to future work.
 
-\textbf{Open Access Notice:} The authors explicitly encourage the review and reuse of all the data and custom tools used in the preparation of this paper. The materials are available from the authors' public repository\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim}}. 
+~\newline
+\textit{Note:} The authors explicitly encourage the review and reuse of all the data and custom tools used in the preparation of this paper. The materials are therefore available as \textbf{open source} and \textbf{open data} from the authors' public repository\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim}}.
+
+
+
+%Many of the past publications regarded the \gls{QoE} of online and cloud video games as ``good enough''. This statement is probably true when looking at a wider audience and looking only at certain games, but does not go very well with the core audience group, that shows real interest in those games.
+
 
 %With the recent successes of competitive video games, the commercial failure of many cloud gaming services, and the rise of local game streaming offerings it might also be time to critically investigate methods used evaluate those video games. as the scientific view on these matters does not seem to be very aligned with actual mechanics and events.
 
@@ -37,3 +43,13 @@ Finally, in Section~\ref{sec:conclusion} we discuss our key findings and conclud
 %This holds true for both \gls{QoS} measurements as well as subjective \gls{QoE} user studies, which are often parametrized in rather peculiar ways.
 
 
+
+% Looking at those past studies many of them also seem to take very peculiar choices in their selection of measurement parameters, seemingly oblivious to central game properties. For example one paper \cite{claypool2007} examines user actions in \textsc{Quake 3} running at framerates down to \SI{3}{\hertz}, which is considerably below the limit where one can still perceive movement. 
+
+%Casual games requirements are usually more relaxed, e.g., due to the social, temporal, and spatial context factors they are played under (reducing the attention of the player) or inadequate or slow input methods (e.g., touch controls). 
+%The second topic covers the game's framerate, its interaction with the monitor refresh rate and their implications.
+
+
+% The first topic discussed here is the game loop and tick rate of online games. Resulting from this process are some interesting consequences in terms of latency and interactivity for online video games, which usually have very stringent requirements regarding input lag. 
+
+%Derived from these properties are suggestions for three different measurement approaches that are suited to capture the full or parts of the end-to-end lag experienced by players. The explanations and best practices given in this paper are a novel input to the scientific literature and have been derived, e.g., from mechanisms described in the gaming press but also from the first author's personal experiences in online and multiplayer video games.
