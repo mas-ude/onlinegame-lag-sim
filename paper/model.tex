@@ -4,12 +4,7 @@
 \label{sec:model}
 
 
-Not factored into this abstract model:
 
-\begin{itemize}
-	\item Input controller delay (might be ~5-10ms)
-	\item Screen delay (usually 1-3 frames, larger values on many TVs)
-\end{itemize}
 
 \begin{figure}[!t]
 	\centering
@@ -21,6 +16,19 @@ Not factored into this abstract model:
 
 
 This section will focus on describing the main game loop and the framerate and both their implications for properly measuring video games. On a technical level these two properties distinguish passively consumed videos and video games the most.
+
+\subsection{Model simplifications, constraints, limitations and future extensions}
+
+Framerate and tickrate are kept determinstic. Should follow distributions in the future
+
+Not factored into this abstract model:
+
+\begin{itemize}
+	\item Input controller delay (might be ~5-10ms)
+	\item Screen delay (usually 1-3 frames, larger values on many TVs)
+	\item ``multi-tick-actions'', different tickrates, actions that take longer than one interval
+	\item adaptive vsync?
+\end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,49 +61,18 @@ Video games add two more factors to the frame rate consideration. The first is t
 Finally, video games also distinguish themselves from video material by being highly interactive. Specifically this means that video games constantly require inputs on short time scales to which the game reacts and displays the feedback. Therefore, the framerate also influences the reactivity of a game and can be a source of latency as discussed further in Section~\ref{sec:latency}.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Game Tick Rates and Send Rates}
-
-At their core video games are essentially feedback-directed real-time simulators. The simulator's main loop consists of three central parts as depicted in Fig.~\ref{alg:gameloop1}. Every render-call means putting out a new video frame. As this framerate is usually not limited and variable, the game logic has to update its state on a time-scale operating independent of the current frame. Some games also update parts of the game on a fixed frequency, the so-called \textbf{tickrate}, for example a non-game-influencing physics effect updating at a lower \SI{30}{\hertz} rate.
-
-%Some games do not do this and tie the game time directly to the frame rate and expect to be run at a fixed frequency. If one manages to unlock the frame rate in such games, the game will often run much faster with numerous mostly disadvantageous side effects. Examples include games optimized for older CPUs and clock speeds now unexpectedly running at much higher clocks. Also games such as Need for Speed Rivals, which was locked at 30 fps, but could be unlocked and subsequently behave erroneously. Also, games with a locked frame rate are very much frowned upon in the gaming community, especially when the cap is lower than 60 fps.
-%This general logic is also preserved in modern multi-threaded game designs, although it is more difficult to achieve.
-
-\begin{figure}[!t]
-\centering
-\removelatexerror
-\begin{algorithm}[H]
- \While{game running}{
-  read inputs\;
-  update game state\;
-  render screen\;
- }
-\end{algorithm}
-\caption{Basic model of a continuous main video game loop.}
-\label{alg:gameloop1}
-\end{figure}
-
-Online video games complicate this update logic a bit. In online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. A typical scenario with all the relevant rates for an online game running in a cloud gaming environment is depicted in Fig.~\ref{fig:tickrate-streamed}. To make matters even more complicated the rates of sending input commands from the clients to the server as well as game state updates from the server to the clients do not need to be the same rate as the server's tick rate. Popular examples for the fixed tickrates of game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../models/game-tick-rate-streamed.pdf}
-	\caption{Interaction of client and server in streamed online games.}
-\label{fig:tickrate-streamed}
-\end{figure}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sources of Latency in Gaming}
 \label{sec:latency}
 
-It is evident that latency is a critically important factor for online games, for fast games, or especially for competitive games as will be discussed in Sec.~\ref{sec:game-criteria}. But besides the obvious network delay there are many more sources of delay that need to be factored in when examining these games, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textbf{end-to-end lag} is captured. What makes matters even worse, is that this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing a move command, may take considerable longer to complete especially when the game is not performing well, partly due to the actions taking more than one game tick to complete. Therefore, each video game will have a distinct ``lag profile''.  Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
+Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
-	\caption{Exemplary time series of an online video game's client-server interaction and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+	\caption{Exemplary time series of an online video game's client-server interaction and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations. TODO: add the command rate to this figure and find a better place for it.}
 \label{fig:tickrate-timeseries}
 \end{figure}
 
