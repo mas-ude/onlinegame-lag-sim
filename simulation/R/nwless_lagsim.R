@@ -63,7 +63,7 @@ source("onlinegaming-lag.R", chdir = TRUE)
 
 sim.rounds <- 10
 
-registerDoParallel(cores = detectCores())
+registerDoParallel(cores = detectCores()-2)
 
 results <- foreach(round = 1:sim.rounds, .combine = rbind) %dopar% {
   results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
@@ -138,6 +138,13 @@ dev.off()
 # ggplots
 # ggplot(results, aes(x=e2e.lag, color = framerate, lty = tickrate)) + stat_ecdf(lwd=1)
 #ggplot(results, aes(x=framerate, y=tickrate, z=e2e.lag)) + stat_summary2d()+ scale_fill_gradient2("e2e lag", high=muted("green"), trans="log", space="Lab")
+
+
+## RAINBOW POWER!1!!
+# Show lag as a function of framerate, with the tickrate as parameter
+ggplot(data=results.mean) + aes(y=e2e.lag, x=framerate, color=tickrate) + geom_point()
+# Show lag as a function of tickrate now, with the framerate as parameter
+ggplot(data=results.mean) + aes(y=e2e.lag, x=tickrate, color=framerate) + geom_point()
 
 # lattice.extra 3d bar plot
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
