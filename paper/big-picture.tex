@@ -6,7 +6,7 @@
 Before diving into the promised end-to-end lag model, some terms and concepts need to be introduced first.
 
 
-\subsection{Game Types}
+\subsection{Some Video Game Flavors}
 %TODO: needs a better word than types, more like architectures. Feedback welcome
 
 \begin{figure}[!t]
@@ -66,9 +66,7 @@ Fig.~\ref{fig:tickrate-streamed} gives once again an overview of all these compo
 \subsection{Framerate and Frame-times}
 \label{sec:framerate}
 
-In contrast to traditional video media with their fixed framerates of, e.g., \SI{24}{\hertz} or \SI{29.97}{\hertz}, video games are more flexible but simultaneously also much more demanding to the framerate for several reasons. First 
-
-Video games also distinguish themselves from video material by being highly interactive. Specifically this means that video games constantly require inputs on short time scales to which the game reacts and displays the feedback. Therefore, the framerate also influences the reactivity of a game and can be a source of latency as discussed further in Section~\ref{sec:latency}.
+In contrast to traditional video media with their fixed framerates of, e.g., \SI{24}{\hertz} or \SI{29.97}{\hertz}, video games are more flexible but simultaneously also much more demanding to the framerate for several reasons. First, video games usually target frame rates of \SI{30}{\hertz}, \SI{60}{\hertz}, or sometimes also \SI{120}{\hertz}, depending on the type of game. Higher frame rates are targeted to enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos. High frame rates also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate also influences the reactivity of a game and can also be a source of latency itself.
 
 %Generally speaking, motion in video data is based on the principle of \textit{apparent motion}. In order to perceive objects to be in motion in videos, consecutive images have to appear at a certain rate which is considered to be at about \SI{16.67}{\hertz} according to \cite{wertheimer1912experimentelle}. Below that threshold objects will appear as two distinct objects between two consecutive frames. %This form of apparent movement is called the phi phenomenon. The higher the rate of displaying images, the more fluid the motion looks, as the discrete ``jumps'' in the position of the object get smaller the higher the framerate is.\footnote{One can verify this behavior for example at \url{https://frames-per-second.appspot.com/}.}.
 
