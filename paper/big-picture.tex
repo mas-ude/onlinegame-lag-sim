@@ -23,7 +23,7 @@ Before diving into the promised end-to-end lag model, some terms and concepts ne
 \label{alg:gameloop1}
 \end{figure}
 
-At their core video games are essentially feedback-directed real-time simulators. The simplified simulator's main loop consists of three central parts as depicted in Fig.~\ref{alg:gameloop1}. Every render-call means putting out a new video frame. As this \textbf{framerate} is usually not limited and variable, the game logic has to update its state on a time-scale operating independent of the current frame. Some games also update parts of the game on one or mulitple fixed frequencies, the so-called \textbf{tickrate}, for example a non-game-influencing physics effect could be updated at a lower \SI{30}{\hertz} rate. The components of a locally running \textit{singleplayer game} and their interactions are depicted in Fig.~\ref{fig:component-model-local}.
+At their core video games are essentially feedback-directed real-time simulators. The simplified simulator's main loop consists of three central parts as depicted in Fig.~\ref{alg:gameloop1}. Every render-call means putting out a new video frame. As this \textbf{framerate} is usually variable and not limited, the game logic has to update its state on a time-scale operating independent of the current frame. Some games also update parts of the game on one or mulitple fixed frequencies, the so-called \textbf{tickrate}, for example a non-game-influencing physics effect could be updated at a lower \SI{30}{\hertz} rate. The components of a locally running \textit{singleplayer game} and their interactions are depicted in Fig.~\ref{fig:component-model-local}.
 
 \begin{figure}
   \centering
