@@ -3,11 +3,13 @@
 \section{Overview and Background}
 \label{sec:background}
 
-Before diving into the promised end-to-end lag model, some terms and concepts need to be introduced first.
+Before constructing an end-to-end lag model, we first introduce some terms 
+and concepts in subsections \ref{subsec:game-model} through 
+\ref{subsec:e2e-lag}. Then, subsection \ref{sec:measurementapproaches} 
+presents various lag measurement techniques.
 
 
-\subsection{Some Video Game Flavors}
-%TODO: needs a better word than types, more like architectures. Feedback welcome
+\subsection{Basic Game Model}\label{subsec:game-model}
 
 \begin{figure}[!t]
 \centering
@@ -23,7 +25,42 @@ Before diving into the promised end-to-end lag model, some terms and concepts ne
 \label{alg:gameloop1}
 \end{figure}
 
-At their core video games are essentially feedback-directed real-time simulators. The simplified simulator's main loop consists of three central parts as depicted in Fig.~\ref{alg:gameloop1}. Every render-call means putting out a new video frame. As this \textbf{framerate} is usually variable and not limited, the game logic has to update its state on a time-scale operating independent of the current frame. Some games also update parts of the game on one or mulitple fixed frequencies, the so-called \textbf{tickrate}, for example a non-game-influencing physics effect could be updated at a lower \SI{30}{\hertz} rate. The components of a locally running \textit{singleplayer game} and their interactions are depicted in Fig.~\ref{fig:component-model-local}.
+At their core video games are essentially feedback-directed 
+real-time simulators. Figure~\ref{alg:gameloop1} overviews a 
+simplified simulation loop consisting of three parts.
+The game reads player input, updates the game state, and renders 
+new screen contents. This loop repeats as long as the game is running. 
+While the three parts are interrelated, and every component provides 
+some form of input to the next, they may still proceed at their own 
+intrinsic paces. (For example, the state of the game world is updated 
+even if the player character does not move.)
+In this simplified model, we distinguish a generic process for player 
+input, a tickrate that governs the frequency of game state updates, and 
+a framerate determining how often the screen is updated every second.
+
+Note that actual game implementations sometimes choose to update 
+parts of the game state on different fixed frequencies. For example, 
+a physics effect that does not influence gameplay directly could be 
+updated at only half the tickrate. Also, the parameters of the player 
+input process depend on the game genre and on the player action 
+currently performed. \textbf{Please refer to 
+Section~\ref{sec:gameclassification} and Table~\ref{tbl:TODO} for 
+exemplary rates of current games.
+
+%Popular examples for the fixed tickrates of 
+%game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for 
+%\textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for 
+%\textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+
+
+
+
+\subsection{Game Flavors}
+%TODO: needs a better word than types, more like architectures. Feedback welcome
+
+ The components of a locally 
+running \textit{singleplayer game} and their interactions are 
+depicted in Fig.~\ref{fig:component-model-local}.
 
 \begin{figure}
   \centering
@@ -40,7 +77,12 @@ At their core video games are essentially feedback-directed real-time simulators
 \end{figure}
 
 \textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
-A third typical component of online video games is the \textbf{command message rate}, i.e., the rate at which input is sent from the client to the server as well as game state updates from the server to the clients do not need to be the same rate as the server's tick rate. Popular examples for the fixed tickrates of game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+A third typical component of online video games is the 
+\textbf{command message rate}, i.e., the rate at which input is 
+sent from the client to the server. as well as game state updates 
+from the server to the clients do not need to be the same rate as 
+the server's tick rate. 
+
 
 \begin{figure}
   \centering
@@ -94,7 +136,7 @@ In contrast to traditional video media with their fixed framerates of, e.g., \SI
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{End-to-End Lag}
+\subsection{End-to-End Lag}\label{subsec:e2e-lag}
 
 Traditionally, lag in video gaming has often been described as solely the network delay in an online game, which is often also called the ``ping''. It should be evident that the lag is a critically important factor for almost all games, but espiaclly for fast games or competitive games, as it governs the reaction time to in-game events.
 
