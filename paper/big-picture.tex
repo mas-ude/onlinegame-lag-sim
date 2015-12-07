@@ -55,13 +55,40 @@ exemplary rates of current games.}
 
 
 
-\subsection{Game Flavors}
+\subsection{Game TODO Flavors END TODO}
 %TODO: needs a better word than types, more like architectures. Feedback welcome
 
+We next discuss how different implementations of game architectures  
+set the local/remote boundary. Consider first a \textit{single-player game}
+as depicted in Fig.~\ref{fig:component-model-local}. All of the 
+components run locally. However, we previously mentioned that the 
+three parts of the main game loop each progress at individual paces. 
+Therefore, one may conceptually form an \textit{online video game} (see 
+Fig.~\ref{fig:component-model-online}) by separating server-side 
+input and state management components out of the single-player 
+architecture. Now, player state information is transmitted to the 
+game server across the network, and likewise, state updates from 
+the server transit the network until they reach the game client.
+Furthermore, the game server can be the central, authoritative 
+point of state synchronization for other connected clients.
+It should be noted that for reasons of network and processing efficiency, 
+player input events are usually batched, and sent to the server according 
+to a specific \textit{command message rate}.
 
- The components of a locally 
-running \textit{singleplayer game} and their interactions are 
-depicted in Fig.~\ref{fig:component-model-local}.
+%\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
+
+Another possible separation of components is presented in 
+Fig.~\ref{fig:component-model-cloud}: Now the game client including 
+state management and rendering is remote. This gives rise to 
+\textit{cloud gaming}, which is a form of \textit{game streaming} 
+where the game streaming server is part of a larger streaming service 
+hosted at a data center. Due to the spatial separation of the 
+input/output devices and the game engine, input data needs to be 
+sent from the streaming client to the game engine. The return channel 
+does not transport state messages in this scenario, but rather streams 
+rendered audio and video data.
+
+Fig.~\ref{fig:tickrate-streamed} gives once again an overview of all these components for a combined streamed online video game scenario.
 
 \begin{figure}
   \centering
@@ -77,13 +104,6 @@ depicted in Fig.~\ref{fig:component-model-local}.
   \label{fig:component-model-online}
 \end{figure}
 
-\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
-A third typical component of online video games is the 
-\textbf{command message rate}, i.e., the rate at which input is 
-sent from the client to the server. as well as game state updates 
-from the server to the clients do not need to be the same rate as 
-the server's tick rate. 
-
 
 \begin{figure}
   \centering
@@ -93,16 +113,12 @@ the server's tick rate.
 \end{figure}
 
 
-The crucial components of \textit{cloud gaming} are not much different than local or online video games as shown in Fig~\ref{fig:component-model-cloud}. Generally speaking, cloud gaming is a form of \textit{game streaming} where the game streaming server is part of a larger streaming service and hosted at a data center. Through the spatial separation of the input/output devices and the game engine, input data needs to be send from the client to the server and the processed video data is transmitted back to the client in a lossy encoded form.
-
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../models/game-tick-rate-streamed.pdf}
 	\caption{Interaction of client and server in streamed online games.}
 \label{fig:tickrate-streamed}
 \end{figure}
-
-Fig.~\ref{fig:tickrate-streamed} gives once again an overview of all these components for a combined streamed online video game scenario.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
