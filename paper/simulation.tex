@@ -3,22 +3,29 @@
 \section{Simulation Model}
 \label{sec:simulation}
 
-Based on the model introduced in Section~\ref{sec:model} a stochastic simulation was created that implements this model.
-%\subsection{Implementation}
+Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
 
+By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
+This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
 
+The investigations here are not intended to cover every aspect of all parameters or to conduct full parameter studies, but are rather intended to highlight some particular aspect in each of the scenario. 
 
+All of the source code and the data from the upcoming scenarios is provided in the simulation-folder\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} of the repository and can be used as public domain.
 
 
 \subsection{Parameters}
-\begin{itemize}
-  \item Input events are negexp distributed
-  \item Command rate equals tick rate
-\end{itemize}
+
+Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity.
+First, the input is modeled by an exponential distribution with a rate of $20$ events per second. \textbf{TODO:} implications and reasons?
+
+Additionally, the rate at which command messages are sent to the game server is set equal to the server's tickrate as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
+
+The first and simplest scenario to be investigated here, is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best-case of an online multiplayer game, where the server would run in a remote location.
 
 \begin{figure}[!t]
 	\centering
@@ -26,6 +33,9 @@ Based on the model introduced in Section~\ref{sec:model} a stochastic simulation
 	\caption{Scatterplot of the median E2E lag under various frame and tick durations in a scenario where the game is running fully local.}
 \label{fig:nwless-scatter}
 \end{figure}
+
+Figure~\ref{fig:nwless-scatter} ...
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,6 +48,7 @@ Based on the model introduced in Section~\ref{sec:model} a stochastic simulation
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
+Figure~\ref{fig:3dbars-framerate-tickrate-lag} ...
 
 To note here: Variance on the framerate axis is much higher than for the tickrate. This has practical implications for gaming studies. Experiment that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
 
@@ -54,6 +65,7 @@ To note here: Variance on the framerate axis is much higher than for the tickrat
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
 
+Figure~\ref{fig:cloud-e2e-delay-sim}...
 
 
 
