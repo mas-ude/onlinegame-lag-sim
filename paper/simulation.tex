@@ -5,7 +5,7 @@
 
 Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
 
-By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
+By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities. Therefore, the evaluation of the presented scenarios was each conducted with $1000$ repetitions.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
 
@@ -34,28 +34,35 @@ The first and simplest scenario to be investigated here, is the case of the loca
 \label{fig:nwless-scatter}
 \end{figure}
 
-Figure~\ref{fig:nwless-scatter} presents a scatter plot of the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting end-to-end lag.
+Figure~\ref{fig:nwless-scatter} presents a scatter plot of the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting end-to-end lag. The offset between the command message, tickrate, and framerate is responsible for this lower limit of lag and results in lag values generally much higher than just the sum of the tick and frame duration.
 
-
+Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the results for the lag are in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (especially considering that the simulation model does not factor in the delay of the screen and input devices) that can only get worse with the presence of network delay. Therefore, video games, and quality assessments thereof, should try to achieve the highest framerate possible to minimize this influence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
 
+Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay was assumed to follow a truncated normal distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
+
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
+	\vspace{-15mm}
 	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
-Figure~\ref{fig:3dbars-framerate-tickrate-lag} ...
+Figure~\ref{fig:3dbars-framerate-tickrate-lag} shows a 3D bar plot of the influence of both the framerate and the tickrate on this scenario. Typical values for the framerate and tickrate are depicted here. Two things can be noted here. First, the framerate seems to have a larger influence on the lag than the tickrate. And second, the network delay is almost completely masked for low values of both framerate and tickrate, which dominate the resulting end-to-end lag. Only if both rates are high enough the network delay will play a more significant role.
 
-To note here: Variance on the framerate axis is much higher than for the tickrate. This has practical implications for gaming studies. Experiment that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
+This masking effect has large implications for video games and video game evaluations. Many of them exclusively examine the influence of just the network delay, without considering other influence sources to the end-to-end lag. This example demonstrates that this might not be the best course of action. It could also be assumed that this effect shifts to lower values of the frame- and tickrates when a higher network delay is examined.
+
+A further property to note in this scenario is the much larger variance in the framerate dimension when compared to the tickrate. This can also have practical implications for video game studies. Experiments that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cloud Gaming}
 
+Finally, the case of Cloud Gaming is also reconstructed as a simulation scenario for a hypothetical singleplayer game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode (\SI{15}{\milli\second}) and decode delay (\SI{5}{\milli\second}) is in place at the game streaming server and client respectively. As the video frames are now rendered at the server, they need to be transported back to the client first. 
+Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. For the actual propagation delay, the same values as for the online game are used.
 
 \begin{figure}[!t]
 	\centering
@@ -65,13 +72,15 @@ To note here: Variance on the framerate axis is much higher than for the tickrat
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
 
-Figure~\ref{fig:cloud-e2e-delay-sim}...
+In Figure~\ref{fig:cloud-e2e-delay-sim} the results of this Cloud Gaming scenario are shown as an \gls{ECDF} of the end-to-end lag for several framerates. Once again, the large influence of the framerate when compared to the network delay is evident. Past studies have relied on similarly low framerates when assessing the network influence on cloud gaming, which might be problematic, seeing the impact the framerate has on the end-to-end lag here. 
+Similarly, these results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Discussion}
 
-
+The three scenarios presented here serve to provide initial insights into the complex interactions of the end-to-end lag. Although the underlying abstract model adopts some simplifications and some properties are not factored in yet, the results are still very revealing.
+Using the model and simulator as baseline, one can get a good estimation of the expected video game \gls{QoS} values. Alternatively, it can help in choosing representative games for select scenarios.
 
 % Ultimately, to capture any and all latency sources in gaming you would need to rely on external recording gear.
 % With modified input: zero latency and visible input detection (e.g. solder some LEDs to the buttons)
