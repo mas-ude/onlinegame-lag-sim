@@ -78,12 +78,12 @@ saveRDS(results, "../data/nwless-lagsim-1000rounds.rds")
 ## plotting
 
 p <- ggplot(results, aes(x=framerate, y=e2e.lag, color=tickrate)) + geom_point()
-p <- p + scale_x_discrete(name = "frame duration (ms)", labels = seq(5, 100, length.out=20)) + ylab("E2E lag (ms)")
-p <- p + scale_color_discrete(name = "tick duration (ms)", labels=seq(5, 100, length.out=20), guide = guide_legend(ncol=2))
+p <- p + scale_x_discrete(name = "frame duration (ms)", labels = seq(100, 5, length.out=20)) + ylab("E2E lag (ms)")
+p <- p + scale_color_discrete(name = "tick duration (ms)", labels=seq(100, 5, length.out=20), guide = guide_legend(ncol=2))
 #p <- p + theme(text = element_text(family="Linux Biolinum O", size=24))
 p <- p + theme(text = element_text(size=24))
 p
-ggsave("nwless-onlinegame-1000rounds.pdf", width=12, height=8)
+ggsave("../visualization/nwless-onlinegame-1000rounds.pdf", width=12, height=8)
 
 
 # works with custom fonts, but produces a file 5 times larger

@@ -25,7 +25,7 @@ Additionally, the rate at which command messages are sent to the game server is 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
 
-The first and simplest scenario to be investigated here, is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best-case of an online multiplayer game, where the server would run in a remote location.
+The first and simplest scenario to be investigated here, is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best-case an online multiplayer game could achieve, when the server would run locally.
 
 \begin{figure}[!t]
 	\centering
@@ -34,7 +34,7 @@ The first and simplest scenario to be investigated here, is the case of the loca
 \label{fig:nwless-scatter}
 \end{figure}
 
-Figure~\ref{fig:nwless-scatter} ...
+Figure~\ref{fig:nwless-scatter} presents a scatter plot of the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting end-to-end lag.
 
 
 
@@ -67,6 +67,9 @@ To note here: Variance on the framerate axis is much higher than for the tickrat
 
 Figure~\ref{fig:cloud-e2e-delay-sim}...
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Discussion}
 
 
 
