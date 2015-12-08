@@ -1,6 +1,6 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simulation Model}
+\section{Simulation and Scenario Evaluation}
 \label{sec:simulation}
 
 Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
@@ -16,9 +16,10 @@ All of the source code and the data from the upcoming scenarios is provided in t
 
 \subsection{Parameters}
 
-Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity.
-First, the input is modeled by an exponential distribution with a rate of $20$ events per second. \textbf{TODO:} implications and reasons?
+Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are briefly covered here.
 
+First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processes each tick in a truncated normal distribution duration with $\mu = \SI{3}{\milli\second}$ and $\sigma = \SI{0.1}{\milli\second}$.
+%\textbf{TODO:} implications and reasons?
 Additionally, the rate at which command messages are sent to the game server is set equal to the server's tickrate as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
 
 

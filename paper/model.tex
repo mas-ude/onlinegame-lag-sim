@@ -8,7 +8,7 @@ that multiple different components contribute to
 the end-to-end lag in games, and that multiple potential models and 
 levels of granularity exist for each game type.
 Let's discuss therefore the model boundaries and level of detail 
-used in the current implementation of our simulation model.
+used in the current iteration of this analytical model to be presented here.
 
 First, we define the end-to-end lag to be the time elapsed 
 from when the player supplies commands to the input devices until just 
@@ -16,8 +16,8 @@ before actual audio/video output.
 % I.e.: rendering, *and* encode/decode for cloud games
 We assume that the actual presentation of 
 audio and video content happens instantaneously  
-(ignoring any screen synchronization issues), and simulate the player 
-input as a stochastic process. % future work!1!!
+(ignoring any screen synchronization issues), and assume the player 
+input to be a stochastic process. % future work!1!!
 Furthermore, as also found in practice, input events are queued up  
 and sent en bloc at a specific, configurable interval.
 
@@ -29,7 +29,7 @@ Thus, the client we are looking at does not need to account for the
 behavior of other clients.
 % probaby not future work
 
-Next, we associated a static (but individually parametrizable) tick 
+Next, we associate a static (but individually parametrizable) tick 
 rate with the computation process of the game server, and a frame rate 
 with the render process. 
 The server updates the state of the game world at every tick, and may 
@@ -40,9 +40,9 @@ video frame in accordance to the frame rate. The game client's state
 might not get updated by the server between rendered frames. Still, 
 output is generated\footnote{A practical game implementation will use state prediction for this.}.
 
-Note that while the delay between frames is constant, the lag between 
-an input event and the earliest frame that may contain perceptible 
-results of that event can be multiple frame times.
+Note that while the delay between frames is held constant here,
+the lag between an input event and the earliest frame containing a perceptible 
+result of that event can take multiple frame times.
 
 While we consider the command, tick, and frame rates to be constant 
 (while not necessarily identical), there is no inherent synchronization 
@@ -52,11 +52,12 @@ phase offset for each of the rates.
 Finally, since we are simulating online games, the simulation obviously 
 includes the network paths between the different components. The delay 
 distributions are freely configurable, but may be omitted entirely as well.
+Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case.
 
 \begin{figure*}[!t]
 	\centering
 	\includegraphics[width=1.0\textwidth]{../models/e2e-lag-model.pdf}
-	\caption{Process model of TODO.}
+	\caption{Abstract end-to-end lag queuing model representation in the online video game case.}
 \label{fig:queuing-model}
 \end{figure*}
 
@@ -65,35 +66,42 @@ distributions are freely configurable, but may be omitted entirely as well.
 \subsection{Model simplifications}
 
 The simulation model at hand does not attempt to capture all possible 
-sources of lag that §... identifies. Indeed, we simplify the model in the 
+sources of lag that. Indeed, we simplify the model in the 
 following aspects in the hope to make the results more tractable.
-\textbf{TODO Make this more of a ``future work'' section, less ``why we suck''.}
+%\textbf{TODO Make this more of a ``future work'' section, less ``why we suck''.}
 
-\textbf{Additional delay sources.}~The simulation ignores, i.e. 
+\paragraph{Additional delay sources.}
+The simulation ignores, i.e. 
 models as a constant zero contribution, the delays contributed by 
 input devices like keyboards, mice, and game controllers. We estimate 
 these at below \SI{10}{\milli\second}. The same goes for the  lag of 
 the display device (from after rendering or decoding until the frame 
-is actually visible) which is in the range of 1-3 frames for a computer 
-screen, and larger for TV sets. \textbf{Add adaptive VSYNC?}
+is actually visible) which is typically in the range of 1--3 frames for a computer 
+monitor, and larger for TV sets. 
+% TODO: \textbf{Add adaptive VSYNC?}
 
-\textbf{Subtleties of game internals.}~Modern games go great lengths 
+\paragraph{Subtleties of game internals.}
+Modern games go great lengths 
 to handle lag gracefully, and try to ``work around it'' in various ways. 
 The methods for this vary, and implementations usually are not open 
 for examination, so we leave them for further study. 
 Techniques include lag compensation (the game client 
 tries to predict the server state from past knowledge, allowing for 
 smoother local updates but possibly causing slight deviation and 
-re-synchronization artifacts), and tick and frame rate adaptation 
+re-synchronization artifacts), and tick- and framerate adaptation 
 at the game server and client, respectively.
-\textbf{TODO I'm making this up. PLX correct.}
 Lastly, player actions in a game might take multiple command time 
 intervals to perform. The simulation currently assumes that every 
 single batch of commands that reaches the server will result in 
 state updates and thus changes in the perceptible output of the game 
-client.
+client. It should be noted, that none of these techniques alter the 
+end-to-end lag itself, rather they just try to conceal it on some higher level. 
+Therefore, the mechanisms do not invalidate our examination of the basic 
+end-to-end lag itself.
+%\textbf{TODO I'm making this up. PLX correct.}
 
-\textbf{Factors in human perception and strategy.}~The lag model 
+\paragraph{Factors in human perception and strategy.}
+The lag model 
 we present does not take into account the perceived lag from when the 
 player \textit{thinks} they have triggered an action to when they 
 perceive the outcomes of their action. This consequently disregards 
@@ -114,7 +122,7 @@ Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify t
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
-	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations. TODO: add the command rate to this figure and find a better place for it.}
+	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
 \label{fig:tickrate-timeseries}
 \end{figure}
 
@@ -190,26 +198,6 @@ Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify t
 
 
 
-% \begin{table}[!t]
-% \caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Much of this information here is guesswork from sometimes dubious sources and needs to be verified.}
-% \label{tbl:tickrates}
-% 	\centering
-% 	\begin{tabu}{X[0.45]|X}
-% 		\toprule
-% 		\textbf{Video Game} & \textbf{Tickrate} \\
-% 		\midrule
-% 		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\ \midrule
-% 		Battlefield 4 & \SI{30}{\hertz} (\SI{10}{\hertz} for state outside of close proximity to player). \SI{60}{\hertz}/\SI{120}{\hertz} implemented on test servers. \\ \midrule
-% 		Minecraft & max. \SI{20}{\hertz} \\ \midrule
-% 		League of Legends & \SI{30}{\hertz} (guessed) \\ \midrule
-% 		Dota 2 & \SI{30}{\hertz} \\ \midrule
-% 		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\ \midrule
-% 		Eve Online & \SI{1}{\hertz} \\ \midrule
-% %		Sports Game 1 & \\ \midrule
-% 		Project Cars & \SI{600}{\hertz} (Physics) \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
-% 		\bottomrule
-% 	\end{tabu}
-% \end{table}
 
 
 
