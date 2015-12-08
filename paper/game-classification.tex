@@ -3,12 +3,22 @@
 \section{Choosing Representative Games}
 \label{sec:game-criteria}
 
-Finding fitting objective \gls{QoE} metrics is strongly game-dependent. They need to reflect the game's mechanics in a meaningful manner. But this is beyond the scope of this paper, which will only concern itself with game-independent metrics, including: The framerate, the frame \gls{IAT}, and the end-to-end lag.
+Suitable objective \gls{QoE} strongly depend on the considered game, as they need to reflect the game's mechanics in a meaningful manner.
+However, finding such metrics is beyond the scope of this paper.
+Here we provide the foundation for the investigation of such \gls{QoE} metrics by investigating game-independent metrics, including: Framerate, frame \gls{IAT}, and end-to-end lag.
 
-The framerate and \gls{IAT} are a good representation for the game's fluidity and responsiveness to inputs and are especially important to note for cloud gaming. The end-to-end lag gives the best overall picture on the attainable gaming experience and should always be preferred over partial lag values, such as purely investigating the network latency. The impact of the lag also depends on the type and precision of controls the game offers. A keyboard and mouse driven PC game might be much more sensitive to high lag than a mobile game with touch controls.
+Framerate and frame \gls{IAT} are a good indicators for the game's fluidity and responsiveness to inputs.
+As such, they are especially important to note in cloud gaming scenarios.
+End-to-end lag gives provides the best overall picture on the attainable gaming experience and should always be preferred over partial lag values, e.g. by purely investigating the network latency.
+The impact of the lag also depends on the type and precision of controls the game offers.
+For example, a keyboard and mouse driven PC game might be much more sensitive to high lag values than a mobile game with touch controls.
 
-Input controls are but one aspect of the games environment and settings, which also need to be carefully selected to achieve meaningful results. This especially concerns PC games which usually offer a wide range of options to choose from of which the graphics options are the most impactful. The recommended settings to run games at are a video resolution of 1080p or higher with the games other graphics options set to high or at lest medium values in order to reflect a typical gaming experience. 
-Due to the demonstrated impact of the framerate on the end-to-end lag a target of \SI{60}{\hertz} should considered as a minimum rate for most games. Some types of games are less dependent on the framerate, where a rate of \SI{30}{\hertz} would still be considered acceptable. 
+Input controls are but one aspect of the games environment and settings, which need to be carefully selected to achieve meaningful results.
+This especially concerns PC games which usually offer a wide range of options to choose from.
+Here, the graphics options are the most impactful.
+The recommended settings to run games at are a video resolution of 1080p or higher with the games other graphics options set to high or at least medium values in order to reflect a typical gaming experience. 
+Due to the demonstrated impact of the framerate on the end-to-end lag a target of \SI{60}{\hertz} should considered as a minimum rate for most games.
+Some types of games are less dependent on the framerate, where a rate of \SI{30}{\hertz} would still be considered acceptable. 
 
 % Experimenters should never set a framerate lower than that for the reasons discussed in the previous section. They should however also consider testing at higher framerates, especially for competitive games with a high tickrate to further reduce the negative impact of low framerates.
 
@@ -16,16 +26,23 @@ Due to the demonstrated impact of the framerate on the end-to-end lag a target o
 
 \subsection{Quantifiable Game Classification Criteria}
 
-It is quite difficult to find games that are representative for certain input and lag demands. For example, the traditional game genre categorization is not a good starting point as games from the same category can be vastly different in terms of game speed and necessary reaction times. Rather, the following four exemplary metrics might be more helpful for classifying games to better assess the impact of the end-to-end lag on the experienced quality.
+Finding games which are representative for certain input and lag demands is challenging.
+For example, the traditional game genre categorization is not a good starting point, as games from the same category can be vastly different in terms of game speed and necessary reaction times.
+Rather, the following four exemplary metrics might prove useful when classifying games to better assess the impact of the end-to-end lag on the experienced quality.
 
  \begin{itemize}
-    \item \textbf{Required number of decisions or actions in a certain time span.} E.g., the \gls{CCG} \textsc{Hearthstone} may only require a handful of actions (i.e., choosing and playing cards) each turn, while in order to competitively play the \gls{RTS} \textsc{Starcraft 2} you more or less need to achieve a few hundred so-called \gls{APM}, with the record being higher than $800$ \gls{APM}.s \cite{6404025} defines a related metric dubbed \textit{command heaviness} comparing the amount of change to the input rate, under the umbrella term \textit{real-time strictness}. This ties in with the concepts of game sense. Micromanagement-intense games usually tend to result in high APM rates.
+    \item \textbf{Required number of decisions or actions in a certain time span.} E.g., the \gls{CCG} \textsc{Hearthstone} may only require a handful of actions, i.e. choosing and playing cards, each turn, while in order to competitively play the \gls{RTS} \textsc{Starcraft 2} you more or less need to achieve a few hundred \gls{APM}, with the record being higher than $800$ \glspl{APM}. \cite{6404025} defines a related metric dubbed \textit{command heaviness} comparing the amount of change to the input rate, under the umbrella term \textit{real-time strictness}. %This ties in with the concepts of game sense. Versteh ich nicht
+    Micromanagement-intense games usually tend to result in high APM rates.
 
     \item \textbf{Maximum successful reaction time to in-game actions.} Again e.g., \textsc{Hearthstone} as a turn-based game requires no instant reaction time at all, as the opponent's and the player's actions are separated into turns. First-person shooters like \textsc{Counter-Strike: Global Offensive} are usually on the opposite extreme of this spectrum, as they tend to have a very high tickrate and literally often require you to ``shoot first'' to win. This is also investigated in \cite{Claypool:2006:LPA:1167838.1167860}.
 
-    \item \textbf{Ratio of unpredictable actions,} which is closely related to the previous metric. Compare, e.g., an entirely rhythm-based game (e.g., \textsc{Guitar Hero}), where you can completely pre-plan all of your actions, to a twitch-based shooter like \textsc{Counter-Strike} where you have to react from moment to moment. In theory, a game with no surprising events will be much less influenced by a higher end-to-end lag.
+    \item \textbf{Ratio of unpredictable actions.} which is closely related to the previous metric. When considering an entirely rhythm-based game (e.g., \textsc{Guitar Hero}), where you can completely pre-plan all of your actions, to a twitch-based shooter like \textsc{Counter-Strike} where you have to react from moment to moment. In theory, a game with no surprising events will be less influenced by a higher end-to-end lag.
 
-    \item \textbf{Temporal and spatial accuracy and precision of input events.} Accuracy can be both in terms of temporal as well as spatial aspects which can be influenced by both the image quality and the frame rate. For example, discrete events, like button-presses on a controller, require less spatial less precision than analogue inputs, e.g., freeform mouse movement.
+    \item \textbf{Temporal and spatial accuracy and precision of input events.} Accuracy can be relevant in both temporal as well as spatial aspects.
+    Thus, it can be influenced by both the image quality and the frame rate.
+    For example, discrete events, e.g. button-presses on a controller, require less spatial precision than analogue inputs, e.g., free-form mouse movement.
 \end{itemize}
 
-This is a non-exhaustive list for a few quantifiable criteria, which would need to be further refined and extended before such metrics can be applied as a means of categorization. Moreover, the value of some of these metrics might not be that easy to determine as they involve playing the game. But even as a qualitative discriminator or when just considering broad value ranges, such a classification might be much more fruitful than one based on the video game genre.
+This is a non-exhaustive list of selected quantifiable criteria.
+It should be refined in future studies and extended before such metrics can be applied as a means of categorization.
+Moreover, the value of some of these metrics might not be that easy to determine as they involve playing the game. Even as a qualitative discriminator or when considering broad value ranges, such a classification might be much more sensible than one purely based on the video game genre.
