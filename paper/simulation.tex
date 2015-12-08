@@ -5,7 +5,7 @@
 
 Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
 
-By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities. Therefore, the evaluation of the presented scenarios was each conducted with $1000$ repetitions.
+By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
 
@@ -21,6 +21,8 @@ Besides being fully reconfigurable, the simulation currently also has a few defa
 First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processes each tick in a truncated normal distribution duration with $\mu = \SI{3}{\milli\second}$ and $\sigma = \SI{0.1}{\milli\second}$.
 %\textbf{TODO:} implications and reasons?
 Additionally, the rate at which command messages are sent to the game server is set equal to the server's tickrate as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
+
+The evaluation of the presented scenarios was conducted on the basis of $1000$ repetitions for each setting. Each of the runs consisted of a series of $100$ input events and their associated end-to-end lag. On this basis a median lag was calculated, and finally an overall mean lag out of the individiual medians of each repetition.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
