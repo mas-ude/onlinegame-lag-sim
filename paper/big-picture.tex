@@ -5,8 +5,8 @@
 
 We now introduce some fundamental terms and concepts such as tickrate, 
 framerate, command message rate, and end-to-end lag 
-in subsections \ref{subsec:game-model} through 
-\ref{subsec:e2e-lag}. Then, subsection \ref{sec:measurementapproaches} 
+in Section~\ref{subsec:game-model} through 
+\ref{subsec:e2e-lag}. Then, Section~\ref{sec:measurementapproaches} 
 presents various lag measurement techniques.
 
 
@@ -24,8 +24,10 @@ presents various lag measurement techniques.
   render screen\;
  }
 \end{algorithm}
-\caption{Basic model of a continuous main video game loop.}
+\caption{Basic model of a continuous main video game loop.
+\hoss{Wir haben doch eigentlich ein nebenlaeufiges System. Das wird hier nicht klar, sondern erweckt den falschen Eindruck. Eventuell andere Darstellung (siehe Scan). Formal koennte man das mit UML oder Petri-Netzen machen, ist aber nicht verstaendlich. Daher semi-formal graphical representation.}}
 \label{alg:gameloop1}
+\includegraphics[width=\columnwidth]{figure1videoGameLoop.jpg}
 \end{figure}
 
 At their core video games are essentially feedback-directed 
@@ -54,22 +56,26 @@ exemplary rates of current games.
 %\textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for 
 %\textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
+%\newcommand{\mymidrule}[]{\midrule }
+\newcommand{\mymidrule}{\addlinespace }
 
 \begin{table}[!t]
-\caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various reliable and unreliable source and should be taken as-is.}
+\caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various reliable and unreliable sources and should be taken as-is. 
+\hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
+}
 \label{tbl:tickrates}
 	\centering
-	\begin{tabu}{X[0.45]|X}
+	\begin{tabu}{X[0.45]X}
 		\toprule
 		\textbf{Video Game} & \textbf{Tickrate} \\
 		\midrule
-		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\ \midrule
-		Battlefield 4 & \SI{30}{\hertz} (\SI{10}{\hertz} for state outside of close proximity to player). \SI{60}{\hertz}/\SI{120}{\hertz} implemented on test servers. \\ \midrule
-		Minecraft & max. \SI{20}{\hertz} \\ \midrule
-		League of Legends & \SI{30}{\hertz} (guessed) \\ \midrule
-		Dota 2 & \SI{30}{\hertz} \\ \midrule
-		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\ \midrule
-		Eve Online & \SI{1}{\hertz} \\ \midrule
+		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\ \mymidrule
+		Battlefield 4 & \SI{30}{\hertz} (\SI{10}{\hertz} for state outside of close proximity to player). \SI{60}{\hertz}/\SI{120}{\hertz} implemented on test servers. \\ \mymidrule
+		Minecraft & max. \SI{20}{\hertz} \\ \mymidrule
+		League of Legends & \SI{30}{\hertz} (guessed) \\ \mymidrule
+		Dota 2 & \SI{30}{\hertz} \\ \mymidrule
+		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\ \mymidrule
+		Eve Online & \SI{1}{\hertz} \\ \mymidrule
 %		Sports Game 1 & \\ \midrule
 		Project Cars & \SI{600}{\hertz} (Physics) \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
 		\bottomrule
@@ -113,12 +119,12 @@ sent from the streaming client to the game engine. The return channel
 does not transport game state messages in this scenario, but rather streams the 
 rendered audio and video data.
 
-Fig.~\ref{fig:tickrate-streamed} gives once again an overview of all these components for a combined streamed online video game scenario.
+Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
 
 \begin{figure}[!t]
   \centering
   \includegraphics[width=0.8\columnwidth]{../models/component_interaction-local.pdf}
-  \caption{Components and interactions of a singleplayer video game.}
+  \caption{Components and interactions of a single-player video game.}
   \label{fig:component-model-local}
 \end{figure}
 
@@ -183,7 +189,7 @@ With the central role of the end-to-end lag in mind, it is natural to assume tha
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Screen Recording Software Method}
+\myparagraph{Screen Recording Software Method}
 Recording in software the output stream of a video game might be the simplest approach to determine video game lag. It can capture both the framerate and \gls{IAT} at a driver level, and the recorded video can be used for image and quality analyses as well as to correlate it to additionally recorded input events in order to calculate the lag. This is not the complete end-to-end lag however, as both the controller and screen output delay are missing. The need to install additional software might make it unsuitable for some scenarios, e.g., when measuring console video games. As a variant of this method, one can also record the output stream with a video capture card on a secondary computer, which does not negatively effect the game's performance as the software method would.
 
 Examples of this approach include both \cite{Chen:2011:MLC:2072298.2071991} and \cite{6670099} which measured the latency of cloud gaming services in the game client. They do this by invoking the system menu in games and measuring the time until it is displayed. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (i.e., the lag) as well as image quality by employing software recording methods on the client's computer.
@@ -191,7 +197,7 @@ Examples of this approach include both \cite{Chen:2011:MLC:2072298.2071991} and 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Passive Network Measurements}
+\myparagraph{Passive Network Measurements}
 In some cases it may also be advantageous to tap into the network interactions of the games and record the command and update messages sent between server and clients. While this is not a direct measure of game quality, it can give insights into the game's inner workings, such as the tick rates, and one can derive, e.g., the lowest achievable end-to-end lag from this.
 
 %Can only investigate command and update messages, not tick rate directly. Evaluate rate, IAT, and bandwidth, estimate latency (though there may be no direct link between commands and updates).
@@ -202,8 +208,10 @@ In some cases it may also be advantageous to tap into the network interactions o
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Camera Recordings}
-Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
+\myparagraph{Camera Recordings}
+Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. 
+\hoss{Mit 'only' ware ich vorsichtig. Es kann auch noch andere Moeglichkeiten mittels physikalischer Sensoren geben, evtl. sowas \cite{di2010new} also aehnlich zu \cite{beyermethod}. Evtl sollte man 'Camera Recordings and Sensoring' schreiben?}
+The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
 
 
 

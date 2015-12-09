@@ -3,7 +3,6 @@
 \section{Introduction}
 \label{sec:introduction}
 
-
 The video games industry currently is one of the largest entertainment sectors in terms of revenue, having grossed an estimated \SI{81}[\$]{Bn} in 2014\footnote{\url{http://www.newzoo.com/insights/top-100-countries-represent-99-6-81-5bn-global-games-market/}}. Similarly, it has also garnered some interest from the computer networking and the \gls{QoE} research communities, both taking a look at network-related properties and the resulting subjective quality of individual video games. Many of these research efforts were triggered through the contrivance of cloud gaming.
 
 % However, video games were generally not highly regarded especially in western countries in the past. With casual and mobile games serving as a ``gateway drug'' this opinion began to change in recent years. Games like \textsc{League of Legends} are played by more than $27$ million each day\footnote{\url{http://www.riotgames.com/articles/20140711/1322/league-players-reach-new-heights-2014}}. Especially competitive gaming has been on the rise, with some video game tournaments offering price pools in the millions.\footnote{E.g. \textsc{Dota 2}'s The International 5  is the largest tournament to date with a prize pool of about \SI{18}[M]{\$} \url{http://www.dota2.com/international/overview/}.}
@@ -23,16 +22,18 @@ Understanding these game properties would result in two distinct benefits:
 
 This paper aims to give insights to one of the bespoke core properties, namely the ``\textit{end-to-end lag}'', and its influence in online and cloud gaming scenarios. To this end, we create a model, which describes this lag on the basis of other intrinsic game factors, such as the framerate and tickrate, and its influence on several distinct scenarios, such as online and cloud gaming.
 
-To demonstrate the model, this paper also provides a simulation implementing these exact scenarios. Initial results from this simulation visualize what has been assumed by many for quite some time: The influence of the framerate and tickrate on the end-to-end lag, and therefore also on the subjective interaction quality of the game, is much larger than expected. Which means, that these two parameters need to be tightly controlled and kept in certain ranges to improve the results of future subjective quality assessment studies.
+To demonstrate the model, this paper also provides a simulation implementing these exact scenarios.
+\footnote{\textit{Note:} The authors explicitly encourage the review and reuse of all the data and custom tools used in the preparation of this paper. The materials are therefore available as \textbf{open source} and \textbf{open data} from the authors' public repository  %\footnote{
+\url{https://github.com/mas-ude/onlinegame-lag-sim}.}
+Initial results from this simulation visualize what has been assumed by many for quite some time: The influence of the framerate and tickrate on the end-to-end lag, and therefore also on the subjective interaction quality of the game, is much larger than expected. Which means, that these two parameters need to be tightly controlled and kept in certain ranges %to improve the results of future 
+in subjective quality assessment studies.
 
-~\newline
+%~\newline
 This paper is structured as follows.
 First, in Section~\ref{sec:background} we give an introduction to important parts of video game engine terminology and properties, which provides a big-picture for game components relevant to this scientific study of video game technologies.
 In Section~\ref{sec:relatedwork} we survey prior work on \gls{QoS} and \gls{QoE} for video games.
 Afterwards, in Section~\ref{sec:model}, we propose an abstract model to describe end-to-end lag, a major factor of \gls{QoS} in any video games. Based on this model, we describe the implemented \gls{DES} and perform a parameter study in order to identify main influence factors for the end-to-end lag in Section~\ref{sec:simulation}. This is followed up by a discussion in Section~\ref{sec:game-criteria} on how to correctly classify games in order to meaningfully apply the lag results. Finally, in Section~\ref{sec:conclusion} the key findings are discussed in addition to providing some concluding remarks and pointers to future work.
 
-~\newline
-\textit{Note:} The authors explicitly encourage the review and reuse of all the data and custom tools used in the preparation of this paper. The materials are therefore available as \textbf{open source} and \textbf{open data} from the authors' public repository\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim}}.
 
 
 
