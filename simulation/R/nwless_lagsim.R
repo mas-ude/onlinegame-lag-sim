@@ -8,6 +8,7 @@
 
 
 library(ggplot2)
+library(RColorBrewer)
 library(scales) # for muted()
 library(latticeExtra) # for cloud and 3dbars
 library(foreach)
@@ -83,11 +84,15 @@ results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="m
 results.mean$fr2 <- factor(results.mean$framerate, levels = as.character(sort(as.numeric(levels(results.mean$framerate)), decreasing = TRUE)))
 results.mean$tr2 <- factor(results.mean$tickrate, levels = as.character(sort(as.numeric(levels(results.mean$tickrate)), decreasing = TRUE)))
 
-p <- ggplot(results.mean, aes(x=fr2, y=e2e.lag, color=tr2)) + geom_point(size = 3)
+colour.count = length(unique(results.mean$tickrate))
+get.palette = colorRampPalette(brewer.pal(9, "Set1"))
+
+p <- ggplot(results.mean, aes(x=fr2, y=e2e.lag, color=tr2)) + geom_point(size = 4)
 p <- p + scale_x_discrete(name = "frame duration (ms)", labels = seq(5, 100, length.out=20)) + ylab("E2E lag (ms)")
-p <- p + scale_color_discrete(name = "tick duration (ms)", labels=seq(5, 100, length.out=20), guide = guide_legend(ncol=2))
-#p <- p + theme(text = element_text(family="Linux Biolinum O", size=24))
+# p <- p + scale_color_discrete(values = get.palette(colour.count), name = "tick duration (ms)", labels=seq(5, 100, length.out=20), guide = guide_legend(ncol=2))
+# p <- p + theme(text = element_text(family="Linux Biolinum O", size=24))
 p <- p + theme(text = element_text(size=24))
+p <- p + scale_color_manual(values = get.palette(colour.count), name = "tick duration (ms)", labels=seq(5, 100, length.out=20), guide = guide_legend(ncol=2))
 p
 ggsave("../visualization/nwless-onlinegame-1000rounds.pdf", width=12, height=8)
 
