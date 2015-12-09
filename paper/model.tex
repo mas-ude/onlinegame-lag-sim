@@ -10,21 +10,29 @@ levels of granularity exist for each game type.
 Let's discuss therefore the model boundaries and level of detail 
 used in the current iteration of this analytical model to be presented here.\footnote{\hoss{Random variables (RV) are denoted as capitalized letters $X$, while constants are depicted with small letters $c$.}} 
 
+\newcommand{\maybeaddsomespace}{\\ \addlinespace}
+%\newcommand{\inv}[1]{\nicefrac{1}{#1}}
+\newcommand{\inv}[1]{#1^{-1}}
+
 \begin{table}[!t]%
 \caption{Notation of model variables and constants.}
 \label{tab:notation}
 \centering
-\begin{tabu}{lXX}
+\begin{tabu}{lX[1,l]X[1,l]}
 \toprule
-Symbol & Description & Simulation \\
+Sym. & Description & Simulation \\
 \midrule
-$T$ & end-to-end lag (RV) & key performance measure \\
-$D$ & network delay (RV) between game client and server & $D \sim LogN(\mu;\sigma)$ with $ \mu=\unit[50]{ms}; \sigma=\unit[50]{ms}$\\
-$U$ & (inter arrival) time between user inputs (RV) & $U \sim Exp(\lambda)$; $\lambda=\unit[50]{ms}$\\
-$b$ & input events are gathered and sent in time intervals $b$ (const.) & $b=\unit[]{}$ \\
-$c$ & command rate $c=\nicefrac{1}{b}$ (const.) & $c=\unit[]{}$ \\
-$t$ & game tick rate (const.) & $t=\unit[]{}$ \\
-$f$ & frame rate (const.) & $f=\unit[]{}$ \\
+$T$ & end-to-end lag (RV) & key performance measure \maybeaddsomespace
+$D$ & network delay (RV) between game client and server & $D \sim TNorm(\mu
+_D;\sigma_D)$ with $ \mu_D=\unit[20]{ms}; \sigma_D=\unit[5]{ms}$\maybeaddsomespace
+$P$ & game server processing time (RV) & $P \sim TNorm(\mu_P;\sigma_P)$ with $ \mu_P=\unit[3]{ms}; \sigma_P=\unit[0.1]{ms}$\maybeaddsomespace
+$U$ & (inter arrival) time between user inputs (RV) & $U \sim Exp(\lambda)$; $\lambda=\unit[50]{ms}$\maybeaddsomespace
+$g$ & game tickrate (const.) & $g \in \{10,\dots,200\} \unit{Hz}$ \\
+$\inv{g}$ & game tick duration (const.) & $\inv{g} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
+$f$ & framerate (const.) & $f \in \{10,\dots,200\} \unit{Hz}$ \\
+$\inv{f}$ & frame duration (const.) & $\inv{f} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
+$c$ & command rate (const.) & $c=g$ \\
+$\inv{c}$ & input events are gathered and sent in time intervals $\inv{c}$ (const.) &  \maybeaddsomespace
 \bottomrule
 \end{tabu}
 \end{table}
@@ -40,7 +48,8 @@ audio and video content happens instantaneously
 (ignoring any screen synchronization issues), and assume the player 
 input to be a stochastic process. % future work!1!!
 Furthermore, as also found in practice, input events are queued up  
-and sent en bloc at a specific, configurable interval.
+and sent en bloc at a specific, configurable interval $b$.
+\hoss{The command rate is denoted as $c$.}
 
 Second, in our treatment of client-server games, we focus on modeling 
 a single connected client and its interaction with the game server. 
@@ -51,10 +60,10 @@ behavior of other clients.
 % probaby not future work
 
 Next, we associate a static (but individually configurable) tick 
-rate with the computation process of the game server, and a frame rate 
+rate $g$ with the computation process of the game server, and a frame rate $f$
 with the render process. 
 The server updates the state of the game world at every tick, and may 
-spend some processing time in order to do so. Once finished, an update 
+spend some processing time $P$ in order to do so. \hoss{The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations.} Once finished, an update 
 message is sent to the client.
 Independent of the update process, the game client outputs the next 
 video frame in accordance to the frame rate. The game client's state 
@@ -72,21 +81,23 @@ phase offset for each of the rates.
 
 Finally, since we are simulating online games, the simulation obviously 
 includes the network paths between the different components. The delay 
-distributions are freely configurable, but may be omitted entirely as well.
-Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case. Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
+distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server.
+Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case. \hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.} Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
 \begin{figure*}[!t]
 	\centering
 	\includegraphics[width=1.0\textwidth]{../models/e2e-lag-model.pdf}
-	\caption{Abstract end-to-end lag queuing model representation in the online video game case. \hoss{Die Queues sind nicht ganz korrekt so. Es werden periodisch alle Events verarbeitet und weitergereicht. Hier sieht es nach FIFO und Einzelabarbeitung aus. Ausserdem sind die Variablen $N_C$ usw. nicht erklaert. }}
+	\caption{Abstract end-to-end lag queuing model representation in the online video game case. \hoss{Die Queues sind nicht ganz korrekt so. Es werden periodisch alle Events verarbeitet und weitergereicht. Hier sieht es nach FIFO und Einzelabarbeitung aus. Ausserdem sind die Variablen $N_C$ usw. nicht erklaert. Ausserdem wird im Model nicht erklaert, dass es einen Gaming Processing Delay am Game Server gibt.}}
 \label{fig:queuing-model}
+\includegraphics[width=0.8\textwidth]{figure7-queueingModel.jpg}
+\caption*{\hoss{Wie waere es, ein Symbol einzufuehren, dass den periodic Update mit entsprechender Rate zeigt?}}
 \end{figure*}
 
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
-	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag. \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild.}} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag. \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild. }} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
 \label{fig:tickrate-timeseries}
 \end{figure}
 
@@ -100,17 +111,17 @@ sources of lag that. Indeed, we simplify the model in the
 following aspects in the hope to make the results more tractable.
 %\textbf{TODO Make this more of a ``future work'' section, less ``why we suck''.}
 
-\myparagraph{Additional delay sources.}
-The simulation ignores, i.e. 
-models as a constant zero contribution, the delays contributed by 
+\myparagraph{Additional delay sources}
+The model ignores the delays contributed by 
 input devices like keyboards, mice, and game controllers. We estimate 
-these at below \SI{10}{\milli\second}. The same goes for the  lag of 
+these at below \SI{10}{\milli\second}. The same goes for the lag of 
 the display device (from after rendering or decoding until the frame 
 is actually visible) which is typically in the range of 1--3 frames for a computer 
 monitor, and larger for TV sets. 
+\hoss{The model can be extended to take those delay factors into account. For the sake of simplicity, we have ignored them in this paper.}
 % TODO: \textbf{Add adaptive VSYNC?}
 
-\myparagraph{Subtleties of game internals.}
+\myparagraph{Subtleties of game internals}
 Modern games go great lengths 
 to handle lag gracefully, and try to ``work around it'' in various ways. 
 The methods for this vary, and implementations usually are not open 
@@ -130,7 +141,7 @@ Therefore, the mechanisms do not invalidate our examination of the basic
 end-to-end lag itself.
 %\textbf{TODO I'm making this up. PLX correct.}
 
-\myparagraph{Factors in human perception and strategy.}
+\myparagraph{Factors in human perception and strategy}
 The lag model 
 we present does not take into account the perceived lag from when the 
 player \textit{thinks} they have triggered an action to when they 

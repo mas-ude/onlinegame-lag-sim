@@ -5,7 +5,7 @@
 
 Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
 
-By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
+By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
 
@@ -16,13 +16,14 @@ All of the source code and the data from the upcoming scenarios is provided in t
 
 \subsection{Parameters}
 
-Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are briefly covered here.
+Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are briefly covered here and summarized in Table~\ref{tab:notation}.
+\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
 
-First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processes each tick in a truncated normal distribution duration with $\mu = \SI{3}{\milli\second}$ and $\sigma = \SI{0.1}{\milli\second}$.
+First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processing time $P$ follows a truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
 %\textbf{TODO:} implications and reasons?
-Additionally, the rate at which command messages are sent to the game server is set equal to the server's tickrate as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
+Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
 
-The evaluation of the presented scenarios was conducted on the basis of $1000$ repetitions for each setting. Each of the runs consisted of a series of $100$ input events and their associated end-to-end lag. On this basis a median lag was calculated, and finally an overall mean lag out of the individiual medians of each repetition.
+The evaluation of the presented scenarios was conducted on the basis of $r=\np{1000}$ repetitions for each setting. Each run $i \in \{1,\dots,r\}$ consisted of a series of $n=\np{100}$ input events and their associated end-to-end lag $T_{i,j}$ for the $j$-th input event. On this basis a median lag $\widetilde{T_i}$ was calculated over the $n$ input events for each run $i$, and finally an overall mean lag out of the individiual medians of each repetition, i.e. $\overline{T}=\frac{1}{n}\sum_{i=1}^r\widetilde{T_i}$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,7 +45,7 @@ Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a f
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
 
-Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay was assumed to follow a truncated normal distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
+Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a \hoss{left}-truncated normal distribution with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
 
 \begin{figure}[!t]
 	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
@@ -52,7 +53,7 @@ Next up is the full scenario of an online video game, now with the network lag i
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}
+	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario. \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
@@ -67,13 +68,13 @@ A further property to note in this scenario is the much larger variance in the f
 \subsection{Cloud Gaming}
 
 Finally, the case of Cloud Gaming is also reconstructed as a simulation scenario for a hypothetical single-player game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode (\SI{15}{\milli\second}) and decode delay (\SI{5}{\milli\second}) is in place at the game streaming server and client respectively. As the video frames are now rendered at the server, they need to be transported back to the client first. 
-Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. For the actual propagation delay, the same values as for the online game are used.
+Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. For the actual network delay, the same values as for the online game are used.
 
 \begin{figure}[!t]
 	\centering
 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{\acrshort{ECDF} of the influence of the server's rendering and streaming framerate on the end-to-end lag in the cloud gaming scenario.}
+	\caption{\acrshort{ECDF} of the influence of the server's rendering and streaming framerate on the end-to-end lag in the cloud gaming scenario. \hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
 
