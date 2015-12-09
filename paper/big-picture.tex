@@ -3,8 +3,9 @@
 \section{Overview and Background}
 \label{sec:background}
 
-Before constructing an end-to-end lag model, we first introduce some terms 
-and concepts in subsections \ref{subsec:game-model} through 
+We now introduce some fundamental terms and concepts such as tickrate, 
+framerate, command message rate, and end-to-end lag 
+in subsections \ref{subsec:game-model} through 
 \ref{subsec:e2e-lag}. Then, subsection \ref{sec:measurementapproaches} 
 presents various lag measurement techniques.
 
@@ -37,8 +38,8 @@ some form of input to the next, they may still proceed at their own
 intrinsic paces. (For example, the state of the game world is updated 
 even if the player character does not move.)
 In this simplified model, we distinguish a generic process for player 
-input, a tickrate that governs the frequency of game state updates, and 
-a framerate determining how often the screen is updated every second.
+input, a \textit{tickrate} that governs the frequency of game state updates, and 
+a \textit{framerate} determining how often the screen is updated every second.
 
 Note that actual game implementations sometimes choose to update 
 parts of the game state on different fixed frequencies. For example, 
@@ -86,10 +87,11 @@ set the local/remote boundary. Consider first a \textit{single-player game}
 as depicted in Fig.~\ref{fig:component-model-local}. All of the 
 components run locally. However, we previously mentioned that the 
 three parts of the main game loop each progress at individual paces. 
-Therefore, one may conceptually form an \textit{online video game} (see 
-Fig.~\ref{fig:component-model-online}) by separating server-side 
+Therefore, one may conceptually separate server-side 
 input and state management components out of the single-player 
-architecture. Now, player state information is transmitted to the 
+architecture, and thus form an \textit{online video game} (see 
+Fig.~\ref{fig:component-model-online}). 
+Now, player state information is transmitted to the 
 game server across the network, and likewise, state updates from 
 the server transit the network until they reach the game client.
 Furthermore, the game server can be the central, authoritative 
@@ -148,7 +150,9 @@ Fig.~\ref{fig:tickrate-streamed} gives once again an overview of all these compo
 \subsection{Framerate and Frame-times}
 \label{sec:framerate}
 
-In contrast to traditional video media with their fixed framerates of, e.g., \SI{24}{\hertz}, video games are more flexible but simultaneously also much more demanding to the framerate for several reasons. First, video games usually target frame rates of \SI{30}{\hertz}, \SI{60}{\hertz}, or sometimes also \SI{120}{\hertz}, depending on the type of game. Higher frame rates are targeted to enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos. High frame rates also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate also influences the reactivity of a game, but can also be a source of latency itself.
+In contrast to traditional video media with their fixed framerates of, e.g., \SI{24}{\hertz}, video games are more flexible but simultaneously also much more demanding on the framerate for several reasons. First, video games usually target frame rates of \SI{30}{\hertz}, \SI{60}{\hertz}, or sometimes also \SI{120}{\hertz}, depending on the type of game. Higher frame rates are targeted to enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos. High frame rates also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate 
+influences the reactivity of a game, but can also be a source 
+of latency itself.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -156,7 +160,8 @@ In contrast to traditional video media with their fixed framerates of, e.g., \SI
 
 Lag in video gaming is often described solely on the basis of the network delay in an online game. It should be evident that the lag is a critically important factor for almost all games. This is especially true for fast or competitive games, as it governs the reaction time to in-game events.
 
-But this focus on network delay neglects some key components to this lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textbf{end-to-end lag} is captured. What makes matters even worse, is that this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing a move command, may take considerable longer to complete, partly due to the actions taking more than one game tick to complete. Therefore, each video game will have a distinct ``lag profile''.  
+However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textbf{end-to-end lag} is captured. What makes matters even worse, is that this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing a move command, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete. 
+Therefore, each video game will have a distinct ``lag profile''.  
 
 
 % TODO:
@@ -167,7 +172,7 @@ But this focus on network delay neglects some key components to this lag, includ
 \subsection{Measurement Approaches}
 \label{sec:measurementapproaches}
 
-With the central role of the end-to-end lag in mind, it is natural to assume, that this lag also plays a critical role in both subjective and objective video game quality assessments. Therefore, the end-to-end lag needs to be correctly examined and quantified from any kind of video game. But video games usually represent a black box with very few points, where something can be actually measured. The following sections discuss three distinct methods which are each situated at an unique vantage point as depicted in Fig.~\ref{fig:measurement-methods}.
+With the central role of the end-to-end lag in mind, it is natural to assume that this lag also plays a critical role in both subjective and objective video game quality assessments. Therefore, the end-to-end lag needs to be correctly examined and quantified from any kind of video game. Unfortunately, video games usually represent a black box with very few possible vantage points where measurements can be taken. Below we discuss three distinct methods which are each situated at unique vantage points as depicted in Fig.~\ref{fig:measurement-methods}.
 
 \begin{figure}[!t]
     \centering
@@ -179,7 +184,7 @@ With the central role of the end-to-end lag in mind, it is natural to assume, th
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Screen Recording Software Method}
-Recording the output stream of a video game might be the simplest approach to determine video game lag. It can capture both the framerate and \gls{IAT} at a driver level, and the recorded video can be used for image and quality analyses as well as to correlate it to additionally recorded input events in order to calculate the lag. This is not the complete end-to-end lag however, as both the controller and screen output delay are missing. The need to install additional software might make it unsuitable for some scenarios, e.g., when measuring console video games. As a variant of this method, one can also record the output stream with a video capture card on a secondary computer, which does not negatively effect the game's performance as the software method would.
+Recording in software the output stream of a video game might be the simplest approach to determine video game lag. It can capture both the framerate and \gls{IAT} at a driver level, and the recorded video can be used for image and quality analyses as well as to correlate it to additionally recorded input events in order to calculate the lag. This is not the complete end-to-end lag however, as both the controller and screen output delay are missing. The need to install additional software might make it unsuitable for some scenarios, e.g., when measuring console video games. As a variant of this method, one can also record the output stream with a video capture card on a secondary computer, which does not negatively effect the game's performance as the software method would.
 
 Examples of this approach include both \cite{Chen:2011:MLC:2072298.2071991} and \cite{6670099} which measured the latency of cloud gaming services in the game client. They do this by invoking the system menu in games and measuring the time until it is displayed. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (i.e., the lag) as well as image quality by employing software recording methods on the client's computer.
 %However, this method assumes a constant delay of game actions and may not capture the actual end-to-end lag of many of real game actions, as they are typically different from and longer as the latency of displaying a menu. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (latency) as well as image quality by employing software recording methods on the client's computer. With these techniques the challenges regarding the quality are discussed.
@@ -198,7 +203,7 @@ In some cases it may also be advantageous to tap into the network interactions o
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Camera Recordings}
-Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is, that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
+Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
 
 
 
