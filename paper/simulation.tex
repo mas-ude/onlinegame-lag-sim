@@ -47,7 +47,9 @@ Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a f
 Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay was assumed to follow a truncated normal distribution with $\mu = \SI{20}{\milli\second}$ and $\sigma = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
 
 \begin{figure}[!t]
+	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
 	\centering
+	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
 	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}

@@ -52,7 +52,7 @@ phase offset for each of the rates.
 Finally, since we are simulating online games, the simulation obviously 
 includes the network paths between the different components. The delay 
 distributions are freely configurable, but may be omitted entirely as well.
-Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case.
+Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case. Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
 \begin{figure*}[!t]
 	\centering
@@ -60,6 +60,16 @@ Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for t
 	\caption{Abstract end-to-end lag queuing model representation in the online video game case.}
 \label{fig:queuing-model}
 \end{figure*}
+
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
+	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag.} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+\label{fig:tickrate-timeseries}
+\end{figure}
+
+
 
 
 
@@ -113,18 +123,11 @@ effects of different player actions (``traverse vs fight''), strategies
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sources of Latency in Gaming}
-\label{sec:latency}
+% \subsection{Sources of Latency in Gaming}
+% \label{sec:latency}
 
 
-Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../models/tickrate-timeseries.pdf}
-	\caption{Exemplary flow of events in online client-server game, and resulting end-to-end lag. Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
-\label{fig:tickrate-timeseries}
-\end{figure}
 
 
 
