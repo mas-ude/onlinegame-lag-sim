@@ -80,9 +80,12 @@ saveRDS(results, "../data/nwless-lagsim-1000rounds.rds")
 #results.sampled <- sample_n(results, nrow(results)*0.1)
 results.mean <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="mean")
 
-p <- ggplot(results.mean, aes(x=framerate, y=e2e.lag, color=tickrate)) + geom_point(size = 3)
-p <- p + scale_x_discrete(name = "frame duration (ms)", labels = seq(100, 5, length.out=20)) + ylab("E2E lag (ms)")
-p <- p + scale_color_discrete(name = "tick duration (ms)", labels=seq(100, 5, length.out=20), guide = guide_legend(ncol=2))
+results.mean$fr2 <- factor(results.mean$framerate, levels = as.character(sort(as.numeric(levels(results.mean$framerate)), decreasing = TRUE)))
+results.mean$tr2 <- factor(results.mean$tickrate, levels = as.character(sort(as.numeric(levels(results.mean$tickrate)), decreasing = TRUE)))
+
+p <- ggplot(results.mean, aes(x=fr2, y=e2e.lag, color=tr2)) + geom_point(size = 3)
+p <- p + scale_x_discrete(name = "frame duration (ms)", labels = seq(5, 100, length.out=20)) + ylab("E2E lag (ms)")
+p <- p + scale_color_discrete(name = "tick duration (ms)", labels=seq(5, 100, length.out=20), guide = guide_legend(ncol=2))
 #p <- p + theme(text = element_text(family="Linux Biolinum O", size=24))
 p <- p + theme(text = element_text(size=24))
 p
