@@ -112,36 +112,12 @@ rendered audio and video data.
 
 Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
 
-\begin{figure}[!t]
+\begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.8\columnwidth]{../models/component_interaction-local.pdf}
-  \caption{Components and interactions of a single-player video game.}
-  \label{fig:component-model-local}
-\end{figure}
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{../models/component_interaction-online.pdf}
-  \caption{Components and interactions of an online video game. Local game state is synchronized with the server's view on the game state.}
-  \label{fig:component-model-online}
-\end{figure}
-
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=0.8\columnwidth]{../models/component_interaction-cloud.pdf}
-  \caption{Components and interactions of a streamed video game. I/O and game engine are physically separated and have to be synchronized.}
+  \includegraphics[width=0.9\textwidth]{../models/component_interaction_full.pdf}
+  \caption{Top left: Single-player game. Bottom left: Online game. Right: Cloud game. (.......)}
   \label{fig:component-model-cloud}
-\end{figure}
-
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../models/game-tick-rate-streamed.pdf}
-	\caption{Interaction of client and server in streamed online games.}
-\label{fig:tickrate-streamed}
-\end{figure}
-
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Framerate and Frame-times}
