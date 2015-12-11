@@ -16,22 +16,13 @@ presents various lag measurement techniques.
 
 \begin{figure}[!t]
 \centering
-\removelatexerror
-\begin{algorithm}[H]
- \While{game running}{
-  sample input\;
-  update game state\;
-  render screen\;
- }
-\end{algorithm}
-\caption{Basic model of a continuous main video game loop.
-\hoss{Wir haben doch eigentlich ein nebenlaeufiges System. Das wird hier nicht klar, sondern erweckt den falschen Eindruck. Eventuell andere Darstellung (siehe Scan). Formal koennte man das mit UML oder Petri-Netzen machen, ist aber nicht verstaendlich. Daher semi-formal graphical representation.}}
-\label{alg:gameloop1}
-\includegraphics[width=\columnwidth]{figure1videoGameLoop.jpg}
+\includegraphics[width=0.9\columnwidth]{../models/game_loop.pdf}
+\caption{Basic model of a continuous main video game loop.}
+\label{fig:gameloop1}
 \end{figure}
 
 At their core video games are essentially feedback-directed 
-real-time simulators. Figure~\ref{alg:gameloop1} overviews a 
+real-time simulators. Figure~\ref{fig:gameloop1} overviews a 
 simplified simulation loop consisting of three parts.
 The game reads player input, updates the game state, and renders 
 new screen contents. This loop repeats as long as the game is running. 
