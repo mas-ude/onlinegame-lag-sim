@@ -88,6 +88,7 @@ saveRDS(results, "../data/cloud-lagsim-10rounds.rds")
 
 p <- ggplot(results, aes(x = e2e.lag, color = framerate)) + stat_ecdf(lwd = 2)
 p <- p + xlab("E2E lag (ms)") + ylab("ECDF")
+p <- p + geom_vline(xintercept=60)
 p <- p + scale_color_brewer(palette = "Set1", name = "framerate (Hz)", guide = guide_legend(ncol=2))
 p <- p + theme(text = element_text(size=24))
 p

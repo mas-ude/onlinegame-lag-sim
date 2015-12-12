@@ -51,9 +51,9 @@ exemplary rates of current games.
 \newcommand{\mymidrule}{\addlinespace }
 
 \begin{table}[!t]
-\caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various reliable and unreliable sources and should be taken as-is. 
-\hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
-}
+\caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
+% \hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
+% fm: inoffizielle, nicht-wissenschaftliche quellen, da diese werte normalerweise nicht durch den entwickler veröffentlicht werden; für framerates gibt es keine werte, da diese normalerweise unlocked laufen (zumindest für pc, bei konsolen für alle entweder 30 oder 60), ist eigentlich zu komplex um an der stelle darauf einzugehen
 \label{tbl:tickrates}
 	\centering
 	\begin{tabu}{X[0.45]X}
@@ -176,8 +176,8 @@ In some cases it may also be advantageous to tap into the network interactions o
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \myparagraph{Camera Recordings}
-Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external camera. 
-\hoss{Mit 'only' ware ich vorsichtig. Es kann auch noch andere Moeglichkeiten mittels physikalischer Sensoren geben, evtl. sowas \cite{di2010new} also aehnlich zu \cite{beyermethod}. Evtl sollte man 'Camera Recordings and Sensoring' schreiben?}
+Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external measurement device, i.e., a video camera in the simplest case.
+%\hoss{Mit 'only' ware ich vorsichtig. Es kann auch noch andere Moeglichkeiten mittels physikalischer Sensoren geben, evtl. sowas \cite{di2010new} also aehnlich zu \cite{beyermethod}. Evtl sollte man 'Camera Recordings and Sensoring' schreiben?}
 The experimenter then has to count the frames between pressing a button on the input device and the action appearing on the screen and calculate the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. An additional benefit of this method is that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
 
 
