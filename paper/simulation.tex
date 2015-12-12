@@ -16,10 +16,11 @@ All of the source code and the data from the upcoming scenarios is provided in t
 
 \subsection{Parameters}
 
-Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are briefly covered here and summarized in Table~\ref{tab:notation}.
-\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
+Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are chosen to be as realistic as possible and and are summarized in Table~\ref{tab:notation}.
+%\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
+% fm: referenzen für solche werte sind leider eher schwer zu finden
 
-First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processing time $P$ follows a truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
+First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
 %\textbf{TODO:} implications and reasons?
 Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
 
@@ -45,7 +46,7 @@ Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a f
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
 
-Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a \hoss{left}-truncated normal distribution with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
+Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a left-truncated normal distribution with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
 
 \begin{figure}[!t]
 	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
@@ -53,7 +54,9 @@ Next up is the full scenario of an online video game, now with the network lag i
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario. \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}}
+	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}
+	% TODO: \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}
+	% TODO: nicht rechtzeitig für submission deadline, aber für eine nächste version
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
