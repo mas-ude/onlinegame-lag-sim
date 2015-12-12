@@ -5,7 +5,7 @@
 
 Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
 
-By using a vector-based statistics language the core loop is kept compact and easy to modify and reorder to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
+By using a vector-based language the core loop is kept compact and easy to modify in order to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
 
@@ -70,14 +70,14 @@ A further property to note in this scenario is the much larger variance in the f
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cloud Gaming}
 
-Finally, the case of Cloud Gaming is also reconstructed as a simulation scenario for a hypothetical single-player game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode (\SI{15}{\milli\second}) and decode delay (\SI{5}{\milli\second}) is in place at the game streaming server and client respectively. As the video frames are now rendered at the server, they need to be transported back to the client first. 
+Finally, the case of Cloud Gaming is also reconstructed as a scenario for a hypothetical single-player game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode (\SI{15}{\milli\second}) and decode delay (\SI{5}{\milli\second}) is in place at the game streaming server and client respectively. As the frames are now rendered by the server, they need to be transported back to the client first. 
 Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. For the actual network delay, the same values as for the online game are used.
 
 \begin{figure}[!t]
 	\centering
 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{\acrshort{ECDF} of the influence of the server's rendering and streaming framerate on the end-to-end lag in the cloud gaming scenario. Vertical intercept denotes the average base delay of \SI{60}{\milli\second}.}
+	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of \SI{60}{\milli\second}.}
 	%\hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}

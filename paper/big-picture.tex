@@ -80,14 +80,12 @@ exemplary rates of current games.
 % TODO: need to find a better word than game (delivery) flavors
 
 We next discuss how different implementations of game architectures  
-set the local/remote boundary. Consider first a \textit{single-player game}
-as depicted in Fig.~\ref{fig:component-model-local}. All of the 
-components run locally. However, we previously mentioned that the 
+set the local/remote boundary, as depicted in Fig.~\ref{fig:component-models}. Consider first a \textit{single-player game}, with all of the 
+components running locally. However, we previously mentioned that the 
 three parts of the main game loop each progress at individual paces. 
 Therefore, one may conceptually separate server-side 
 input and state management components out of the single-player 
-architecture, and thus form an \textit{online video game} (see 
-Fig.~\ref{fig:component-model-online}). 
+architecture, and thus form an \textit{online video game}. 
 Now, player state information is transmitted to the 
 game server across the network, and likewise, state updates from 
 the server transit the network until they reach the game client.
@@ -99,8 +97,7 @@ to a specific \textit{command message rate}.
 
 %\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
 
-Another possible separation of components is presented in 
-Fig.~\ref{fig:component-model-cloud}: Now the game client, which includes 
+In an further possible separation of components the game client, which includes 
 state management and rendering, is situated on a remote entity. This gives rise to 
 \textit{cloud gaming}, which is a form of \textit{game streaming} 
 where the game streaming server is part of a larger streaming service 
@@ -110,13 +107,13 @@ sent from the streaming client to the game engine. The return channel
 does not transport game state messages in this scenario, but rather streams the 
 rendered audio and video data.
 
-Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
+%Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.9\textwidth]{../models/component_interaction_full.pdf}
-  \caption{Top left: Single-player game. Bottom left: Online game. Right: Cloud game. (.......)}
-  \label{fig:component-model-cloud}
+  \caption{Component model of the different interactions in video games. Top left: Single-player. Bottom left: Online game. Right: Cloud gaming.}
+  \label{fig:component-models}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

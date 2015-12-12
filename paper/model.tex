@@ -8,7 +8,7 @@ that multiple different components contribute to
 the end-to-end lag in games, and that multiple potential models and 
 levels of granularity exist for each game type.
 Let's discuss therefore the model boundaries and level of detail 
-used in the current iteration of this analytical model to be presented here.\footnote{\hoss{Random variables (RV) are denoted as capitalized letters $X$, while constants are depicted with small letters $c$.}} 
+used in the current iteration of this analytical model to be presented here.\footnote{\gls{RV} are denoted by capital letters $X$, and constants by small letters $c$.}
 
 \newcommand{\maybeaddsomespace}{\\ \addlinespace}
 %\newcommand{\inv}[1]{\nicefrac{1}{#1}}
@@ -38,7 +38,7 @@ $\inv{c}$ & input events are gathered and sent in time intervals $\inv{c}$ (cons
 \end{table}
 
 \subsection{Model of end-to-end lag for online games}
-\hoss{Ich wuerde mathematische Notation einfuehren, um klar zu machen, was Teil des Modells ist.}
+%\hoss{Ich wuerde mathematische Notation einfuehren, um klar zu machen, was Teil des Modells ist.}
 First, we define the end-to-end lag $T$ to be the time elapsed 
 from when the player supplies commands to the input devices until just 
 before actual audio/video output.
@@ -48,8 +48,7 @@ audio and video content happens instantaneously
 (ignoring any screen synchronization issues), and assume the player 
 input to be a stochastic process. % future work!1!!
 Furthermore, as also found in practice, input events are queued up  
-and sent en bloc at a specific, configurable interval $b$.
-\hoss{The command rate is denoted as $c$.}
+and sent en bloc at specific intervals defined by the command rate $c$.
 
 Second, in our treatment of client-server games, we focus on modeling 
 a single connected client and its interaction with the game server. 
@@ -63,7 +62,7 @@ Next, we associate a static (but individually configurable) tick
 rate $g$ with the computation process of the game server, and a frame rate $f$
 with the render process. 
 The server updates the state of the game world at every tick, and may 
-spend some processing time $P$ in order to do so. \hoss{The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations.} Once finished, an update 
+spend some processing time $P$ in order to do so. The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations. Once finished, an update 
 message is sent to the client.
 Independent of the update process, the game client outputs the next 
 video frame in accordance to the frame rate. The game client's state 
@@ -82,7 +81,9 @@ phase offset for each of the rates.
 Finally, since we are simulating online games, the simulation obviously 
 includes the network paths between the different components. The delay 
 distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server.
-Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case. \hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.} Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
+Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
+%\hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.} 
+Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
 
 \begin{figure*}[!t]
 	\centering
@@ -120,8 +121,7 @@ input devices like keyboards, mice, and game controllers. We estimate
 these at below \SI{10}{\milli\second}. The same goes for the lag of 
 the display device (from after rendering or decoding until the frame 
 is actually visible) which is typically in the range of 1--3 frames for a computer 
-monitor, and larger for TV sets. 
-\hoss{The model can be extended to take those delay factors into account. For the sake of simplicity, we have ignored them in this paper.}
+monitor, and larger for TV sets. The model can be extended to take those delay factors into account, but were exempted for the sake of simplicity in this paper.
 % TODO: \textbf{Add adaptive VSYNC?}
 
 \myparagraph{Subtleties of game internals}
@@ -145,9 +145,9 @@ end-to-end lag itself.
 %\textbf{TODO I'm making this up. PLX correct.}
 
 \myparagraph{Factors in human perception and strategy}
-The lag model 
+The model 
 we present does not take into account the perceived lag from when the 
-player \textit{thinks} they have triggered an action to when they 
+players \textit{think} they have triggered an action to when they 
 perceive the outcomes of their action. This consequently disregards 
 effects of different player actions (``traverse vs fight''), strategies 
 (``assault vs snipe''), and so on.
