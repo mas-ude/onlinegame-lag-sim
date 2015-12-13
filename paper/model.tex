@@ -8,31 +8,34 @@ that multiple different components contribute to
 the end-to-end lag in games, and that multiple potential models and 
 levels of granularity exist for each game type.
 Let's discuss therefore the model boundaries and level of detail 
-used in the current iteration of this analytical model to be presented here.\footnote{\glspl{RV} are denoted by capital letters $X$, and constants by small letters $c$.}
+used in the current iteration of this analytical model to be presented here.
 
 \newcommand{\maybeaddsomespace}{\\ \addlinespace}
 %\newcommand{\inv}[1]{\nicefrac{1}{#1}}
 \newcommand{\inv}[1]{#1^{-1}}
 
-\begin{table}[!t]%
-\caption{Notation of model variables and constants.}
+\begin{table}[!t]
+\caption{Notation used in the model. Random variables are denoted by capital letters $X$, and constants by small letters $x$.}
 \label{tab:notation}
 \centering
 \begin{tabu}{lX[1,l]X[1,l]}
 \toprule
-Sym. & Description & Simulation \\
+Symbol & Description & Simulation \\
 \midrule
-$T$ & end-to-end lag (RV) & key performance measure \maybeaddsomespace
-$D$ & network delay (RV) between game client and server & $D \sim TNorm(\mu
-_D;\sigma_D)$ with $ \mu_D=\unit[20]{ms}; \sigma_D=\unit[5]{ms}$\maybeaddsomespace
-$P$ & game server processing time (RV) & $P \sim TNorm(\mu_P;\sigma_P)$ with $ \mu_P=\unit[3]{ms}; \sigma_P=\unit[0.1]{ms}$\maybeaddsomespace
-$U$ & (inter arrival) time between user inputs (RV) & $U \sim Exp(\lambda)$; $\lambda=\unit[50]{ms}$\maybeaddsomespace
-$g$ & game tickrate (const.) & $g \in \{10,\dots,200\} \unit{Hz}$ \\
-$\inv{g}$ & game tick duration (const.) & $\inv{g} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
-$f$ & framerate (const.) & $f \in \{10,\dots,200\} \unit{Hz}$ \\
-$\inv{f}$ & frame duration (const.) & $\inv{f} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
-$c$ & command rate (const.) & $c=g$ \\
-$\inv{c}$ & input events are gathered and sent in time intervals $\inv{c}$ (const.) &  \maybeaddsomespace
+$D$ & network delay between game client and server & $D \sim TNorm(\mu
+_D;\sigma_D)$, $\mu_D=\SI{20}{\milli\second}; \sigma_D=\SI{5}{\milli\second}$\maybeaddsomespace
+$P$ & game server processing time & $P \sim TNorm(\mu_P;\sigma_P)$, $ \mu_P=\SI{3}{\milli\second}; \sigma_P=\SI{0.1}{\milli\second}$\maybeaddsomespace
+$T$ & end-to-end lag & key performance measure \maybeaddsomespace
+$U$ & (inter arrival) time between user inputs & $U \sim Exp(\lambda)$; $\lambda=\SI{50}{\milli\second}$\maybeaddsomespace
+\midrule
+$c$ & command rate & $c=g$ \\
+$\inv{c}$ & interval to gather input events before sending &  \maybeaddsomespace
+$d$ & decode delay & $\SI{5}{\milli\second}$ \maybeaddsomespace
+$e$ & encode delay & $\SI{15}{\milli\second}$ \maybeaddsomespace
+$f$ & framerate & $f \in \{10,\dots,200\} \unit{Hz}$ \\
+$\inv{f}$ & frame duration & $\inv{f} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
+$g$ & game tickrate & $g \in \{10,\dots,200\} \unit{Hz}$ \\
+$\inv{g}$ & game tick duration & $\inv{g} \in \{5,\dots,100\} \unit{ms}$ \maybeaddsomespace
 \bottomrule
 \end{tabu}
 \end{table}
@@ -149,9 +152,7 @@ The model
 we present does not take into account the perceived lag from when the 
 players \textit{think} they have triggered an action to when they 
 perceive the outcomes of their action. This consequently disregards 
-effects of different player actions (``traverse vs fight''), strategies 
-(``assault vs snipe''), and so on.
-
+effects of different player actions, strategies, and so on.
 
 
 
