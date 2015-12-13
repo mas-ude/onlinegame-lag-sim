@@ -94,7 +94,18 @@ Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a f
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
 
-Next up is the full scenario of an online video game, now with the network lag included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a left-truncated normal distribution with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing no negative results. Typical, competitive online games today are expected to operate in such ranges, while a \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience for many games.
+Next up is the full scenario of an online video game, now with 
+network lag $D$ and server processing time $P$ included. For 
+this exemplary scenario, the one-way delay $D$ was assumed to 
+follow a left-truncated normal distribution, 
+with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, 
+producing non-negative network delays. Typical competitive online 
+games today are expected to operate in such ranges. An 
+\acrshort{RTT} of \SI{100}{\milli\second} is often considered to 
+be the upper limit for a good playing experience.
+$P$ is similarly left-truncated. In addition to the components in 
+the previous scenario, the lag now also contains contributions by 
+the network round-trip and processing delay, $2D + P$.
 
 \begin{figure}[!t]
 	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
@@ -102,13 +113,19 @@ Next up is the full scenario of an online video game, now with the network lag i
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{3D bars representation of the influence of both the client's framerate and the server's tickrate on the end-to-end lag in the online game scenario.}
+	\caption{Influence of client framerate and server tickrate on the end-to-end lag in the online game scenario. For high rates $f^{-1},g^{-1}\rightarrow0$, the lag approaches $2D+P$.}
 	% TODO: \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}
 	% TODO: nicht rechtzeitig für submission deadline, aber für eine nächste version
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
-Figure~\ref{fig:3dbars-framerate-tickrate-lag} shows a 3D bar plot of the influence of both the framerate and the tickrate on this scenario. Typical values for the framerate and tickrate are depicted here. Two things can be noted here. First, the framerate seems to have a larger influence on the lag than the tickrate. And second, the network delay is almost completely masked for low values of both framerate and tickrate, which dominate the resulting end-to-end lag. Only if both rates are high enough the network delay will play a more significant role.
+Figure~\ref{fig:3dbars-framerate-tickrate-lag} shows a 3D bar plot 
+of the influence of both the framerate and the tickrate on this 
+scenario. The axes mark typical values for $f$ and $g$. Two things 
+can be noted here. First, the framerate has a larger influence on 
+the lag than the tickrate. Second, for low framerates and tickrates, 
+the network delay is almost completely masked. Only if both rates 
+are high enough, the network delay will play a more significant role.
 
 This masking effect has large implications for video games and video game evaluations. Many of them exclusively examine the influence of just the network delay, without considering other influence sources to the end-to-end lag. This example demonstrates that this might not be the best course of action. It could also be assumed that this effect shifts to lower values of the frame- and tickrates when a higher network delay is examined.
 
