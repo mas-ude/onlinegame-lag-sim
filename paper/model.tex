@@ -119,8 +119,9 @@ The model ignores the delays contributed by
 input devices like keyboards, mice, and game controllers. We estimate 
 these at below \SI{10}{\milli\second}. The same goes for the lag of 
 the display device (from after rendering or decoding until the frame 
-is actually visible) which is typically in the range of 1--3 frames for a computer 
-monitor, and larger for TV sets. The model can be extended to take those delay factors into account, but were exempted for the sake of simplicity in this paper.
+is actually visible) which is typically in the range of 1--3 
+frame times for a computer 
+monitor, and larger for TV sets. The model can be extended to take those delay factors into account, but they were exempted for the sake of simplicity in this paper.
 % TODO: \textbf{Add adaptive VSYNC?}
 
 \myparagraph{Subtleties of game internals}
@@ -137,11 +138,10 @@ Lastly, player actions in a game might take multiple command time
 intervals to perform. The simulation currently assumes that every 
 single batch of commands that reaches the server will result in 
 state updates and thus changes in the perceptible output of the game 
-client. It should be noted, that none of these techniques alter the 
+client. It should be noted that none of these techniques alter the 
 end-to-end lag itself, rather they just try to conceal it on some higher level. 
 Therefore, the mechanisms do not invalidate our examination of the basic 
 end-to-end lag itself.
-%\textbf{TODO I'm making this up. PLX correct.}
 
 \myparagraph{Factors in human perception and strategy}
 The model 
