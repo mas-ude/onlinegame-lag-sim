@@ -124,18 +124,24 @@ of the influence of both the framerate and the tickrate on this
 scenario. The axes mark typical values for $f$ and $g$. Two things 
 can be noted here. First, the framerate has a larger influence on 
 the lag than the tickrate. Second, for low framerates and tickrates, 
-the network delay is almost completely masked. Only if both rates 
+the impact of network delay on the end-to-end lag is almost 
+completely masked. Only if both rates 
 are high enough, the network delay will play a more significant role.
 
-This masking effect has large implications for video games and video game evaluations. Many of them exclusively examine the influence of just the network delay, without considering other influence sources to the end-to-end lag. This example demonstrates that this might not be the best course of action. It could also be assumed that this effect shifts to lower values of the frame- and tickrates when a higher network delay is examined.
+This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to end-to-end lag. Our results indicate that this might not be the best course of action. The effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined.
 
-A further property to note in this scenario is the much larger variance in the framerate dimension when compared to the tickrate. This can also have practical implications for video game studies. Experiments that examine the influence of the framerate need to have a very high repetition rate to keep the variance low and provide meaningful results.
+Another interesting result (not plotted here) is the much larger 
+variance of lag in the framerate dimension when compared to the 
+tickrate. This requires video game studies % experiments that examine the influence of the framerate need 
+to have a very high repetition rate to %keep the variance low and 
+provide meaningful results.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cloud Gaming}
 
-Finally, the case of Cloud Gaming is also reconstructed as a scenario for a hypothetical single-player game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode (\SI{15}{\milli\second}) and decode delay (\SI{5}{\milli\second}) is in place at the game streaming server and client respectively. As the frames are now rendered by the server, they need to be transported back to the client first. 
+Finally, the case of Cloud Gaming is also reconstructed as a scenario for a hypothetical single-player game without any network interactions itself. To this end, the tickrate has been removed, but instead a constant encode and decode delay is in place at the game streaming server and client respectively. As the frames are now rendered by the server, they need to be transported back to the client first. 
+
 Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. For the actual network delay, the same values as for the online game are used.
 
 \begin{figure}[!t]
