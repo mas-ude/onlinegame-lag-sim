@@ -10,7 +10,7 @@ cloudgaming.lagsim <- function(server.frame.rate, encode.delay, decode.delay,
                               net.delay.mean, net.delay.sd, 
                               server.delay.mean, server.delay.sd,
                               client.input.rate, client.input.events, 
-                              client.command.rate = server.tick.rate){
+                              client.command.rate) {
   
   ## init sim
   client.command.rate <- server.frame.rate

@@ -10,7 +10,7 @@ onlinegame.lagsim <- function(client.frame.rate, server.tick.rate,
                               net.delay.mean, net.delay.sd, 
                               server.delay.mean, server.delay.sd,
                               client.input.rate, client.input.events, 
-                              client.command.rate = server.tick.rate){
+                              client.command.rate) {
   
   ## init sim
   server.tick.timedelta    <- 1 / server.tick.rate    * 1000 # time interval between game ticks (ms)

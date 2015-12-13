@@ -79,7 +79,8 @@ sim.rounds <- 10
 results <- foreach(round = 1:sim.rounds, .combine = rbind, .packages="foreach") %dopar% {
   results <- foreach(server.frame.rate = server.frame.rates, .combine = rbind) %do% {
     cloudgaming.lagsim(server.frame.rate, encode.delay, decode.delay, net.delay.mean, net.delay.sd,
-                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
+                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events, server.tick.rate)
+                      # We take the client command rate to equal the server tick rate
   }
 }
 

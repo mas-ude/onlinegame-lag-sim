@@ -59,7 +59,9 @@ sim.rounds <- 1000
 results <- foreach(round = 1:sim.rounds, .combine = rbind, .packages="foreach") %dopar% {
   results <- foreach(client.frame.rate = client.frame.rates, server.tick.rate = server.tick.rates, .combine = rbind) %do% {
     onlinegame.lagsim(client.frame.rate, server.tick.rate, net.delay.mean, net.delay.sd,
-                      server.delay.mean, server.delay.sd, client.input.rate, client.input.events)
+                      server.delay.mean, server.delay.sd, client.input.rate, 
+                      client.input.events, server.tick.rate)
+                      # We take the client command rate to equal the server tick rate
   }
   results <- aggregate(e2e.lag ~ framerate + tickrate, data = results, FUN="median")
   results$round <- round
