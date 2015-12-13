@@ -3,15 +3,17 @@
 \section{Simulation and Scenario Evaluation}
 \label{sec:simulation}
 
-Based on the model introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created that implements this model. This R-based simulator strifes to translate all of the earlier discussed lag blocks, while keeping them as configurable as possible.
-
-By using a vector-based language the core loop is kept compact and easy to modify in order to adapt to new scenarios in addition to the ones evaluated here. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
+Based on the model introduced in Section~\ref{sec:model} a stochastic 
+\gls{DES} was created that implements this model. This 
+\textsc{Gnu R}-based simulator strives to translate all of the earlier 
+discussed components of lag, while keeping them as configurable as possible.
+%By using a vector-based language the core loop is kept compact and easy to modify in order to adapt to new scenarios in addition to the ones evaluated here. 
+Due to the influence of several stochastic processes (user inputs $U$, network delay $D$, server processing time $P$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario.
+The investigations here are not intended to cover every aspect of all parameters or to conduct full parameter studies, but are rather to highlight some particular aspect in each of the scenario. 
 
-The investigations here are not intended to cover every aspect of all parameters or to conduct full parameter studies, but are rather intended to highlight some particular aspect in each of the scenario. 
-
-All of the source code and the data from the upcoming scenarios is provided in the simulation-folder\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} of the repository and can be used as public domain.
+All of the source code and the data from the upcoming scenarios is provided in the simulation folder\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} of the repository and can be used as public domain.
 
 
 \subsection{Parameters}
@@ -20,7 +22,7 @@ Besides being fully reconfigurable, the simulation currently also has a few defa
 %\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
 % fm: referenzen für solche werte sind leider eher schwer zu finden
 
-First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed, that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
+First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
 %\textbf{TODO:} implications and reasons?
 Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
 
@@ -30,7 +32,7 @@ The evaluation of the presented scenarios was conducted on the basis of $r=\np{1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
 
-The first and simplest scenario to be investigated here, is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best-case an online multiplayer game could achieve, when the server would run locally.
+The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve, if the server ran locally.
 
 \begin{figure}[!t]
 	\centering
