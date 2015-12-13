@@ -8,7 +8,7 @@ that multiple different components contribute to
 the end-to-end lag in games, and that multiple potential models and 
 levels of granularity exist for each game type.
 Let's discuss therefore the model boundaries and level of detail 
-used in the current iteration of this analytical model to be presented here.\footnote{\gls{RV} are denoted by capital letters $X$, and constants by small letters $c$.}
+used in the current iteration of this analytical model to be presented here.\footnote{\glspl{RV} are denoted by capital letters $X$, and constants by small letters $c$.}
 
 \newcommand{\maybeaddsomespace}{\\ \addlinespace}
 %\newcommand{\inv}[1]{\nicefrac{1}{#1}}
@@ -46,7 +46,7 @@ before actual audio/video output.
 We assume that the actual presentation of 
 audio and video content happens instantaneously  
 (ignoring any screen synchronization issues), and assume the player 
-input to be a stochastic process. % future work!1!!
+input to be a stochastic process $U$. % future work!1!!
 Furthermore, as also found in practice, input events are queued up  
 and sent en bloc at specific intervals defined by the command rate $c$.
 
@@ -68,13 +68,12 @@ Independent of the update process, the game client outputs the next
 video frame in accordance to the frame rate. The game client's state 
 might not get updated by the server between rendered frames. Still, 
 output is generated\footnote{A practical game implementation will use state prediction for this.}.
-
-Note that while the delay between frames is held constant here,
+The round-trip to the server and back implies that
 the lag between an input event and the earliest frame containing a perceptible 
 result of that event can take multiple frame times.
 
 While we consider the command, tick, and frame rates to be constant 
-(while not necessarily identical), there is no inherent synchronization 
+(though not necessarily identical), there is no inherent synchronization 
 between them. This is represented in the simulation by a random initial 
 phase offset for each of the rates.
 
@@ -83,7 +82,7 @@ includes the network paths between the different components. The delay
 distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server.
 Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
 %\hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.} 
-Moreover, Fig.~\ref{fig:tickrate-timeseries} shows a time series attempting to exemplify this for the simplified case of an online video game.
+Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
 
 \begin{figure*}[!t]
 	\centering
