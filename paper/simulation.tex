@@ -32,16 +32,52 @@ The evaluation of the presented scenarios was conducted on the basis of $r=\np{1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
 
-The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve, if the server ran locally.
+The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally.
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
-	\caption{Scatterplot of the end-to-end lag under various frame and tick durations in a scenario where the game is running fully local.}
+	\caption{Scatterplot of the median end-to-end lag under various frame and tick durations in a scenario where the game is running fully local.}
 \label{fig:nwless-scatter}
 \end{figure}
 
-Figure~\ref{fig:nwless-scatter} presents a scatter plot of the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting end-to-end lag. The offset between the command message, tickrate, and framerate is responsible for this lower limit of lag and results in lag values generally much higher than just the sum of the tick and frame duration.
+Figure~\ref{fig:nwless-scatter} plots the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting median end-to-end lag.
+% NOTA BENE: Every status update that the server sends must wait for another 
+% frame time until we consider it rendered.
+%
+% The scatter plot of raw e2e lag values for one (FR, TR) configuration thus 
+% spans
+% * separate "boxes" for each CR/FR/TR offset config
+% * inside of which the input events U scatter
+% * Boxes are, when all other rates/processes are in optimal sync,
+%   - bound from below by the frame-time f^-1 as the minimum
+%   - bound from above by f^-1 + c^-1, because c "groups together" input events
+% * alternatively, when maximally *out of* sync, 
+%   - the boundaries shift upwards by another f^-1 + g^-1, resulting in 
+%     a total just short of c^-1 + g^-1 + 2*f^-1:
+%     Input event waits almost-full command cycle, which then waits 
+%     almost-full tick, which then waits almost-full frame; plus one frame 
+%     per the "nota bene" above.
+% * a "cloud of boxes" (per the above description) whose minima are uniformly 
+%   distributed (from visual inspection).
+%
+% Overall, over many simulation runs the E2E lag
+To put the plotted values in perspective, we will estimate the extreme 
+values of the end-to-end in this simulation. Every user input 
+event traverses three queues with fixed-rate outputs ($c$, $g$ and $f$), 
+and every game state update waits for the next full frame until it gets 
+displayed. In the ideal case, an input event occurs just before the command 
+message is sent off, the server tick follows as soon as the message is 
+received, and the update reaches the client just before a frame is output. 
+Then the end-to-end lag is slightly above the frame time that must elapse 
+before the update can be rendered to screen, $T_{min}>f^{-1}$.
+
+In case the events are unfavorably offset against one 
+another, an input event has to wait almost a full command-message cycle 
+until it is sent on; it reaches the server just after a tick has 
+occurred, so it waits almost a full server tick; finally, it will wait 
+for almost two frame times until it is displayed. The maximum lag is 
+bound by $T_{max}<c^{-1}+g^{-1}+2f^{-1}$.
 
 Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the results for the lag are in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (especially considering that the simulation model does not factor in the delay of the screen and input devices) that can only get worse with the presence of network delay. Therefore, video games, and quality assessments thereof, should try to achieve the highest framerate possible to minimize this influence.
 
