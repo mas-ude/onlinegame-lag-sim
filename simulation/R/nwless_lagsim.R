@@ -19,6 +19,9 @@ library(Cairo)
 ##################################################################################
 ## parameters
 
+number_of_repetitions <- 100  # number of repetitions of experiment 
+                              # for each frame and tick rate
+
 net.delay.mean <- 0         # one-way network delay (ms)
 net.delay.sd   <- 0         # owd standard deviation (ms)
 
@@ -26,13 +29,13 @@ net.delay.sd   <- 0         # owd standard deviation (ms)
 # Simulate tick *intervals* from 5 to 100 ms (i.e. 200 down to 10 Hz);
 # convert to rates so as to interface with the rest of the sim script.
 ###server.tick.rates <- rep(seq(10,200,10),20)
-server.tick.rates <- rep(rev(1000 / seq(5, 100, length.out=20)), 20)
+server.tick.rates <- rep(rev(1000 / seq(5, 100, length.out=20)), number_of_repetitions)
 server.delay.mean <- 0       # mean game server delay (ms)
 server.delay.sd   <- 0       # mean game server delay (ms)
 
 # As with `server.tick.rates`, use 5-100 ms frame *intervals*.
 ###client.frame.rates <- sort(rep(seq(10,200,10),20))
-client.frame.rates <- sort(rep(1000 / seq(5, 100, length.out=20), 20))
+client.frame.rates <- sort(rep(1000 / seq(5, 100, length.out=20), number_of_repetitions))
 client.input.rate   <- 20    # user input / sec
 client.input.events <- 1000  # number of simulated user inputs
 
