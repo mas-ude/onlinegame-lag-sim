@@ -80,12 +80,13 @@ exemplary rates of current games.
 % TODO: need to find a better word than game (delivery) flavors
 
 We next discuss how different implementations of game architectures  
-set the local/remote boundary, as depicted in Fig.~\ref{fig:component-models}. Consider first a \textit{single-player game}, with all of the 
+set the local/remote boundary, as depicted in Fig.~\ref{fig:component-models}. Consider first a \textit{single-player game} (sub-figure \textit{a}), with all of the 
 components running locally. However, we previously mentioned that the 
 three parts of the main game loop each progress at individual paces. 
 Therefore, one may conceptually separate server-side 
 input and state management components out of the single-player 
-architecture, and thus form an \textit{online video game}. 
+architecture, and thus form an \textit{online video game} 
+(sub-figure \textit{b}). 
 Now, player state information is transmitted to the 
 game server across the network, and likewise, state updates from 
 the server transit the network until they reach the game client.
@@ -97,9 +98,10 @@ to a specific \textit{command message rate}.
 
 %\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
 
-In an further possible separation of components the game client, which includes 
-state management and rendering, is situated on a remote entity. This gives rise to 
-\textit{cloud gaming}, which is a form of \textit{game streaming} 
+In a different possible separation of components, the game client (which includes 
+state management and rendering) is situated on a remote entity. This gives rise to 
+\textit{cloud gaming} (sub-figure \textit{c}), 
+which is a form of \textit{game streaming} 
 where the game streaming server is part of a larger streaming service 
 hosted at a data center. Due to the spatial separation of the 
 input/output devices and the game engine, input data needs to be 
@@ -112,7 +114,7 @@ rendered audio and video data.
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.9\textwidth]{../models/component_interaction_full.pdf}
-  \caption{Component model of the different interactions in video games. Top left: Single-player. Bottom left: Online game. Right: Cloud gaming.}
+  \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
   \label{fig:component-models}
 \end{figure*}
 
@@ -161,7 +163,7 @@ complexity of implementation.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=1.0\columnwidth]{../models/e2e-lag.pdf}
-    \caption{Location of the three measurement approaches to capture end-to-end latency inside a usual online video game lag chain.}
+    \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
 \label{fig:measurement-methods}
 \end{figure}
 
