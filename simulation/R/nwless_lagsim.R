@@ -38,10 +38,6 @@ client.input.events <- 1000  # number of simulated user inputs
 
 # client.command.rate        # for this sim defined as the same value as the server's tickrate
 
-## extra cloud parameters
-encode.delay <- 10
-decode.delay <- 5
-server.frame.rates <- c(5, 10, 15, 30, 60, 120)
 
 
 ##################################################################################
