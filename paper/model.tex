@@ -63,7 +63,8 @@ rate $g$ with the computation process of the game server, and a frame rate $f$
 with the render process. 
 The server updates the state of the game world at every tick, and may 
 spend some processing time $P$ in order to do so. The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations. Once finished, an update 
-message is sent to the client.
+message is sent to the client. Since the client needs time to render 
+this update, it is displayed only after the next, upcoming frame.
 Independent of the update process, the game client outputs the next 
 video frame in accordance to the frame rate. The game client's state 
 might not get updated by the server between rendered frames. Still, 
@@ -80,7 +81,7 @@ phase offset for each of the rates.
 Finally, since we are simulating online games, the simulation obviously 
 includes the network paths between the different components. The delay 
 distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server.
-Fig.~\ref{fig:queuing-model} gives a graphical representation of the model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
+Fig.~\ref{fig:queuing-model} gives a graphical representation of the queueing model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
 %\hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.} 
 Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
 
