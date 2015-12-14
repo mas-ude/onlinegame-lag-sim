@@ -51,7 +51,7 @@ exemplary rates of current games.
 \newcommand{\mymidrule}{\addlinespace }
 
 \begin{table}[!t]
-\caption{Exemplary table of some competitive and popular video game tickrates that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
+\caption{Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
 % \hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
 % fm: inoffizielle, nicht-wissenschaftliche quellen, da diese werte normalerweise nicht durch den entwickler veröffentlicht werden; für framerates gibt es keine werte, da diese normalerweise unlocked laufen (zumindest für pc, bei konsolen für alle entweder 30 oder 60), ist eigentlich zu komplex um an der stelle darauf einzugehen
 \label{tbl:tickrates}
@@ -61,14 +61,14 @@ exemplary rates of current games.
 		\textbf{Video Game} & \textbf{Tickrate} \\
 		\midrule
 		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\ \mymidrule
-		Battlefield 4 & \SI{30}{\hertz} (\SI{10}{\hertz} for state outside of close proximity to player). \SI{60}{\hertz}/\SI{120}{\hertz} implemented on test servers. \\ \mymidrule
+		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\ \mymidrule
 		Minecraft & max. \SI{20}{\hertz} \\ \mymidrule
-		League of Legends & \SI{30}{\hertz} (guessed) \\ \mymidrule
+		League of Legends & \SI{30}{\hertz} (estimated) \\ \mymidrule
 		Dota 2 & \SI{30}{\hertz} \\ \mymidrule
 		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\ \mymidrule
 		Eve Online & \SI{1}{\hertz} \\ \mymidrule
 %		Sports Game 1 & \\ \midrule
-		Project Cars & \SI{600}{\hertz} (Physics) \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
+		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
 		\bottomrule
 	\end{tabu}
 \end{table}
@@ -143,7 +143,7 @@ of latency itself.
 
 Lag in video gaming is often described solely on the basis of the network delay in an online game. It should be evident that the lag is a critically important factor for almost all games. This is especially true for fast or competitive games, as it governs the reaction time to in-game events.
 
-However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textbf{end-to-end lag} is captured. Notably, this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing command that moves the player character in the game world, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete. 
+However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textit{end-to-end lag} is captured. Notably, this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing command that moves the player character in the game world, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete. 
 Therefore, each video game will have a distinct ``lag profile''.  
 
 
