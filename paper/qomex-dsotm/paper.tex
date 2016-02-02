@@ -1,0 +1,89 @@
+%!TEX program = pdflatex
+\documentclass[conference,10pt,a4paper]{IEEEtran}
+
+\usepackage{ifluatex}
+\ifluatex
+  \usepackage{fontspec}
+  \usepackage{polyglossia} % babel replacement for use with fontspec
+  \setdefaultlanguage[variant=american]{english}
+  \selectlanguage[variant=american]{english}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage[american]{babel}
+\fi
+
+\usepackage[acronym, nomain, nowarn]{glossaries}
+\loadglsentries{acronyms}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage[pdfhighlight=/O, hidelinks, unicode=true]{hyperref}
+\usepackage{mathtools}
+\usepackage{fixmath}
+\usepackage{algorithm2e}
+\usepackage{subcaption}
+\usepackage[load-configurations={abbreviations,binary}, per-mode=symbol]{siunitx}
+\sisetup{load-configurations = abbreviations,binary-units}
+\usepackage{tabu}
+\makeglossaries
+\usepackage[url=false,doi=false,backend=biber,style=ieee,isbn=false,sorting=none,minnames=1,maxnames=6]{biblatex}
+\addbibresource{literature.bib}
+\usepackage[inline]{enumitem}
+
+\usepackage[np]{numprint}
+
+\npstyleenglish
+
+\newcommand{\hoss}[1]{\textcolor{red}{TH: #1}}
+
+\makeatletter
+\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
+\makeatother
+
+% masks an issue with polyglossia, not sure of side effects
+\AtBeginDocument{\let\textlabel\label}
+
+\begin{document}
+
+%\title{Things to Keep in Mind When Measuring Online or Streamed Video Games}
+%\title{QoS Measurement Approaches for Online Video Games from Basic Game Mechanics}
+%\title{Best Practices for QoS Measurements of Online Video Games}
+\title{A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming}
+
+\author{\IEEEauthorblockN{Florian Metzger, Tobias Hoßfeld}
+\IEEEauthorblockA{
+Chair of Modeling of Adaptive Systems\\
+University of Duisburg-Essen\\
+Essen, Germany\\
+\{florian.metzger,tobias.hossfeld\}@uni-due.de}
+\and
+\IEEEauthorblockN{Albert Rafetseder}
+\IEEEauthorblockA{
+Datenkugerl\\
+Austria\\
+albert.rafetseder@univie.ac.at}
+\and
+\IEEEauthorblockN{Christian Schwartz}
+\IEEEauthorblockA{
+University of Würzburg\\
+Würzburg, Germany\\
+schwartz@informatik.uni-wuerzburg.de}}
+
+
+\newcommand{\myparagraph}[1]{\subsubsection{#1}}
+
+\maketitle
+
+\input{abstract}
+\input{introduction}
+\input{big-picture}
+\input{relatedwork}
+\input{model}
+\input{simulation}
+\input{game-classification}
+\input{conclusion}
+
+\printbibliography 
+
+\end{document}

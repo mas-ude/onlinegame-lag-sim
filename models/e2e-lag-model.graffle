@@ -1973,7 +1973,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2015-12-12 07:45:44 +0000</string>
+	<string>2016-01-27 15:07:52 +0000</string>
 	<key>Modifier</key>
 	<string>Florian Metzger</string>
 	<key>NotesVisible</key>
@@ -2052,9 +2052,11 @@
 		<key>CurrentSheet</key>
 		<integer>0</integer>
 		<key>Expanded_Canvases</key>
-		<array/>
+		<array>
+			<string>Arbeitsfläche 1</string>
+		</array>
 		<key>Frame</key>
-		<string>{{2, 47}, {1676, 970}}</string>
+		<string>{{-7, -283}, {1676, 970}}</string>
 		<key>ShowInfo</key>
 		<true/>
 		<key>ShowRuler</key>
@@ -2064,17 +2066,17 @@
 		<key>SidebarWidth</key>
 		<integer>200</integer>
 		<key>TopSlabHeight</key>
-		<real>250</real>
+		<real>325</real>
 		<key>VisibleRegion</key>
-		<string>{{0, 0}, {721.73913043478262, 504.3478260869565}}</string>
+		<string>{{0, 0}, {712.42235391845747, 495.0310515021888}}</string>
 		<key>Zoom</key>
-		<real>1.6100000000000001</real>
+		<real>1.6100000143051147</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
 				<string>Arbeitsfläche 1</string>
+				<real>1.6100000143051147</real>
 				<real>1.6100000000000001</real>
-				<real>1.6300000000000001</real>
 			</array>
 		</array>
 	</dict>
