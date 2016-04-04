@@ -1,4 +1,4 @@
-%!TEX program = pdflatex
+%!TEX program = pdflalatex
 \documentclass[conference,10pt,a4paper]{IEEEtran}
 
 \usepackage{ifluatex}
@@ -19,11 +19,12 @@
 \usepackage{booktabs}
 \usepackage[hyphens]{url}
 \usepackage[pdfhighlight=/O, hidelinks, unicode=true]{hyperref}
+\usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{fixmath}
 \usepackage{algorithm2e}
 \usepackage{subcaption}
-\usepackage[load-configurations={abbreviations,binary}, per-mode=symbol]{siunitx}
+\usepackage[load-configurations={abbreviations,binary}, per-mode=symbol,range-phrase = {\text{~to~}}]{siunitx}
 \sisetup{load-configurations = abbreviations,binary-units}
 \usepackage{tabu}
 \makeglossaries

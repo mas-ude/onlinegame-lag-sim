@@ -3,11 +3,7 @@
 \section{Overview and Background}
 \label{sec:background}
 
-We now introduce some fundamental terms and concepts such as tickrate, 
-framerate, command message rate, and end-to-end lag 
-in Section~\ref{subsec:game-model} through 
-\ref{subsec:e2e-lag}. Then, Section~\ref{sec:measurementapproaches} 
-presents various lag measurement techniques.
+We now introduce some fundamental terms and concepts such as tickrate, framerate, command message rate, and end-to-end lag in Section~\ref{subsec:game-model} through \ref{subsec:e2e-lag}. Then, Section~\ref{sec:measurementapproaches} presents various lag measurement techniques.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -15,37 +11,18 @@ presents various lag measurement techniques.
 \label{subsec:game-model}
 
 \begin{figure}[!t]
-\centering
-\includegraphics[width=0.8\columnwidth]{../models/game_loop.pdf}
-\caption{Basic model of a continuous main video game loop.}
-\label{fig:gameloop1}
+	\centering
+	\includegraphics[width=0.8\columnwidth]{../../models/game_loop.pdf}
+	\caption{Basic model of a continuous main video game loop.}
+	\label{fig:gameloop1}
 \end{figure}
 
-At their core video games are essentially feedback-directed 
-real-time simulators. Figure~\ref{fig:gameloop1} overviews a 
-simplified simulation loop consisting of three parts.
-The game reads player input, updates the game state, and renders 
-new screen contents. This loop repeats as long as the game is running. 
-While the three parts are interrelated, and every component provides 
-some form of input to the next, they may still proceed at their own 
-intrinsic paces. (For example, the state of the game world is updated 
-even if the player character does not move.)
-In this simplified model, we distinguish a generic process for player 
-input, a \textit{tickrate} that governs the frequency of game state updates, and 
-a \textit{framerate} determining how often the screen is updated every second.
+At their core video games are essentially feedback-directed real-time simulators. Figure~\ref{fig:gameloop1} overviews a simplified simulation loop consisting of three parts.
+The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces. (For example, the state of the game world is updated even if the player character does not move.)In this simplified model, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second.
 
-Note that actual game implementations sometimes choose to update 
-parts of the game state on different fixed frequencies. For example, 
-a physics effect that does not influence gameplay directly could be 
-updated at only half the tickrate. Also, the parameters of the player 
-input process depend on the game genre and on the player action 
-currently performed. Please refer to Table~\ref{tbl:tickrates} for 
-exemplary rates of current games.
+Note that actual game implementations sometimes choose to update parts of the game state on different fixed frequencies. For example, a physics effect that does not influence gameplay directly could be updated at only half the tickrate. Also, the parameters of the player input process depend on the game genre and on the player action currently performed. Please refer to Table~\ref{tbl:tickrates} for exemplary rates of current games.
 
-%Popular examples for the fixed tickrates of 
-%game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for 
-%\textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for 
-%\textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+%Popular examples for the fixed tickrates of game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
 %\newcommand{\mymidrule}[]{\midrule }
 \newcommand{\mymidrule}{\addlinespace }
@@ -79,41 +56,19 @@ exemplary rates of current games.
 % TODO: needs a better word than types, more like architectures. Feedback welcome
 % TODO: need to find a better word than game (delivery) flavors
 
-We next discuss how different implementations of game architectures  
-set the local/remote boundary, as depicted in Fig.~\ref{fig:component-models}. Consider first a \textit{single-player game} (sub-figure \textit{a}), with all of the 
-components running locally. However, we previously mentioned that the 
-three parts of the main game loop each progress at individual paces. 
-Therefore, one may conceptually separate server-side 
-input and state management components out of the single-player 
-architecture, and thus form an \textit{online video game} 
-(sub-figure \textit{b}). 
-Now, player state information is transmitted to the 
-game server across the network, and likewise, state updates from 
-the server transit the network until they reach the game client.
-Furthermore, the game server can be the central, authoritative 
-point of state synchronization for other connected clients.
-It should be noted that for reasons of network and processing efficiency, 
-player input events are usually batched, and sent to the server according 
-to a specific \textit{command message rate}.
+We next discuss how different implementations of game architectures set the local/remote boundary, as depicted in Fig.~\ref{fig:component-models}. Consider first a \textit{single-player game} (sub-figure \textit{a}), with all of the components running locally. However, we previously mentioned that the three parts of the main game loop each progress at individual paces. Therefore, one may conceptually separate server-side input and state management components out of the single-player architecture, and thus form an \textit{online video game} (sub-figure \textit{b}). Now, player state information is transmitted to the game server across the network, and likewise, state updates from the server transit the network until they reach the game client.
+Furthermore, the game server can be the central, authoritative point of state synchronization for other connected clients.
+It should be noted that for reasons of network and processing efficiency, player input events are usually batched, and sent to the server according to a specific \textit{command message rate}.
 
-%\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized. 
+%\textit{Online video games} (i.e. mostly multiplayer games) complicate this update logic a bit as seen in the depiction of Fig~\ref{fig:component-model-online}. In client/server online games, the client is not the final authority over its game state any more. Instead, interpreted input commands are sent to the server and a preliminary game state is calculated locally. When the authoritative update from the server is received the two states can be once again be synchronized.
 
-In a different possible separation of components, the game client (which includes 
-state management and rendering) is situated on a remote entity. This gives rise to 
-\textit{cloud gaming} (sub-figure \textit{c}), 
-which is a form of \textit{game streaming} 
-where the game streaming server is part of a larger streaming service 
-hosted at a data center. Due to the spatial separation of the 
-input/output devices and the game engine, input data needs to be 
-sent from the streaming client to the game engine. The return channel 
-does not transport game state messages in this scenario, but rather streams the 
-rendered audio and video data.
+In a different possible separation of components, the game client (which includes state management and rendering) is situated on a remote entity. This gives rise to \textit{cloud gaming} (sub-figure \textit{c}), which is a form of \textit{game streaming} where the game streaming server is part of a larger streaming service hosted at a data center. Due to the spatial separation of the input/output devices and the game engine, input data needs to be sent from the streaming client to the game engine. The return channel does not transport game state messages in this scenario, but rather streams the rendered audio and video data.
 
 %Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=0.9\textwidth]{../models/component_interaction_full.pdf}
+  \includegraphics[width=0.9\textwidth]{../../models/component_interaction_full.pdf}
   \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
   \label{fig:component-models}
 \end{figure*}
@@ -122,20 +77,8 @@ rendered audio and video data.
 \subsection{Framerate}
 \label{sec:framerate}
 
-In contrast to traditional video media that play back at fixed 
-framerates, e.g., \SI{24}{\hertz}, video games are more flexible 
-but also much more demanding on the framerate. First, the framerate 
-in a game may fluctuate as the processing time of the render process 
-depends on the scene complexity.
-Then, video games usually target higher framerates than other media do: 
-\SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on 
-the type of game. Higher framerates enable smoother camera movement and 
-scene transitions, as games often present faster scenes when compared 
-to videos; they also help in increasing the interactivity as video games 
-constantly require input on short time scales to which the game reacts 
-and displays the feedback. Therefore, the framerate 
-influences the reactivity of a game, but can also be a source 
-of latency itself.
+In contrast to traditional video media that play back at fixed framerates, e.g., \SI{24}{\hertz}, video games are more flexible but also much more demanding on the framerate. First, the framerate in a game may fluctuate as the processing time of the render process depends on the scene complexity.
+Then, video games usually target higher framerates than other media do: \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on the type of game. Higher framerates enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos; they also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate influences the reactivity of a game, but can also be a source of latency itself.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -143,8 +86,8 @@ of latency itself.
 
 Lag in video gaming is often described solely on the basis of the network delay in an online game. It should be evident that the lag is a critically important factor for almost all games. This is especially true for fast or competitive games, as it governs the reaction time to in-game events.
 
-However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textit{end-to-end lag} is captured. Notably, this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing command that moves the player character in the game world, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete. 
-Therefore, each video game will have a distinct ``lag profile''.  
+However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textit{end-to-end lag} is captured. Notably, this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing command that moves the player character in the game world, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete.
+Therefore, each video game will have a distinct ``lag profile''.
 
 
 % TODO:
@@ -155,14 +98,13 @@ Therefore, each video game will have a distinct ``lag profile''.
 \subsection{Measurement Approaches}
 \label{sec:measurementapproaches}
 
-%With the central role of the end-to-end lag in mind, it is natural to assume that this 
+%With the central role of the end-to-end lag in mind, it is natural to assume that this
 Lag also plays a critical role in both subjective and objective video game quality assessments. Therefore, the end-to-end lag needs to be correctly examined and quantified from any kind of video game. Unfortunately, video games usually represent a black box with very few possible vantage points where measurements can be taken. Below we discuss three distinct methods which are each situated at unique vantage points as depicted in Fig.~\ref{fig:measurement-methods}.
-The methods described below are ordered roughly from lowest to highest 
-complexity of implementation.
+The methods described below are ordered roughly from lowest to highest complexity of implementation.
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=1.0\columnwidth]{../models/e2e-lag.pdf}
+    \includegraphics[width=1.0\columnwidth]{../../models/e2e-lag.pdf}
     \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
 \label{fig:measurement-methods}
 \end{figure}
@@ -191,8 +133,8 @@ In some cases it may also be advantageous to tap into the network interactions o
 \myparagraph{Camera Recordings}
 Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external measurement device like a video camera.
 %\hoss{Mit 'only' ware ich vorsichtig. Es kann auch noch andere Moeglichkeiten mittels physikalischer Sensoren geben, evtl. sowas \cite{di2010new} also aehnlich zu \cite{beyermethod}. Evtl sollte man 'Camera Recordings and Sensoring' schreiben?}
-The experimenter then counts the frames between pressing a button on the input device and the action appearing on the screen and calculates the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed. 
-%Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem. 
+The experimenter then counts the frames between pressing a button on the input device and the action appearing on the screen and calculates the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed.
+%Also, the camera should operate at least at twice the monitor's refresh rate according to the Nyquist-Shannon sampling theorem.
 An additional benefit of this method is that the game and the computers remain unaltered and are therefore not affecting any properties of the game. A variant of this approach, replacing the camera with a photodiode and synthetically creating the input events with a microcontroller is described in \cite{beyermethod}, though it may be difficult to use for certain game actions that have a barely visible or unpredictable on-screen effect.
 
 
@@ -227,7 +169,7 @@ An additional benefit of this method is that the game and the computers remain u
 % \label{fig:framerate}
 % \end{figure}
 
-% The benefit of motion blur lies in its ability to conceal stutters in apparent movement due to the object and its edges being blurred, thereby reducing the positional information available on it.%, Figure~\ref{fig:framerate} illustrates this. 
+% The benefit of motion blur lies in its ability to conceal stutters in apparent movement due to the object and its edges being blurred, thereby reducing the positional information available on it.%, Figure~\ref{fig:framerate} illustrates this.
 % Therefore, typical movie sequences usually appear to be perfectly fluid. Only for example when the camera pans at a high speed stutters in object movement or the viewport updates become apparent. Intrinsic motion blur is absent in computer generated imagery but can be artificially added to the images. While adding blur to video games can improve fluidity, it also reduces the spatial information available to the player and hampers the precision of the player's actions. Therefore it is often avoided, especially for objects in focus.
 
 % Video games add two more factors to the frame rate consideration. The first is the issue of the monitor's refresh rate. Monitors work with a fixed, configurable image refresh rate, typically always including \SI{60}{\hertz}. If the game outputs images at an inconsistent rate or a rate lower than the monitor's refresh rate or if the framerate is not an integer multiple of the refresh rate or vice versa one of two things will happen: tearing or stuttering. % TODO: shorten and rephrase this section
