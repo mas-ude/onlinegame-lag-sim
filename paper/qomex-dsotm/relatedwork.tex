@@ -4,6 +4,21 @@
 \label{sec:relatedwork}
 
 
+%Many of the past publications regarded the \gls{QoE} of online and cloud video games as ``good enough''. This statement is probably true when looking at a wider audience and looking only at certain games, but does not go very well with the core audience group, that shows real interest in those games.
+
+
+%With the recent successes of competitive video games, the commercial failure of many cloud gaming services, and the rise of local game streaming offerings it might also be time to critically investigate methods used evaluate those video games. as the scientific view on these matters does not seem to be very aligned with actual mechanics and events.
+
+%The issue of large portions of the scientific literature is that video games are treated as black boxes without taking the inner workings of games into account. For online video games this especially means understanding the main game loop (which is running in a distributed fashion) with its tick rates as well as mechanics and implications surrounding the framerate.
+
+%This holds true for both \gls{QoS} measurements as well as subjective \gls{QoE} user studies, which are often parametrized in rather peculiar ways.
+
+% Looking at those past studies many of them also seem to take very peculiar choices in their selection of measurement parameters, seemingly oblivious to central game properties. For example one paper \cite{claypool2007} examines user actions in \textsc{Quake 3} running at framerates down to \SI{3}{\hertz}, which is considerably below the limit where one can still perceive movement. 
+
+%Casual games requirements are usually more relaxed, e.g., due to the social, temporal, and spatial context factors they are played under (reducing the attention of the player) or inadequate or slow input methods (e.g., touch controls). 
+%The second topic covers the game's framerate, its interaction with the monitor refresh rate and their implications.
+
+
 The assessment of video games has been a topic in many past papers. Due to the strong interactivity of games and the large number of different game mechanics most of the research is focused on conducting user studies and noting the subjective quality of the users. The outcome of these studies depends strongly on a wide selection of factors (e.g., on the precise setup, the game, and the choice of players) which makes comparing their results quite difficult. This section presents a few examples of such studies.
 
 In \cite{5976180} Jarschel et al. identify some influence factors on the subjective quality of cloud gaming through a user survey for certain games and three different game categories (slow, medium, fast games) that have been subjected to worsening \gls{QoS} parameters. Downstream packet loss and delay was noted be be especially problematic for achieving a good quality. Similarly, the authors of \cite{4591393} observed the relationship of players quitting a \gls{MMO} game with deteriorating \gls{QoS} and noted an impact proportion of 1:2:4:3 for delay, jitter, and packet loss on both the client-to-server and server-to-client connections respectively. Additionally, a user study in \cite{4604397} also showed a correlation of the \gls{QoE} to the delay as well as the jitter for another \gls{MMO}, in this case the total delay had more impact than the delay variation. Regarding the subjective quality in first person shooters, the authors of \cite{6614351} find a strong impact of the delay and packet loss on the experienced quality. The authors of \cite{6404025} and \cite{beyerusing} use \gls{fEMG} and \gls{EEG} approaches respectively to examine individual gamers' reaction to various cloud games and measure the quality they are experiencing in terms of real-time strictness and \gls{QoE}. Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
