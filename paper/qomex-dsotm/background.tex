@@ -5,12 +5,12 @@
 
 We now introduce some fundamental terms and concepts such as tickrate, framerate, command message rate, and end-to-end lag in Section~\ref{subsec:game-model} through \ref{subsec:e2e-lag}. Then, Section~\ref{sec:measurementapproaches} presents various lag measurement techniques.
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{../../models/game_loop.pdf}
-	\caption{Basic model of a continuous main video game loop.}
-	\label{fig:gameloop1}
-\end{figure}
+% \begin{figure}[!t]
+% 	\centering
+% 	\includegraphics[width=0.8\columnwidth]{../../models/game_loop.pdf}
+% 	\caption{Basic model of a continuous main video game loop.}
+% 	\label{fig:gameloop1}
+% \end{figure}
 
 At their core video games are essentially feedback-directed real-time simulators. Figure~\ref{fig:gameloop1} overviews a simplified simulation loop consisting of three parts.
 The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces. (For example, the state of the game world is updated even if the player character does not move.)In this simplified model, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second.
