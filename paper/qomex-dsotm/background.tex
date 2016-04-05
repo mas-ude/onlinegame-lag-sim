@@ -5,11 +5,6 @@
 
 We now introduce some fundamental terms and concepts such as tickrate, framerate, command message rate, and end-to-end lag in Section~\ref{subsec:game-model} through \ref{subsec:e2e-lag}. Then, Section~\ref{sec:measurementapproaches} presents various lag measurement techniques.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Basic Game Model}
-\label{subsec:game-model}
-
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{../../models/game_loop.pdf}
@@ -24,8 +19,6 @@ Note that actual game implementations sometimes choose to update parts of the ga
 
 %Popular examples for the fixed tickrates of game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
-%\newcommand{\mymidrule}[]{\midrule }
-\newcommand{\mymidrule}{\addlinespace }
 
 \begin{table}[!t]
 \caption{Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
@@ -37,13 +30,13 @@ Note that actual game implementations sometimes choose to update parts of the ga
 		\toprule
 		\textbf{Video Game} & \textbf{Tickrate} \\
 		\midrule
-		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\ \mymidrule
-		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\ \mymidrule
-		Minecraft & max. \SI{20}{\hertz} \\ \mymidrule
-		League of Legends & \SI{30}{\hertz} (estimated) \\ \mymidrule
-		Dota 2 & \SI{30}{\hertz} \\ \mymidrule
-		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\ \mymidrule
-		Eve Online & \SI{1}{\hertz} \\ \mymidrule
+		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
+		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
+		Minecraft & max. \SI{20}{\hertz} \\
+		League of Legends & \SI{30}{\hertz} (estimated) \\
+		Dota 2 & \SI{30}{\hertz} \\
+		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
+		Eve Online & \SI{1}{\hertz} \\
 %		Sports Game 1 & \\ \midrule
 		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
 		\bottomrule
@@ -66,12 +59,12 @@ In a different possible separation of components, the game client (which include
 
 %Fig.~\ref{fig:tickrate-streamed} gives again an overview of all these components for a combined streamed online video game scenario by highlighting the involved entities and interaction triggers in more detail.
 
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.9\textwidth]{../../models/component_interaction_full.pdf}
-  \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
-  \label{fig:component-models}
-\end{figure*}
+% \begin{figure*}[!t]
+%   \centering
+%   \includegraphics[width=0.9\textwidth]{../../models/component_interaction_full.pdf}
+%   \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
+%   \label{fig:component-models}
+% \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Framerate}
@@ -80,9 +73,14 @@ In a different possible separation of components, the game client (which include
 In contrast to traditional video media that play back at fixed framerates, e.g., \SI{24}{\hertz}, video games are more flexible but also much more demanding on the framerate. First, the framerate in a game may fluctuate as the processing time of the render process depends on the scene complexity.
 Then, video games usually target higher framerates than other media do: \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on the type of game. Higher framerates enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos; they also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate influences the reactivity of a game, but can also be a source of latency itself.
 
+%Generally speaking, motion in video data is based on the principle of \textit{apparent motion}. In order to perceive objects to be in motion in videos, consecutive images have to appear at a certain rate which is considered to be at about \SI{16.67}{\hertz} according to \cite{wertheimer1912experimentelle}. Below that threshold objects will appear as two distinct objects between two consecutive frames. %This form of apparent movement is called the phi phenomenon. The higher the rate of displaying images, the more fluid the motion looks, as the discrete ``jumps'' in the position of the object get smaller the higher the framerate is.\footnote{One can verify this behavior for example at \url{https://frames-per-second.appspot.com/}.}.
+
+% In general, there is no commonly established upper limit to the framerate that humans can still perceive as an improvement to motion presentation, the gain has however diminishing returns. The typical movie framerate of \SI{24}{\hertz} is considered to be at the lower end of motion perception but mostly still works without any problem due to the presence of motion blur. This artifact is always present in recorded images as objects are still in motion during film exposure. %A faster shutter speed reduces the amount of motion blur. % film grain also has an influence
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{End-to-End Lag}\label{subsec:e2e-lag}
+\subsection{End-to-End Lag}
+\label{sec:e2e-lag}
 
 Lag in video gaming is often described solely on the basis of the network delay in an online game. It should be evident that the lag is a critically important factor for almost all games. This is especially true for fast or competitive games, as it governs the reaction time to in-game events.
 
@@ -102,24 +100,18 @@ Therefore, each video game will have a distinct ``lag profile''.
 Lag also plays a critical role in both subjective and objective video game quality assessments. Therefore, the end-to-end lag needs to be correctly examined and quantified from any kind of video game. Unfortunately, video games usually represent a black box with very few possible vantage points where measurements can be taken. Below we discuss three distinct methods which are each situated at unique vantage points as depicted in Fig.~\ref{fig:measurement-methods}.
 The methods described below are ordered roughly from lowest to highest complexity of implementation.
 
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=1.0\columnwidth]{../../models/e2e-lag.pdf}
-    \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
-\label{fig:measurement-methods}
-\end{figure}
+% \begin{figure}[!t]
+%     \centering
+%     \includegraphics[width=1.0\columnwidth]{../../models/e2e-lag.pdf}
+%     \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
+% \label{fig:measurement-methods}
+% \end{figure}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Screen Recording Software Method}
 Recording in software the output stream of a video game might be the simplest approach to determine video game lag. It can capture both the framerate and \gls{IAT} at a driver level, and the recorded video can be used for image and quality analyses as well as to correlate it to additionally recorded input events in order to calculate the lag. This is not the complete end-to-end lag however, as both the controller and screen output delay are missing. The need to install additional software might make it unsuitable for some scenarios, e.g., when measuring console video games. As a variant of this method, one can also record the output stream with a video capture card on a secondary computer, which does not negatively effect the game's performance as the software method would.
 
 Examples of this approach include both \cite{Chen:2011:MLC:2072298.2071991} and \cite{6670099} which measured the latency of cloud gaming services in the game client. They do this by invoking the system menu in games and measuring the time until it is displayed. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (i.e., the lag) as well as image quality by employing software recording methods on the client's computer.
 %However, this method assumes a constant delay of game actions and may not capture the actual end-to-end lag of many of real game actions, as they are typically different from and longer as the latency of displaying a menu. A 2013 paper \cite{6574660} investigates the quality of cloud gaming interactiveness (latency) as well as image quality by employing software recording methods on the client's computer. With these techniques the challenges regarding the quality are discussed.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Passive Network Measurements}
 In some cases it may also be advantageous to tap into the network interactions of the games and record the command and update messages sent between server and clients. While this is not a direct measure of game quality, it can give insights into the game's inner workings, such as the tick rates, and one can derive, e.g., the lowest achievable end-to-end lag from this.
 
 %Can only investigate command and update messages, not tick rate directly. Evaluate rate, IAT, and bandwidth, estimate latency (though there may be no direct link between commands and updates).
@@ -128,9 +120,6 @@ In some cases it may also be advantageous to tap into the network interactions o
 % Additionally, almost no game encrypts its time-critical messages, enabling an easy read-out. Through these means, the specific commands can be read from the network and potentially linked to their effect on the game state in the corresponding state update messages.
 %, but also potentially allowing malicious actions to be taken easily.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\myparagraph{Camera Recordings}
 Finally, the only method to fully capture the end-to-end lag is to simultaneously record both the screen and input device through an external measurement device like a video camera.
 %\hoss{Mit 'only' ware ich vorsichtig. Es kann auch noch andere Moeglichkeiten mittels physikalischer Sensoren geben, evtl. sowas \cite{di2010new} also aehnlich zu \cite{beyermethod}. Evtl sollte man 'Camera Recordings and Sensoring' schreiben?}
 The experimenter then counts the frames between pressing a button on the input device and the action appearing on the screen and calculates the lag from this. For better visibility the input device is usually modified with an LED that turns on when the button is pressed.
@@ -139,28 +128,6 @@ An additional benefit of this method is that the game and the computers remain u
 
 
 
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=0.8\columnwidth]{../models/component_interaction-online+cloud.pdf}
-%   \caption{Interaction of TODO.}
-%   \label{fig:component-model-online+cloud}
-% \end{figure}
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=1.0\columnwidth]{../models/cycle.pdf}
-%   \caption{Interaction of TODO.}
-%   \label{fig:component-model}
-% \end{figure}
-
-
-
-
-
-%Generally speaking, motion in video data is based on the principle of \textit{apparent motion}. In order to perceive objects to be in motion in videos, consecutive images have to appear at a certain rate which is considered to be at about \SI{16.67}{\hertz} according to \cite{wertheimer1912experimentelle}. Below that threshold objects will appear as two distinct objects between two consecutive frames. %This form of apparent movement is called the phi phenomenon. The higher the rate of displaying images, the more fluid the motion looks, as the discrete ``jumps'' in the position of the object get smaller the higher the framerate is.\footnote{One can verify this behavior for example at \url{https://frames-per-second.appspot.com/}.}.
-
-% In general, there is no commonly established upper limit to the framerate that humans can still perceive as an improvement to motion presentation, the gain has however diminishing returns. The typical movie framerate of \SI{24}{\hertz} is considered to be at the lower end of motion perception but mostly still works without any problem due to the presence of motion blur. This artifact is always present in recorded images as objects are still in motion during film exposure. %A faster shutter speed reduces the amount of motion blur. % film grain also has an influence
 
 % \begin{figure}[!t]
 % 	\centering

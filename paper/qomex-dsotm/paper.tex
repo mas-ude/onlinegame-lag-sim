@@ -36,21 +36,13 @@
 
 \npstyleenglish
 
-\newcommand{\hoss}[1]{\textcolor{red}{TH: #1}}
-
-\makeatletter
-\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
-\makeatother
-
-% masks an issue with polyglossia, not sure of side effects
-\AtBeginDocument{\let\textlabel\label}
 
 \begin{document}
 
 %\title{Things to Keep in Mind When Measuring Online or Streamed Video Games}
 %\title{QoS Measurement Approaches for Online Video Games from Basic Game Mechanics}
 %\title{Best Practices for QoS Measurements of Online Video Games}
-\title{A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming}
+\title{Games and Frames: A Strange Tale of QoE Studies}
 
 \author{\IEEEauthorblockN{Florian Metzger, Tobias Hoßfeld}
 \IEEEauthorblockA{
@@ -64,24 +56,21 @@ Essen, Germany\\
 Datenkugerl\\
 Austria\\
 albert.rafetseder@univie.ac.at}
-\and
-\IEEEauthorblockN{Christian Schwartz}
-\IEEEauthorblockA{
-University of Würzburg\\
-Würzburg, Germany\\
-schwartz@informatik.uni-wuerzburg.de}}
-
-
-\newcommand{\myparagraph}[1]{\subsubsection{#1}}
+% \and
+% \IEEEauthorblockN{Christian Schwartz}
+% \IEEEauthorblockA{
+% University of Würzburg\\
+% Würzburg, Germany\\
+% schwartz@informatik.uni-wuerzburg.de}
+}
 
 \maketitle
 
 \input{abstract}
 \input{introduction}
-\input{big-picture}
+\input{background}
 \input{relatedwork}
 \input{model}
-\input{simulation}
 \input{game-classification}
 \input{conclusion}
 
