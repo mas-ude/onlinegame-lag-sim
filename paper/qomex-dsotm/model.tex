@@ -6,31 +6,6 @@
 It is evident from the discussion in Section~\ref{sec:background} that multiple different components contribute to the end-to-end lag in games, and that multiple potential models and levels of granularity exist for each game type. Let's discuss therefore the model boundaries and level of detail used in the current iteration of this analytical model to be presented here.
 
 
-% \begin{table}[!t]
-% \caption{Notation used in the model. Random variables are denoted by capital letters $X$, and constants by small letters $x$.}
-% \label{tab:notation}
-% 	\centering
-% 	\begin{tabu}{lX[1,l]X[1,l]}
-% 	\toprule
-% 	\textbf{Symbol} & \textbf{Description} & \textbf{Simulation} \\
-% 	\midrule
-% 	$D$ & network delay between game client and server & $D \sim TNorm(\mu_D;\sigma_D)$, $\mu_D = \SI{20}{\milli\second}$; $\sigma_D = \SI{5}{\milli\second}$\\
-% 	$P$ & game server processing time & $P \sim TNorm(\mu_P;\sigma_P)$, $ \mu_P = \SI{3}{\milli\second}; \sigma_P = \SI{0.1}{\milli\second}$\\
-% 	$T$ & end-to-end lag & key performance measure \\
-% 	$U$ & (inter arrival) time between user inputs & $U \sim Exp(\lambda)$; $\lambda = \SI{50}{\milli\second}$\\
-% 	\midrule
-% 	$c$ & command rate & $c=g$ \\
-% 	$c^{-1}$ & interval to gather input events before sending & \\
-% 	$d$ & decode delay & \SI{5}{\milli\second} \\
-% 	$e$ & encode delay & \SI{15}{\milli\second} \\
-% 	$f$ & framerate & $f \in \SIrange{10}{200}{\hertz}$ \\
-% 	$f^{-1}$ & frame duration & $f^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
-% 	$g$ & game tickrate & $g \in \SIrange{10}{200}{\hertz}$ \\
-% 	$g^{-1}$ & game tick duration & $g^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
-% 	\bottomrule
-% 	\end{tabu}
-% \end{table}
-
 \subsection{Model of end-to-end lag for online games}
 %\hoss{Ich wuerde mathematische Notation einfuehren, um klar zu machen, was Teil des Modells ist.}
 First, we define the end-to-end lag $T$ to be the time elapsed from when the player supplies commands to the input devices until just before actual audio/video output.
@@ -45,9 +20,7 @@ Next, we associate a static (but individually configurable) tick rate $g$ with t
 
 While we consider the command, tick, and frame rates to be constant (though not necessarily identical), there is no inherent synchronization between them. This is represented in the simulation by a random initial phase offset for each rate.
 
-Finally, since we are simulating online games, the simulation obviously includes the network paths between the different components. The delay distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server. Fig.~\ref{fig:queuing-model} gives a graphical representation of the queueing model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
-%\hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.}
-Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
+Finally, since we are simulating online games, the simulation obviously includes the network paths between the different components. The delay distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server. Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
 
 % \begin{figure*}[!t]
 % 	\centering
@@ -64,33 +37,28 @@ Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between ga
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../models/tickrate-timeseries-notation.pdf}
-	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag with the notation of Tab.~\ref{tab:notation}.
-	% \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild. }
-	} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag.
+	}
 \label{fig:tickrate-timeseries}
 \end{figure}
 
 
 
-\subsection{Model of end-to-end lag for cloud games}
-The model for cloud gaming (Fig.~\ref{fig:component-models}c) is based on the online game model, adapting its notions of $D$, $P$, $T$, $U$, $c$, and $f$. However, the server now handles only one client, and becomes a \textit{streaming server} that also renders and encodes the screen contents, adding a constant encoding delay $e$. On the client side, the stream is decoded (adding decoding delay $d$) before being displayed.
 
+% \subsection{Model Simplifications}
 
+% These simulation models do not attempt to capture all possible sources of lag that. Indeed, we simplify the models in the following aspects in the hope to make the results more tractable.
+% %\textbf{TODO Make this more of a ``future work'' section, less ``why we suck''.}
 
-\subsection{Model Simplifications}
+% \subsubsection{Additional delay sources}
+% The models ignore the delays contributed by input devices like keyboards, mice, and game controllers. We estimate these at below \SI{10}{\milli\second}. The same goes for the lag of the display device (from after rendering or decoding until the frame is actually visible) which is typically in the range of 1--3 frame times for a computer monitor, and larger for TV sets. The models can be extended to take those delay factors into account, but they were exempted for the sake of simplicity in this paper.
+% % TODO: \textbf{Add adaptive VSYNC?}
 
-These simulation models do not attempt to capture all possible sources of lag that. Indeed, we simplify the models in the following aspects in the hope to make the results more tractable.
-%\textbf{TODO Make this more of a ``future work'' section, less ``why we suck''.}
+% \subsubsection{Subtleties of game internals}
+% Modern games go great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not open for examination, so we leave them for further study. Techniques include lag compensation (the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviation and re-synchronization artifacts), and tick- and framerate adaptation at the game server and client, respectively. Lastly, player actions in a game might take multiple command time intervals to perform. The simulation currently assumes that every single batch of commands that reaches the server will result in state updates and thus changes in the perceptible output of the game client. It should be noted that none of these techniques alter the end-to-end lag itself, rather they just try to conceal it on some higher level. Therefore, the mechanisms do not invalidate our examination.
 
-\subsubsection{Additional delay sources}
-The models ignore the delays contributed by input devices like keyboards, mice, and game controllers. We estimate these at below \SI{10}{\milli\second}. The same goes for the lag of the display device (from after rendering or decoding until the frame is actually visible) which is typically in the range of 1--3 frame times for a computer monitor, and larger for TV sets. The models can be extended to take those delay factors into account, but they were exempted for the sake of simplicity in this paper.
-% TODO: \textbf{Add adaptive VSYNC?}
-
-\subsubsection{Subtleties of game internals}
-Modern games go great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not open for examination, so we leave them for further study. Techniques include lag compensation (the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviation and re-synchronization artifacts), and tick- and framerate adaptation at the game server and client, respectively. Lastly, player actions in a game might take multiple command time intervals to perform. The simulation currently assumes that every single batch of commands that reaches the server will result in state updates and thus changes in the perceptible output of the game client. It should be noted that none of these techniques alter the end-to-end lag itself, rather they just try to conceal it on some higher level. Therefore, the mechanisms do not invalidate our examination.
-
-\subsubsection{Factors in human perception and strategy}
-The models we present do not take into account the perceived lag from when the players \textit{think} they have triggered an action to when they perceive the outcomes of their action. This consequently disregards effects of different player actions, strategies, and so on.
+% \subsubsection{Factors in human perception and strategy}
+% The models we present do not take into account the perceived lag from when the players \textit{think} they have triggered an action to when they perceive the outcomes of their action. This consequently disregards effects of different player actions, strategies, and so on.
 
 
 
@@ -100,18 +68,16 @@ The models we present do not take into account the perceived lag from when the p
 \subsection{Simulation and Scenario Evaluation}
 \label{sec:simulation}
 
-Based on the models introduced in Section~\ref{sec:model} a stochastic \gls{DES} was created. This \textsc{Gnu R}-based simulator strives to translate all of the earlier discussed components of lag, while keeping them as configurable as possible.
+Based on the models introduced a stochastic \gls{DES} was created. This \textsc{Gnu R}-based simulator\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} strives to translate all of the earlier discussed components of lag, while keeping them as configurable as possible.
 %By using a vector-based language the core loop is kept compact and easy to modify in order to adapt to new scenarios in addition to the ones evaluated here. 
-Due to the influence of several stochastic processes (user inputs $U$, network delay $D$, server processing time $P$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
+Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
 
 This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario. The investigations here are not intended to cover every aspect of all parameters or to conduct full parameter studies, but are rather to highlight some particular aspect in each of the scenario.
-
-All of the source code and the data from the upcoming scenarios is provided in the simulation folder\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} of the repository and can be used as public domain.
 
 
 \subsubsection{Parameters}
 
-Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity. They are chosen to be as realistic as possible and and are summarized in Table~\ref{tab:notation}.
+Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity.
 %\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
 % fm: referenzen für solche werte sind leider eher schwer zu finden
 
@@ -123,39 +89,16 @@ The evaluation of the presented scenarios was conducted on the basis of $r=\np{1
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Local Games}
+% \subsubsection{Local Games}
 
-The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally.
+% The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally.
 
-% \begin{figure}[!t]
-% 	\centering
-% 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
-% 	\caption{Median end-to-end lag under various frame and tick durations for a locally-running game. Lower lag values are achieved at lower frame and tick durations.}
-% \label{fig:nwless-scatter}
-% \end{figure}
+% The values can be estimated as follows. Every user input event traverses three queues with fixed-rate outputs ($c=g$, g, and $f$), and every game state update waits for the next full frame until it gets displayed. In the ideal case, an input event occurs just before the command message is sent off, the server tick follows as soon as the message is received, and the update reaches the client just before a frame is output. Then the end-to-end lag is slightly above the frame time that must elapse before the update can be rendered to screen, $T_{min}>f^{-1}$.
 
-Figure~\ref{fig:nwless-scatter} plots the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting median end-to-end lag.
-% NOTA BENE: Every status update that the server sends must wait for another frame time until we consider it rendered.
-%
-% The scatter plot of raw e2e lag values for one (FR, TR) configuration thus spans
-% * separate "boxes" for each CR/FR/TR offset config
-% * inside of which the input events U scatter
-% * Boxes are, when all other rates/processes are in optimal sync,
-%   - bound from below by the frame-time f^-1 as the minimum
-%   - bound from above by f^-1 + c^-1, because c "groups together" input events
-% * alternatively, when maximally *out of* sync,
-%   - the boundaries shift upwards by another f^-1 + g^-1, resulting in a total just short of c^-1 + g^-1 + 2*f^-1: Input event waits almost-full command cycle, which then waits almost-full tick, which then waits almost-full frame; plus one frame per the "nota bene" above.
-% * a "cloud of boxes" (per the above description) whose minima are uniformly distributed (from visual inspection).
-%
-% The distributions of values for different (FR, TR) configs differ in their characteristics pretty starkly:
-% * for low framerates and high tickrates, we get an approximately uniform lag distribution. Seems that the FR which is "further down the tandem queue" dominates the lag, so its uniformly distributed phase offset governs the lag distribution.
-% * for high framerates and low tickrates, it approaches a truncated normal distribution.
-The values can be estimated as follows. Every user input event traverses three queues with fixed-rate outputs ($c=g$, g, and $f$), and every game state update waits for the next full frame until it gets displayed. In the ideal case, an input event occurs just before the command message is sent off, the server tick follows as soon as the message is received, and the update reaches the client just before a frame is output. Then the end-to-end lag is slightly above the frame time that must elapse before the update can be rendered to screen, $T_{min}>f^{-1}$.
-
-In case the events are unfavorably offset against one another, an input event has to wait almost a full command-message cycle until it is sent on; it reaches the server just after a tick has occurred, so it waits almost a full server tick; finally, it will wait for almost two frame times until it is displayed. Combining with the previous result bounds the lag as follows, $f^{-1} < T < c^{-1}+g^{-1}+2f^{-1}$. The mid-interval point between these two limits is $T_{mid}=\frac{3}{2} f^{-1} + g^{-1}|_{c=g}$ which coincides roughly with the medians of the stochastic simulation.
+% In case the events are unfavorably offset against one another, an input event has to wait almost a full command-message cycle until it is sent on; it reaches the server just after a tick has occurred, so it waits almost a full server tick; finally, it will wait for almost two frame times until it is displayed. Combining with the previous result bounds the lag as follows, $f^{-1} < T < c^{-1}+g^{-1}+2f^{-1}$. The mid-interval point between these two limits is $T_{mid}=\frac{3}{2} f^{-1} + g^{-1}|_{c=g}$ which coincides roughly with the medians of the stochastic simulation.
 
 
-Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (even without factoring in the delay of the screen and input devices) that can only increase with the presence of network delay. Therefore, video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize this influence.
+% Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (even without factoring in the delay of the screen and input devices) that can only increase with the presence of network delay. Therefore, video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize this influence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Online Gaming}
@@ -163,14 +106,11 @@ Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a f
 Next up is the full scenario of an online video game, now with network lag $D$ and server processing time $P$ included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a left-truncated normal distribution, with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing non-negative network delays. Typical competitive online games today are expected to operate in such ranges. An \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience. $P$ is similarly left-truncated. In addition to the components in the previous scenario, the lag now also contains contributions by the network round-trip and processing delay, $2D + P$.
 
 \begin{figure}[!t]
-	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
 	\centering
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
 	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario. For high rates $f$, $g$, the lag approaches $2\mu_D+\mu_P=\SI{43}{\milli\second}$.}
-	% TODO: \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}
-	% TODO: nicht rechtzeitig für submission deadline, aber für eine nächste version
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
@@ -180,55 +120,35 @@ Another interesting result (not plotted here) is the much larger variance of lag
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Cloud Gaming}
+% \subsubsection{Cloud Gaming}
 
-Finally, we construct a Cloud Gaming scenario. The tickrate has been removed;  instead, a constant encode ($e$) and decode ($d$) delay is in place at the game streaming server and client respectively. The frames are now rendered by the server, so they need to be transported back to the client first. Instead of assuming a specific network throughput and frame size, we simply add one frame time to account for the transmission of the encoded screen contents.
-%Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. 
-For the network delay $D$, the same values as for the online game are used. $c$ is set to $\SI{200}{\hertz}$.
+% Finally, we construct a Cloud Gaming scenario. The tickrate has been removed;  instead, a constant encode ($e$) and decode ($d$) delay is in place at the game streaming server and client respectively. The frames are now rendered by the server, so they need to be transported back to the client first. Instead of assuming a specific network throughput and frame size, we simply add one frame time to account for the transmission of the encoded screen contents.
+% %Without knowing the connection's throughput and absolute values for the frame sizes, the simulation simply applies an upper limit for the transmission duration, namely once again the frame's duration, or the inverse of the framerate. 
+% For the network delay $D$, the same values as for the online game are used. $c$ is set to $\SI{200}{\hertz}$.
 
-\begin{figure}[!t]
-	\centering
-	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
-	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of $\SI{68}{\milli\second}=c^{-1}+2D+P+e+d$.}
-	%\hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
-	%
-	% Albert: Uh, oh, the cloud simulation seems to have reused a stray 
-	%         200 Hz setting for $c$ from a previous online game sim.
-	%         I'm documenting that this value has been used.
-	%
-\label{fig:cloud-e2e-delay-sim}
-\end{figure}
+% \begin{figure}[!t]
+% 	\centering
+% 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
+% 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/cloudgaming-lag-cdf.pdf}
+% 	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of $\SI{68}{\milli\second}=c^{-1}+2D+P+e+d$.}
+% 	%\hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
+% 	%
+% 	% Albert: Uh, oh, the cloud simulation seems to have reused a stray 
+% 	%         200 Hz setting for $c$ from a previous online game sim.
+% 	%         I'm documenting that this value has been used.
+% 	%
+% \label{fig:cloud-e2e-delay-sim}
+% \end{figure}
 
-Figure~\ref{fig:cloud-e2e-delay-sim} shows the results of this scenario as an \gls{ECDF} of the end-to-end lag for several framerates. As before, the framerate impacts the end-to-end lag more severely than the network delay.
-%the large influence of the framerate when compared to the network delay is evident. 
-This result is of particular importance considering how past studies have relied on similarly low framerates as $5-\SI{15}{\hertz}$ when assessing the network influence on cloud gaming. Similarly, these results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
+% Figure~\ref{fig:cloud-e2e-delay-sim} shows the results of this scenario as an \gls{ECDF} of the end-to-end lag for several framerates. As before, the framerate impacts the end-to-end lag more severely than the network delay.
+% %the large influence of the framerate when compared to the network delay is evident. 
+% This result is of particular importance considering how past studies have relied on similarly low framerates as $5-\SI{15}{\hertz}$ when assessing the network influence on cloud gaming. Similarly, these results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Discussion}
+% \subsubsection{Discussion}
 
 The three scenarios presented here serve to provide initial insights into the complex interactions of the end-to-end lag. Although the underlying abstract model adopts some simplifications and some properties are not factored in yet, the results are still very revealing. Using the model and simulator as baseline, one can get a good estimation of the expected video game \gls{QoS} values. Alternatively, it can help in choosing representative games for select scenarios.
-
-% Ultimately, to capture any and all latency sources in gaming you would need to rely on external recording gear.
-% With modified input: zero latency and visible input detection (e.g. solder some LEDs to the buttons)
-
-% Also Arduino with photodiode method described in \cite{beyermethod}
-% Both this and camera method also work for closed game consoles
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{Evaluated Metrics}
-
-%%%%
-%\subsubsection{Frame Rates and Frame Times (i.e. frame IAT)}
-%i.e. frame IAT
-%Reasoning for frame IAT and the negligence of past investigations
-%%%%
-%\subsubsection{Total and additional end-to-end latency}
-%physical controller input to in-game reaction
-%different in-game actions have already difference in latency, therefore need to test various actions for a complete picture
-%Also discuss RTT as Hz (1/RTT) as measure for interactivity
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

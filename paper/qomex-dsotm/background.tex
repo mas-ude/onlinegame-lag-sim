@@ -3,31 +3,29 @@
 \section{Overview and Background}
 \label{sec:background}
 
-Before looking at the fallacies in the literature, first some fundamental gaming terms and concepts need to be introduced. At their core video games are essentially feedback-directed real-time simulators. The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image. Table~\ref{tbl:tickrates} contains some exemplary rates of current games.
-
-%Popular examples for the fixed tickrates of game servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{Counter-Strike: Global Offensive}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+Before looking at the fallacies in the literature, first some fundamental gaming terms and concepts need to be introduced. At their core video games are essentially feedback-directed real-time simulators. The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image. Popular examples for the tickrates of games servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
 
-\begin{table}[!t]
-\caption{Tickrates in competitive and popular video games.}
-\label{tbl:tickrates}
-	\centering
-	\begin{tabu}{X[0.45]X}
-		\toprule
-		\textbf{Video Game} & \textbf{Tickrate} \\
-		\midrule
-		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
-		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
-		Minecraft & max. \SI{20}{\hertz} \\
-		League of Legends & \SI{30}{\hertz} (estimated) \\
-		Dota 2 & \SI{30}{\hertz} \\
-		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
-		Eve Online & \SI{1}{\hertz} \\
-%		Sports Game 1 & \\ \midrule
-		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
-		\bottomrule
-	\end{tabu}
-\end{table}
+% \begin{table}[!t]
+% \caption{Tickrates in competitive and popular video games.}
+% \label{tbl:tickrates}
+% 	\centering
+% 	\begin{tabu}{X[0.45]X}
+% 		\toprule
+% 		\textbf{Video Game} & \textbf{Tickrate} \\
+% 		\midrule
+% 		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
+% 		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
+% 		Minecraft & max. \SI{20}{\hertz} \\
+% 		League of Legends & \SI{30}{\hertz} (estimated) \\
+% 		Dota 2 & \SI{30}{\hertz} \\
+% 		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
+% 		Eve Online & \SI{1}{\hertz} \\
+% %		Sports Game 1 & \\ \midrule
+% 		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
+% 		\bottomrule
+% 	\end{tabu}
+% \end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

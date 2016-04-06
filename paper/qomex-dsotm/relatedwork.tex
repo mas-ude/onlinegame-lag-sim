@@ -3,29 +3,27 @@
 \section{Related Work}
 \label{sec:relatedwork}
 
-
-%Many of the past publications regarded the \gls{QoE} of online and cloud video games as ``good enough''. This statement is probably true when looking at a wider audience and looking only at certain games, but does not go very well with the core audience group, that shows real interest in those games.
-
-
-%With the recent successes of competitive video games, the commercial failure of many cloud gaming services, and the rise of local game streaming offerings it might also be time to critically investigate methods used evaluate those video games. as the scientific view on these matters does not seem to be very aligned with actual mechanics and events.
-
-%The issue of large portions of the scientific literature is that video games are treated as black boxes without taking the inner workings of games into account. For online video games this especially means understanding the main game loop (which is running in a distributed fashion) with its tick rates as well as mechanics and implications surrounding the framerate.
-
-%This holds true for both \gls{QoS} measurements as well as subjective \gls{QoE} user studies, which are often parametrized in rather peculiar ways.
-
-% Looking at those past studies many of them also seem to take very peculiar choices in their selection of measurement parameters, seemingly oblivious to central game properties. For example one paper \cite{claypool2007} examines user actions in \textsc{Quake 3} running at framerates down to \SI{3}{\hertz}, which is considerably below the limit where one can still perceive movement. 
-
-%Casual games requirements are usually more relaxed, e.g., due to the social, temporal, and spatial context factors they are played under (reducing the attention of the player) or inadequate or slow input methods (e.g., touch controls). 
-%The second topic covers the game's framerate, its interaction with the monitor refresh rate and their implications.
-
-
 The assessment of video games has been a topic in many past papers. Due to the strong interactivity of games and the large number of different game mechanics most of the research is focused on conducting user studies and noting the subjective quality of the users. The outcome of these studies depends strongly on a wide selection of factors (e.g., on the precise setup, the game, and the choice of players) which makes comparing their results quite difficult. This section presents a few examples of such studies.
 
-In \cite{5976180} Jarschel et al. identify some influence factors on the subjective quality of cloud gaming through a user survey for certain games and three different game categories (slow, medium, fast games) that have been subjected to worsening \gls{QoS} parameters. Downstream packet loss and delay was noted be be especially problematic for achieving a good quality. Similarly, the authors of \cite{4591393} observed the relationship of players quitting a \gls{MMO} game with deteriorating \gls{QoS} and noted an impact proportion of 1:2:4:3 for delay, jitter, and packet loss on both the client-to-server and server-to-client connections respectively. Additionally, a user study in \cite{4604397} also showed a correlation of the \gls{QoE} to the delay as well as the jitter for another \gls{MMO}, in this case the total delay had more impact than the delay variation. Regarding the subjective quality in first person shooters, the authors of \cite{6614351} find a strong impact of the delay and packet loss on the experienced quality. The authors of \cite{6404025} and \cite{beyerusing} use \gls{fEMG} and \gls{EEG} approaches respectively to examine individual gamers' reaction to various cloud games and measure the quality they are experiencing in terms of real-time strictness and \gls{QoE}. Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
+Improper choice of game parametrization, especially in terms of framerate, resolution, as well as lag, both in measurements as well as in user assessments
 
-In order to avoid some of the issues with subjective user studies, other approaches examine the player objective performance through in-game metrics such as the game's highscore or the duration to achieve a certain task. For example, a user study in \cite{Chen:2006:SOG:1167838.1167859} observes a decrease in the objective quality assessment metrics (the playing duration) in an \gls{MMO} due to the influence of network factors. A 2006 paper \cite{Claypool:2006:LPA:1167838.1167860} categorizes player actions and their relationship to latency, with special regards for the precision and deadlines of actions. However, the in-game metrics under study can not represent short-term effects of latency as they operate on much larger time-scales. 
-%(e.g. researching the whole technology tree in Warcraft 3 is neither a representative action of the game nor delay-sensitive at all). Also the presence of lag compensation techniques is not considered. The end result is a delay tolerance table which probably is not very representative of modern video games.
-A second paper by Claypool et al. \cite{claypool2007} furthers this notion of the influence of network \gls{QoS} on in-game actions and specifically looks at player performance in first person games. A user study records the performance in artificially created in-game environments. Here, the performance gets worse with a degraded network, albeit at a very slow pace. %Players were also subjected to very low framerates of \SI{7}{\hertz} and \SI{3}{\hertz}, which is such an unrealistic setting, that it should not even have been tested. The reasons for this are laid out in Section~\ref{sec:framerate}.
+Looking at past user studies many of them also seem to take very peculiar choices in their selection of measurement parameters, seemingly oblivious to central game properties. For example one paper \cite{claypool2007} examines user actions in \textsc{Quake 3} running at framerates down to \SI{3}{\hertz}, which is considerably below the threshold of apparent motion.
+A second paper by Claypool et al. \cite{claypool2007} furthers this notion of the influence of network \gls{QoS} on in-game actions and specifically looks at player performance in first person games. A user study records the performance in artificially created in-game environments. Here, the performance gets worse with a degraded network, albeit at a very slow pace.
+
+\cite{5506572} attempts to derive ``gaming quality'' by measuring the \acrshort{PSNR} and tests at framerates between \SI{25}{\hertz} and \SI{6}{\hertz}.
+
+
+
+The precise choice of game and methodology also critically impacts the results, which are almost always non-transferable to any other setting or game, even in the same genre. This circumstance is neglected in most works as they make overly general statements with their results. % e.g. compare the contradicting studies in \cite{1266180}  and \cite{Beigbeder:2004:ELL:1016540.1016556} on Quake 3 and UT3 respectively.
+
+Other publications also have selected entirely wrong metrics to observe the \gls{QoE}, e.g. attempting to measure the influence of and tolerance to network delay with a metric that operates on a scale of tens of minutes (as observed in \cite{Claypool:2006:LPA:1167838.1167860}).
+
+
+
+
+Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
+
+
 The ``kills per minute'' of normal players in the \gls{FPS} \textsc{Quake 3} are investigated by \cite{1266180}, which sees a steady decline of this subjective performance metric when increasing the network delay. However, another paper \cite{Beigbeder:2004:ELL:1016540.1016556}, looking at player performance in \textsc{Unreal Tournament 2003} in a controlled in-game environment, finds almost no influence of increased delay and packet loss, even at high values of \SI{200}{\milli\second}. %The discrepancy between the otherwise similar studies could potentially be attributed to the specific construction of the in-game test environment. 
 A 2002 paper \cite{Pantel:2002:IDR:507670.507674}, which gathered objective \gls{QoE} measurements from a custom-made RC racing video game, again sees a strong dependence of the player's performance on the delay, and suggests that a network \acrshort{RTT} of \SI{200}{\milli\second} is barely usable and \SI{500}{\milli\second} completely unusable. Finally, the authors of \cite{Bredel:2010:MSR:1944796.1944797} also find a strong and negative influence of high delay on the player's performance, in this case again in \textsc{Quake 3}. 
 
@@ -33,35 +31,14 @@ It is interesting to note the discrepancies between the studies both in terms of
 
 
 
+%A 2006 paper \cite{Claypool:2006:LPA:1167838.1167860} categorizes player actions and their relationship to latency, with special regards for the precision and deadlines of actions. However, the in-game metrics under study can not represent short-term effects of latency as they operate on much larger time-scales. (e.g. researching the whole technology tree in Warcraft 3 is neither a representative action of the game nor delay-sensitive at all). Also the presence of lag compensation techniques is not considered. The end result is a delay tolerance table which probably is not very representative of modern video games.
 
 
-%Pure \gls{QoS} views on the quality of online video games are rather are, but are nonetheless important in correctly assessing any game-related parameters and are also the foundation for most objective and subjective \gls{QoE} studies.
-
-
-
-%A 2012 article notes the dependence of gaming on latency and the difficulties cloud-based solutions have in providing a sufficiently low latency. The suggest a move closer to the edge to reach more users in a quality they deem adequate.  \cite{Choy:2012:BSC:2501560.2501563}.
-%``The Brewing Storm in Cloud Gaming: A Measurement Study on Cloud to End-user Latency'' 
-
-%``Placing Virtual Machines to Optimize Cloud Gaming Experience'' \cite{6853364}  interesting for cloud gaming economics
 
 %Adaptive Mobile Cloud Computing to Enable Rich Mobile Multimedia Applications \cite{6413270}
 
-%Addressing Response Time and Video Quality in Remote Server Based Internet Mobile Gaming \cite{5506572} optimize mobile cloud gaming based on a certain impairment function and by reducing video bitrate and fps (even sub 10fps...)
-
-%``Kahawai: High-Quality Mobile Gaming Using GPU Offload'' \cite{Cuervo:2015:KHM:2742647.2742657}
-
-%``Outatime: Using Speculation to Enable Low-Latency Continuous Interaction for Mobile Cloud Gaming'' \cite{Lee:2015:OUS:2742647.2742656}
-
 %``Assessing the Impact of Game Type, Display Size and Network Delay on Mobile Gaming QoE'' \cite{beyer2014typedisplaydelayimpact} Another user study regarding context factors like screen size and their impact on MOS, but also game type and delay on MOS
-
-%A Method For Feedback Delay Measurement Using a Low-cost Arduino Microcontroller \cite{beyermethod} already covered in measurement methods section
 
 %``QoE Assessment of Interactivity and Fairness in First Person Shooting with Group Synchronization Control'' \cite{Ida:2010:QAI:1944796.1944806} interessant für lag compensation betrachtungen
 
 %``The Impact of Video Encoding Parameters and Game Type on QoE for Cloud Gaming: a Case Study using the Steam Platform'' \cite{slivarimpact}
-
-%``How Do New Visual Immersive Systems Influence Gaming QoE?'' \cite{hupontnew} Vergleich Immersion am monitor vs oculus. beispiel eines schlechten testsetups, da unterschiedliche FoV für beide ausgabetypen (75° vs 100°), test wird stark verfälscht
-
-%%``An experimental estimation of latency sensitivity in multiplayer Quake 3''  vs. \cite{1266180} ``The Effects of Loss and Latency on User Performance in Unreal Tournament 2003'' \cite{Beigbeder:2004:ELL:1016540.1016556}. both papers completely contradict each other: Quake 3: significant impact of latency on game performance (kills/minute); UT3: no impact on user performance at all (kills/deaths per game)
-
-%``Security issues in online games'' \cite{doi:10.1108/02640470210424455}
