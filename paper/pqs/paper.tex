@@ -1,0 +1,84 @@
+%!TEX program = pdflalatex
+\documentclass[a4paper]{article}
+
+\usepackage{PQS2016}
+
+% \usepackage{graphicx}
+% \usepackage{amssymb,amsmath,bm}
+% \usepackage{textcomp}
+% \def\vec#1{\ensuremath{\bm{{#1}}}}
+% \def\mat#1{\vec{#1}}
+
+\usepackage{ifluatex}
+\ifluatex
+  \usepackage{fontspec}
+  \usepackage{polyglossia} % babel replacement for use with fontspec
+  \setdefaultlanguage[variant=american]{english}
+  \selectlanguage[variant=american]{english}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage[american]{babel}
+\fi
+
+\usepackage[acronym, nomain, nowarn]{glossaries}
+\loadglsentries{acronyms}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage[pdfhighlight=/O, hidelinks, unicode=true]{hyperref}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{fixmath}
+\usepackage{algorithm2e}
+\usepackage{subcaption}
+\usepackage[load-configurations={abbreviations,binary}, per-mode=symbol,range-phrase = {\text{~to~}}]{siunitx}
+\sisetup{load-configurations = abbreviations,binary-units}
+\usepackage{tabu}
+\makeglossaries
+\usepackage[url=false,doi=false,backend=biber,style=ieee,isbn=false,sorting=none,minnames=1,maxnames=6]{biblatex}
+\addbibresource{literature.bib}
+\usepackage[inline]{enumitem}
+
+\usepackage[np]{numprint}
+
+\npstyleenglish
+
+\sloppy % better line breaks
+\ninept
+
+\title{A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming}
+
+\makeatletter
+\def\name#1{\gdef\@name{#1\\}}
+\makeatother
+\name{{\em Firstname1 Lastname1$^1$, Firstname2 Lastname2$^2$, Firstname3 Lastname3$^1$,}}
+
+\address{$^1$Chair of Modeling of Adaptive Systems, University of Duisburg-Essen\\
+  $^2$UoV \\
+  {\small \tt \{florian.metzger,tobias.hossfeld\}@uni-due.de, albert.rafetseder@univie.ac.at}
+}
+
+%
+\begin{document}
+
+
+
+\maketitle
+
+\section*{Hello}
+
+\input{abstract}
+\input{introduction}
+\input{big-picture}
+\input{relatedwork}
+\input{model}
+\input{simulation}
+\input{game-classification}
+\input{conclusion}
+
+\eightpt
+\printbibliography[title={References}, heading=bibnumbered]
+
+
+\end{document}
