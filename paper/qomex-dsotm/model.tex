@@ -3,37 +3,6 @@
 \section{An End-to-End Lag Model}
 \label{sec:model}
 
-It is evident from the discussion in Section~\ref{sec:background} that multiple different components contribute to the end-to-end lag in games, and that multiple potential models and levels of granularity exist for each game type. Let's discuss therefore the model boundaries and level of detail used in the current iteration of this analytical model to be presented here.
-
-
-\subsection{Model of end-to-end lag for online games}
-%\hoss{Ich wuerde mathematische Notation einfuehren, um klar zu machen, was Teil des Modells ist.}
-First, we define the end-to-end lag $T$ to be the time elapsed from when the player supplies commands to the input devices until just before actual audio/video output.
-% I.e.: rendering, *and* encode/decode for cloud games
-We assume that the actual presentation of audio and video content happens instantaneously (ignoring any screen synchronization issues), and assume the player input to be a stochastic process $U$. % future work!1!!
-Furthermore, as also found in practice, input events are queued up and sent en bloc at specific intervals defined by the command rate $c$.
-
-Second, in our treatment of client-server games, we focus on modeling a single connected client and its interaction with the game server. While other clients might be connected to the same server, it is solely the server that controls when game state updates are sent. Thus, the client we are looking at does not need to account for the behavior of other clients.
-% probaby not future work
-
-Next, we associate a static (but individually configurable) tick rate $g$ with the computation process of the game server, and a frame rate $f$ with the render process. The server updates the state of the game world at every tick, and may spend some processing time $P$ in order to do so. The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations. Once finished, an update message is sent to the client. Since the client needs time to render this update, it is displayed only after the next, upcoming frame. Independent of the update process, the game client outputs the next video frame in accordance to the frame rate. The game client's state might not get updated by the server between rendered frames. Still, output is generated\footnote{A practical game implementation will use state prediction for this.}. The round-trip to the server and back implies that the lag between an input event and the earliest frame containing a perceptible result of that event can take multiple frame times.
-
-While we consider the command, tick, and frame rates to be constant (though not necessarily identical), there is no inherent synchronization between them. This is represented in the simulation by a random initial phase offset for each rate.
-
-Finally, since we are simulating online games, the simulation obviously includes the network paths between the different components. The delay distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server. Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
-
-% \begin{figure*}[!t]
-% 	\centering
-% 	\includegraphics[width=1.0\textwidth]{../../models/e2e-lag-model.pdf}
-% 	\caption{Abstract end-to-end lag queuing model representation in the online video game case. The clock rate is denoted in the top right corner of each process. See Tab.~\ref{tab:notation} for the notations.
-% 	%\hoss{Die Queues sind nicht ganz korrekt so. Es werden periodisch alle Events verarbeitet und weitergereicht. Hier sieht es nach FIFO und Einzelabarbeitung aus. Ausserdem sind die Variablen $N_C$ usw. nicht erklaert. Ausserdem wird im Model nicht erklaert, dass es einen Gaming Processing Delay am Game Server gibt.}
-% 	}
-% \label{fig:queuing-model}
-% %\includegraphics[width=0.8\textwidth]{figure7-queueingModel.jpg}
-% %\caption*{\hoss{Wie waere es, ein Symbol einzufuehren, dass den periodic Update mit entsprechender Rate zeigt?}}
-% \end{figure*}
-
-
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../models/tickrate-timeseries-notation.pdf}
@@ -42,8 +11,19 @@ Finally, since we are simulating online games, the simulation obviously includes
 \label{fig:tickrate-timeseries}
 \end{figure}
 
+To combat some of these open issues, a simplified end-to-end model and simulation was set up to investigate lag in both offline and online games and its relationship with the framerate and tickrate. Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game. % This is further discussed in our publication in [PQS?]
+Based on the model a simulator\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} was created.
 
+\begin{figure}[!t]
+	\centering
+	\vspace{-6mm}
+	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
+	\vspace{-15mm}
+	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario.}
+\label{fig:3dbars-framerate-tickrate-lag}
+\end{figure}
 
+Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}, with network lag and server processing time included. The framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the end-to-end lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to end-to-end lag. These results indicate that this might not be the best course of action. Another noteworthy result is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results. Furthermore, this also implies the neccessity of a tight control over game parameters, such as the framerate, resolution, or input devices, in accordance with the game's type. In order to properly determine this type, novel ways to classify games are needed, as games from the same genre can be vastly different in terms of game speed and necessary reaction times.
 
 % \subsection{Model Simplifications}
 
@@ -64,28 +44,6 @@ Finally, since we are simulating online games, the simulation obviously includes
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Simulation and Scenario Evaluation}
-\label{sec:simulation}
-
-Based on the models introduced a stochastic \gls{DES} was created. This \textsc{Gnu R}-based simulator\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} strives to translate all of the earlier discussed components of lag, while keeping them as configurable as possible.
-%By using a vector-based language the core loop is kept compact and easy to modify in order to adapt to new scenarios in addition to the ones evaluated here. 
-Due to the influence of several stochastic processes and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. This is achieved by running large numbers of simulations in parallel through the built-in R facilities.
-
-This section presents simulation results on each of the flavors of how to play video games: the local, online, and the cloud scenario. The investigations here are not intended to cover every aspect of all parameters or to conduct full parameter studies, but are rather to highlight some particular aspect in each of the scenario.
-
-
-\subsubsection{Parameters}
-
-Besides being fully reconfigurable, the simulation currently also has a few default parameters set and makes assumptions that go beyond what the base end-to-end model implies for reasons of simplicity.
-%\hoss{Vielleicht noch kurz erwaehnen, dass die Parameter realistisch gewaehlt sind? Gibt es dafuer Referenzen?}
-% fm: referenzen für solche werte sind leider eher schwer zu finden
-
-First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$.
-%\textbf{TODO:} implications and reasons?
-Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the end-to-end lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle.
-
-The evaluation of the presented scenarios was conducted on the basis of $r=\np{1000}$ repetitions for each setting. Each run $i \in \{1,\dots,r\}$ consisted of a series of $n=\np{100}$ input events and their associated end-to-end lag $T_{i,j}$ for the $j$-th input event. On this basis a median lag $\widetilde{T_i}$ was calculated over the $n$ input events for each run $i$, and finally an overall mean lag out of the individiual medians of each repetition, i.e. $\overline{T}=\frac{1}{n}\sum_{i=1}^r\widetilde{T_i}$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,23 +58,7 @@ The evaluation of the presented scenarios was conducted on the basis of $r=\np{1
 
 % Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (even without factoring in the delay of the screen and input devices) that can only increase with the presence of network delay. Therefore, video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize this influence.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsubsection{Online Gaming}
 
-Next up is the full scenario of an online video game, now with network lag $D$ and server processing time $P$ included. For this exemplary scenario, the one-way delay $D$ was assumed to follow a left-truncated normal distribution, with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$, producing non-negative network delays. Typical competitive online games today are expected to operate in such ranges. An \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience. $P$ is similarly left-truncated. In addition to the components in the previous scenario, the lag now also contains contributions by the network round-trip and processing delay, $2D + P$.
-
-\begin{figure}[!t]
-	\centering
-	\vspace{-6mm}
-	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
-	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario. For high rates $f$, $g$, the lag approaches $2\mu_D+\mu_P=\SI{43}{\milli\second}$.}
-\label{fig:3dbars-framerate-tickrate-lag}
-\end{figure}
-
-Figure~\ref{fig:3dbars-framerate-tickrate-lag} shows a 3D bar plot of the influence of both the framerate and the tickrate on this scenario. The axes mark typical values for $f$ and $g$. Two things can be noted here. First, the framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the end-to-end lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to end-to-end lag. Our results indicate that this might not be the best course of action. The effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined.
-
-Another interesting result (not plotted here) is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,7 +90,7 @@ Another interesting result (not plotted here) is the much larger variance of lag
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsubsection{Discussion}
 
-The three scenarios presented here serve to provide initial insights into the complex interactions of the end-to-end lag. Although the underlying abstract model adopts some simplifications and some properties are not factored in yet, the results are still very revealing. Using the model and simulator as baseline, one can get a good estimation of the expected video game \gls{QoS} values. Alternatively, it can help in choosing representative games for select scenarios.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
