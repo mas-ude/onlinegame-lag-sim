@@ -6,31 +6,6 @@
 It is evident from the discussion in Section~\ref{sec:background} that multiple different components contribute to the end-to-end lag in games, and that multiple potential models and levels of granularity exist for each game type. Let's discuss therefore the model boundaries and level of detail used in the current iteration of this analytical model to be presented here.
 
 
-\begin{table}[!t]
-\caption{Notation used in the model. Random variables are denoted by capital letters $X$, and constants by small letters $x$.}
-\label{tab:notation}
-	\centering
-	\begin{tabu}{lX[1,l]X[1,l]}
-	\toprule
-	\textbf{Symbol} & \textbf{Description} & \textbf{Simulation} \\
-	\midrule
-	$D$ & network delay between game client and server & $D \sim TNorm(\mu_D;\sigma_D)$, $\mu_D = \SI{20}{\milli\second}$; $\sigma_D = \SI{5}{\milli\second}$\\
-	$P$ & game server processing time & $P \sim TNorm(\mu_P;\sigma_P)$, $ \mu_P = \SI{3}{\milli\second}; \sigma_P = \SI{0.1}{\milli\second}$\\
-	$T$ & end-to-end lag & key performance measure \\
-	$U$ & (inter arrival) time between user inputs & $U \sim Exp(\lambda)$; $\lambda = \SI{50}{\milli\second}$\\
-	\midrule
-	$c$ & command rate & $c=g$ \\
-	$c^{-1}$ & interval to gather input events before sending & \\
-	$d$ & decode delay & \SI{5}{\milli\second} \\
-	$e$ & encode delay & \SI{15}{\milli\second} \\
-	$f$ & framerate & $f \in \SIrange{10}{200}{\hertz}$ \\
-	$f^{-1}$ & frame duration & $f^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
-	$g$ & game tickrate & $g \in \SIrange{10}{200}{\hertz}$ \\
-	$g^{-1}$ & game tick duration & $g^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
-	\bottomrule
-	\end{tabu}
-\end{table}
-
 \subsection{Model of end-to-end lag for online games}
 %\hoss{Ich wuerde mathematische Notation einfuehren, um klar zu machen, was Teil des Modells ist.}
 First, we define the end-to-end lag $T$ to be the time elapsed from when the player supplies commands to the input devices until just before actual audio/video output.
@@ -49,26 +24,26 @@ Finally, since we are simulating online games, the simulation obviously includes
 %\hoss{Explanation of Figure~\ref{fig:queuing-model} is missing. What is the meaning of the other queues? Mit der Tabelle~\ref{tab:notation} und Update von Fig.~\ref{fig:queuing-model} sollte das klarer werden.}
 Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
 
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=1.0\textwidth]{../../models/e2e-lag-model.pdf}
-	\caption{Abstract end-to-end lag queuing model representation in the online video game case. The clock rate is denoted in the top right corner of each process. See Tab.~\ref{tab:notation} for the notations.
-	%\hoss{Die Queues sind nicht ganz korrekt so. Es werden periodisch alle Events verarbeitet und weitergereicht. Hier sieht es nach FIFO und Einzelabarbeitung aus. Ausserdem sind die Variablen $N_C$ usw. nicht erklaert. Ausserdem wird im Model nicht erklaert, dass es einen Gaming Processing Delay am Game Server gibt.}
-	}
-\label{fig:queuing-model}
-%\includegraphics[width=0.8\textwidth]{figure7-queueingModel.jpg}
-%\caption*{\hoss{Wie waere es, ein Symbol einzufuehren, dass den periodic Update mit entsprechender Rate zeigt?}}
-\end{figure*}
+% \begin{figure}[!t]
+% 	\centering
+% 	\includegraphics[width=1.0\columnwidth]{../../models/e2e-lag-model.pdf}
+% 	\caption{Abstract end-to-end lag queuing model representation in the online video game case. The clock rate is denoted in the top right corner of each process. See Tab.~\ref{tab:notation} for the notations.
+% 	%\hoss{Die Queues sind nicht ganz korrekt so. Es werden periodisch alle Events verarbeitet und weitergereicht. Hier sieht es nach FIFO und Einzelabarbeitung aus. Ausserdem sind die Variablen $N_C$ usw. nicht erklaert. Ausserdem wird im Model nicht erklaert, dass es einen Gaming Processing Delay am Game Server gibt.}
+% 	}
+% \label{fig:queuing-model}
+% %\includegraphics[width=0.8\textwidth]{figure7-queueingModel.jpg}
+% %\caption*{\hoss{Wie waere es, ein Symbol einzufuehren, dass den periodic Update mit entsprechender Rate zeigt?}}
+% \end{figure}
 
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../../models/tickrate-timeseries-notation.pdf}
-	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag with the notation of Tab.~\ref{tab:notation}.
-	% \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild. }
-	} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
-\label{fig:tickrate-timeseries}
-\end{figure}
+% \begin{figure}[!t]
+% 	\centering
+% 	\includegraphics[width=1.0\columnwidth]{../../models/tickrate-timeseries-notation.pdf}
+% 	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag with the notation of Tab.~\ref{tab:notation}.
+% 	% \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild. }
+% 	} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+% \label{fig:tickrate-timeseries}
+% \end{figure}
 
 
 

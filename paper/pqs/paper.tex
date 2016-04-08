@@ -1,13 +1,6 @@
 %!TEX program = pdflatex
 \documentclass[a4paper]{article}
-
 \usepackage{PQS2016}
-
-% \usepackage{graphicx}
-% \usepackage{amssymb,amsmath,bm}
-% \usepackage{textcomp}
-% \def\vec#1{\ensuremath{\bm{{#1}}}}
-% \def\mat#1{\vec{#1}}
 
 \usepackage{ifluatex}
 \ifluatex
@@ -36,46 +29,40 @@
 \sisetup{load-configurations = abbreviations,binary-units}
 \usepackage{tabu}
 \makeglossaries
-\usepackage[url=false,doi=false,backend=biber,style=ieee,isbn=false,sorting=none,minnames=1,maxnames=6]{biblatex}
+\usepackage[url=false,doi=false,backend=biber,style=ieee,isbn=false,sorting=none,minnames=1,maxnames=2]{biblatex}
 \addbibresource{literature.bib}
 \usepackage[inline]{enumitem}
-
 \usepackage[np]{numprint}
-
 \npstyleenglish
 
-\sloppy % better line breaks
+
+\sloppy
 \ninept
 
 \title{A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming}
 
-
 \makeatletter
 \def\name#1{\gdef\@name{#1\\}}
 \makeatother
-\name{{\em Albert Rafetseder$^1$, Florian Metzger$^2$, Christian Schwartz$^3$, Tobias Hoßfeld$^1$}}
+\name{\em Albert Rafetseder$^1$, Florian Metzger$^2$, Christian Schwartz$^3$, Tobias Hoßfeld$^1$}
 
 \address{$^1$Chair of Modeling of Adaptive Systems, University of Duisburg-Essen\\
-  $^2$UoV \\
-  $^3$ Institute of Computer Science, University of Würzburg\\
-  {\small \tt \{florian.metzger,tobias.hossfeld\}@uni-due.de, \\
-  \small \tt christian.schwartz@informatik.uni-wuerzburg.de, albert.rafetseder@univie.ac.at}
+  $^2$UoV\\
+  $^3$Institute of Computer Science, University of Würzburg\\
+  {\small \tt \{florian.metzger,tobias.hossfeld\}@uni-due.de,} \\
+  {\small \tt christian.schwartz@informatik.uni-wuerzburg.de, albert.rafetseder@univie.ac.at}
 }
 
 %
 \begin{document}
 
-
-
 \maketitle
 
 \input{abstract}
 \input{introduction}
-\input{big-picture}
 \input{relatedwork}
 \input{model}
 \input{simulation}
-\input{game-classification}
 \input{conclusion}
 
 \eightpt

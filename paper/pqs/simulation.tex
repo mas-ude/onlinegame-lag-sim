@@ -28,16 +28,7 @@ The evaluation of the presented scenarios was conducted on the basis of $r=\np{1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Games}
 
-The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally.
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
-	\caption{Median end-to-end lag under various frame and tick durations for a locally-running game. Lower lag values are achieved at lower frame and tick durations.}
-\label{fig:nwless-scatter}
-\end{figure}
-
-Figure~\ref{fig:nwless-scatter} plots the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting median end-to-end lag.
+The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally. Figure~\ref{fig:nwless-scatter} plots the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting median end-to-end lag.
 % NOTA BENE: Every status update that the server sends must wait for another frame time until we consider it rendered.
 %
 % The scatter plot of raw e2e lag values for one (FR, TR) configuration thus spans
@@ -71,7 +62,7 @@ Next up is the full scenario of an online video game, now with network lag $D$ a
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario. For high rates $f$, $g$, the lag approaches $2\mu_D+\mu_P=\SI{43}{\milli\second}$.}
+	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario. For high rates $f$, $g$, the lag approaches \SI{43}{\milli\second}.}
 	% TODO: \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}
 	% TODO: nicht rechtzeitig für submission deadline, aber für eine nächste version
 \label{fig:3dbars-framerate-tickrate-lag}
@@ -93,7 +84,7 @@ For the network delay $D$, the same values as for the online game are used. $c$ 
 	\centering
 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of $\SI{68}{\milli\second}=c^{-1}+2D+P+e+d$.}
+	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of \SI{68}{\milli\second}.}
 	%\hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
 	%
 	% Albert: Uh, oh, the cloud simulation seems to have reused a stray 
@@ -108,10 +99,43 @@ Figure~\ref{fig:cloud-e2e-delay-sim} shows the results of this scenario as an \g
 This result is of particular importance considering how past studies have relied on similarly low framerates as $5-\SI{15}{\hertz}$ when assessing the network influence on cloud gaming. Similarly, these results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Discussion}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Representative Games for QoE studies}
+\label{sec:game-criteria}
+%\hoss{Ich glaube der Titel triffts noch nicht so ganz. Choosing Representative Games for QoE Studies? }
 The three scenarios presented here serve to provide initial insights into the complex interactions of the end-to-end lag. Although the underlying abstract model adopts some simplifications and some properties are not factored in yet, the results are still very revealing. Using the model and simulator as baseline, one can get a good estimation of the expected video game \gls{QoS} values. Alternatively, it can help in choosing representative games for select scenarios.
+
+
+The result of any game quality assessment strongly depends on the considered game, as each game is a unique collection of individual game mechanics, each bringing a distinct influence onto the assessment alongside with it. Here we provide a foundation for quality metrics by rather investigating game-independent metrics, including the framerate, frame \gls{IAT}, and the end-to-end lag.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Game Independent Metrics}
+%\hoss{Was soll hier gesagt werden? Selecting the right parameter range for framerate?}
+Framerate and frame \gls{IAT} are a good indicators for the game's fluidity and responsiveness to inputs. As such, choosing the right range for these parameters is especially important in cloud gaming scenarios or for quality assessments. End-to-end lag gives the best overall picture on the attainable gaming experience and should always be preferred over partial lag values, e.g. by purely investigating the network latency. The impact of the lag also depends on the type and precision of controls the game offers. For example, a keyboard and mouse driven PC game might be much more sensitive to high lag values than a mobile game with touch controls.
+
+Input controls are but one aspect of the games environment and settings, which need to be carefully selected to achieve meaningful results. This especially concerns PC games which usually offer a wide range of options to choose from. Here, the graphics options are the most impactful. The recommended settings to run games at are a video resolution of 1080p or higher with the games other graphics options set to high or at least medium values in order to reflect a typical gaming experience. Due to the demonstrated impact of the framerate on the end-to-end lag a target of \SI{60}{\hertz} should considered as a minimum rate for most games. Some types of games are less dependent on the framerate, where a rate of \SI{30}{\hertz} would still be considered acceptable.
+
+% Experimenters should never set a framerate lower than that for the reasons discussed in the previous section. They should however also consider testing at higher framerates, especially for competitive games with a high tickrate to further reduce the negative impact of low framerates.
+
+%The general focus here lies on measuring online games with high demands. The idea is that if these games work at an objectively good quality, it is reasonable to assume that all other games do so as well.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Quantifiable Game Classification Criteria}
+
+Finding games which are representative for certain input and lag demands is challenging. For example, the traditional game genre categorization is not a good starting point, as games from the same category can be vastly different in terms of game speed and necessary reaction times. Rather, the following four exemplary metrics might prove useful when classifying games to better assess the impact of the end-to-end lag on the experienced quality.
+
+\textbf{Required number of decisions or actions in a certain time span} E.g., the \gls{CCG} \textsc{Hearthstone} may only require a handful of actions, i.e. choosing and playing cards, each turn, while in order to competitively play the \gls{RTS} \textsc{Starcraft 2} you more or less need to achieve a few hundred \gls{APM}, with the record being higher than $800$ \gls{APM}. \cite{6404025} defines a related metric dubbed \textit{command heaviness} comparing the amount of change to the input rate, under the umbrella term \textit{real-time strictness}. Micromanagement-intense games usually tend to result in high APM rates.
+
+\textbf{Maximum successful reaction time to in-game actions} Again e.g., \textsc{Hearthstone} as a turn-based game requires no instant reaction time at all, as the opponent's and the player's actions are separated into turns. First-person shooters like \textsc{Counter-Strike: Global Offensive} are usually on the opposite extreme of this spectrum, as they tend to have a very high tickrate and literally often require you to ``shoot first'' to win. This is also investigated in \cite{Claypool:2006:LPA:1167838.1167860}.
+
+\textbf{Ratio of unpredictable actions} This is closely related to the previous metric. When considering an entirely rhythm-based game (e.g., \textsc{Guitar Hero}), where you can completely pre-plan all of your actions, to a twitch-based shooter like \textsc{Counter-Strike} where you have to react from moment to moment. In theory, a game with no surprising events will be less influenced by a higher end-to-end lag.
+
+\textbf{Temporal and spatial accuracy and precision of input events} Accuracy can be relevant in both temporal as well as spatial aspects. Thus, it can be influenced by both the image quality and the frame rate. For example, discrete events, e.g., button-presses on a controller, require less spatial precision than analogue inputs, e.g., free-form mouse movement.
+
+This is a non-exhaustive list of selected quantifiable criteria. It should be refined in future studies and extended before such metrics can be applied as a means of categorization. Moreover, the value of some of these metrics might not be that easy to determine as they involve playing the game. Even as a qualitative discriminator or when considering broad value ranges, such a classification might be much more sensible than one purely based on the video game genre.
 
 % Ultimately, to capture any and all latency sources in gaming you would need to rely on external recording gear.
 % With modified input: zero latency and visible input detection (e.g. solder some LEDs to the buttons)
