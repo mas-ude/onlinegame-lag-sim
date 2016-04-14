@@ -1,6 +1,6 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{An End-to-End Lag Model}
+\section{Lag Investigations}
 \label{sec:model}
 
 \begin{figure}[!t]
@@ -11,7 +11,7 @@
 \label{fig:tickrate-timeseries}
 \end{figure}
 
-To combat some of these open issues, a simplified end-to-end model and simulation was set up to investigate lag in both offline and online games and its relationship with the framerate and tickrate. Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game. % This is further discussed in our publication in [PQS?]
+To combat some of the described issues, a simplified \gls{E2E} lag model and simulation was set up to investigate lag in both offline and online games and its relationship with the framerate and tickrate. Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game. % This is further elaborated in our publication in [PQS?]
 Based on the model a simulator\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} was created.
 
 \begin{figure}[!t]
@@ -23,7 +23,8 @@ Based on the model a simulator\footnote{\url{https://github.com/mas-ude/onlinega
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
-Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}, with network lag and server processing time included. The framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the end-to-end lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to end-to-end lag. These results indicate that this might not be the best course of action. Another noteworthy result is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results. Furthermore, this also implies the neccessity of a tight control over game parameters, such as the framerate, resolution, or input devices, in accordance with the game's type. In order to properly determine this type, novel ways to classify games are needed, as games from the same genre can be vastly different in terms of game speed and necessary reaction times.
+Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}. The framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to \gls{E2E} lag. These results indicate that this might not be the best course of action. Another noteworthy result is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results. Furthermore, this also implies the neccessity of a tight control over game parameters, such as the framerate, resolution, or input devices.
+%, in accordance with the game's category. In order to properly determine this category, novel ways to classify games are needed, as games from the same genre can be vastly different in terms of game speed and necessary reaction times.
 
 % \subsection{Model Simplifications}
 
@@ -35,7 +36,7 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 % % TODO: \textbf{Add adaptive VSYNC?}
 
 % \subsubsection{Subtleties of game internals}
-% Modern games go great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not open for examination, so we leave them for further study. Techniques include lag compensation (the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviation and re-synchronization artifacts), and tick- and framerate adaptation at the game server and client, respectively. Lastly, player actions in a game might take multiple command time intervals to perform. The simulation currently assumes that every single batch of commands that reaches the server will result in state updates and thus changes in the perceptible output of the game client. It should be noted that none of these techniques alter the end-to-end lag itself, rather they just try to conceal it on some higher level. Therefore, the mechanisms do not invalidate our examination.
+% Modern games go great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not open for examination, so we leave them for further study. Techniques include lag compensation (the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviation and re-synchronization artifacts), and tick- and framerate adaptation at the game server and client, respectively. Lastly, player actions in a game might take multiple command time intervals to perform. The simulation currently assumes that every single batch of commands that reaches the server will result in state updates and thus changes in the perceptible output of the game client. It should be noted that none of these techniques alter the \gls{E2E} lag itself, rather they just try to conceal it on some higher level. Therefore, the mechanisms do not invalidate our examination.
 
 % \subsubsection{Factors in human perception and strategy}
 % The models we present do not take into account the perceived lag from when the players \textit{think} they have triggered an action to when they perceive the outcomes of their action. This consequently disregards effects of different player actions, strategies, and so on.
@@ -51,12 +52,12 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 
 % The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate is still present, but the influence of the network is entirely removed. It therefore represents the best case an online multiplayer game could achieve if the server ran locally.
 
-% The values can be estimated as follows. Every user input event traverses three queues with fixed-rate outputs ($c=g$, g, and $f$), and every game state update waits for the next full frame until it gets displayed. In the ideal case, an input event occurs just before the command message is sent off, the server tick follows as soon as the message is received, and the update reaches the client just before a frame is output. Then the end-to-end lag is slightly above the frame time that must elapse before the update can be rendered to screen, $T_{min}>f^{-1}$.
+% The values can be estimated as follows. Every user input event traverses three queues with fixed-rate outputs ($c=g$, g, and $f$), and every game state update waits for the next full frame until it gets displayed. In the ideal case, an input event occurs just before the command message is sent off, the server tick follows as soon as the message is received, and the update reaches the client just before a frame is output. Then the \gls{E2E} lag is slightly above the frame time that must elapse before the update can be rendered to screen, $T_{min}>f^{-1}$.
 
 % In case the events are unfavorably offset against one another, an input event has to wait almost a full command-message cycle until it is sent on; it reaches the server just after a tick has occurred, so it waits almost a full server tick; finally, it will wait for almost two frame times until it is displayed. Combining with the previous result bounds the lag as follows, $f^{-1} < T < c^{-1}+g^{-1}+2f^{-1}$. The mid-interval point between these two limits is $T_{mid}=\frac{3}{2} f^{-1} + g^{-1}|_{c=g}$ which coincides roughly with the medians of the stochastic simulation.
 
 
-% Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of end-to-end lag (even without factoring in the delay of the screen and input devices) that can only increase with the presence of network delay. Therefore, video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize this influence.
+% Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of \gls{E2E} lag (even without factoring in the delay of the screen and input devices) that can only increase with the presence of network delay. Therefore, video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize this influence.
 
 
 
@@ -72,7 +73,7 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 % 	\centering
 % 	%\includegraphics[width=1.0\columnwidth]{images/e2e-delay-sim.pdf}
 % 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/cloudgaming-lag-cdf.pdf}
-% 	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the end-to-end lag in the cloud scenario. Vertical intercept denotes the average base delay of $\SI{68}{\milli\second}=c^{-1}+2D+P+e+d$.}
+% 	\caption{\acrshort{ECDF} of the influence of the rendering and streaming framerate on the \gls{E2E} lag in the cloud scenario. Vertical intercept denotes the average base delay of $\SI{68}{\milli\second}=c^{-1}+2D+P+e+d$.}
 % 	%\hoss{On average, a network delay of $\unit[2\cdot20=40]{ms}$ (correct???) exists. A constant encoding time (\unit[15]{ms}) and decoding time (\unit[5]{ms}) is assumed. Thus, the major part of the e2e lag is caused by the framerate setting. Kann man hier noch eine Linie reinzeichnen, die die Summe 5+15+40=60 ms zeigt?}}
 % 	%
 % 	% Albert: Uh, oh, the cloud simulation seems to have reused a stray 
@@ -82,7 +83,7 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 % \label{fig:cloud-e2e-delay-sim}
 % \end{figure}
 
-% Figure~\ref{fig:cloud-e2e-delay-sim} shows the results of this scenario as an \gls{ECDF} of the end-to-end lag for several framerates. As before, the framerate impacts the end-to-end lag more severely than the network delay.
+% Figure~\ref{fig:cloud-e2e-delay-sim} shows the results of this scenario as an \gls{ECDF} of the \gls{E2E} lag for several framerates. As before, the framerate impacts the \gls{E2E} lag more severely than the network delay.
 % %the large influence of the framerate when compared to the network delay is evident. 
 % This result is of particular importance considering how past studies have relied on similarly low framerates as $5-\SI{15}{\hertz}$ when assessing the network influence on cloud gaming. Similarly, these results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
 
@@ -106,7 +107,7 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 
 
 %Works only for general purpose computing devices with full access.
-%Easiest method, but might not capture full end-to-end latency.
+%Easiest method, but might not capture full \gls{E2E} latency.
 %FRAPS, OBS, DirectX Hooking, MSI Afterburner
 %FCAT as hybrid solution with external capture card and computer
 
@@ -178,7 +179,7 @@ Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbar
 
 
 
-%All in all, if possible, video game measurements should always consider the full \textbf{end-to-end} lag factoring in every possible source of delay but also the presence latency compensation and concealment techniques.
+%All in all, if possible, video game measurements should always consider the full \textbf{\gls{E2E}} lag factoring in every possible source of delay but also the presence latency compensation and concealment techniques.
 
 
 
