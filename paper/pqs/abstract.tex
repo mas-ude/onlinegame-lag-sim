@@ -1,8 +1,22 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
-Arghbstraaaact.
+We present a queueing model and first \gls{DES} results for \gls{E2E} 
+lag in networked and cloud computer games. \gls{E2E} lag describes the 
+latency between a user's action and the display of the action's results 
+on the screen, thus providing a \gls{QoE} metric for interactivity.
+In contrast to models that focus on the network \gls{RTT}, we also 
+factor in the game's tickrate and framerate (and codec latencies in the 
+case of cloud games).
+% The model's formalism allows us to deduce a few fundamental 
+% relationships between the parameters.
+We use the model to explore the parameter space, and explain how 
+desynchronization effects between the server tickrate and the game 
+framerate severely impact the \gls{E2E} lag, even up to the point 
+that network delay is entirely masked by other lag contributions. 
+This helps to put into perspective existing literature that uses 
+questionably low framerates and only focuses on network parameters 
+to study game \gls{QoE}.
 
 \end{abstract}
 \noindent{\bf Index Terms}: gaming, end-to-end lag, queuing model
