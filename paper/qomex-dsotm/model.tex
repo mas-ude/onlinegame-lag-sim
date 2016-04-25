@@ -1,29 +1,29 @@
 %!TEX root = paper.tex
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Lag Investigations}
+\section{\gls{E2E} Lag Investigations}
 \label{sec:model}
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../models/tickrate-timeseries-notation.pdf}
-	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag.
+	\caption{Exemplary flow of events in an online client-server game. Framerate $f$, tickrate $g$, user input event $U$, server processing time $P$, resulting \gls{E2E} lag $T$. 
 	}
 \label{fig:tickrate-timeseries}
 \end{figure}
 
-To combat some of the described issues, a simplified \gls{E2E} lag model and simulation was set up to investigate lag in both offline and online games and its relationship with the framerate and tickrate. Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game. % This is further elaborated in our publication in [PQS?]
-Based on the model a simulator\footnote{Repository URL with the full code will be provided in the final version.} was created.
+To further the understanding of the fundamental mechanisms behind \gls{E2E} lag, a simplified model and simulation was set up to investigate lag in both offline and online games, and explore its relationship with the framerate and tickrate. Figure~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game. % This is further elaborated in our publication in [PQS?]
+Based on the model, a simulator\footnote{The repository URL with the full simulator code and data will be provided in the final version of this paper.} was created.
 
 \begin{figure}[!t]
 	\centering
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario.}
+	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario, with the mean network round-trip delay and processing time set to \SI{43}{\ms}.}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
-Consider the scenario of an online video game as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}. The framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to \gls{E2E} lag. These results indicate that this might not be the best course of action. Another noteworthy result is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results. Furthermore, this also implies the neccessity of a tight control over game parameters, such as the framerate, resolution, or input devices.
+Consider the scenario of an online video game, where the global game state is updated at a remote game server (following the server's tickrate), and the game client connects to the game server across a network. Figure~\ref{fig:3dbars-framerate-tickrate-lag} evaluates the resulting lag as a function of framerate and tickrate at a set network and processing delay. It is seen that the framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay only, without considering other contributions to \gls{E2E} lag. Our model and simulation results indicate that this might not be the best course of action. Another noteworthy result is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results. Furthermore, this also implies the necessity of a tight control over game parameters, such as the framerate, resolution, or input devices.
 %, in accordance with the game's category. In order to properly determine this category, novel ways to classify games are needed, as games from the same genre can be vastly different in terms of game speed and necessary reaction times.
 
 % \subsection{Model Simplifications}
