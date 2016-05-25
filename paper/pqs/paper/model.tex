@@ -12,28 +12,41 @@ The proposed abstract lag model can be adapted to any gaming use case, be it eit
 \label{fig:queuing-model}
 \end{figure*}
 
-To evaluate this model a stochastic \gls{DES} was created\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/tree/master/simulation}} and parameterized in a realistic fashion to be representable for each of the three investigated use cases (local, online, cloud). Looking at typical \SI{60}{\hertz} local games (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of \gls{E2E} lag (even without factoring in the delay of the screen and input devices) caused by the interactions of several random and clocked processes. Higher framerates alleviate this somewhat. In the online scenario the framerate has a larger influence on the lag than the tickrate. For low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay without considering other contributions to the \gls{E2E} lag. These results indicate that this might not be the best course of action. The effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined. In the Cloud Gaming scenario in Fig.~\ref{fig:cloud-e2e-delay-sim}, the network delay is set to \SI{40}{\milli\second} (average round-trip); it is seen that the framerate impacts the \gls{E2E} lag more severely than the network does. This result is of particular importance considering how past studies have relied on similarly low framerates as $5-\SI{15}{\hertz}$ when assessing the network influence on cloud gaming. Similarly, our results can provide guidelines for implementors of cloud gaming to factor in the framerate in their calculations accordingly.
+
+
+
+\begin{table}[!t]
+\caption{Notation used in the model. Random variables are denoted by capital letters $X$, and constants by small letters $x$.}
+\label{tab:notation}
+	\centering
+	\begin{tabu}{lX[1,l]X[1,l]}
+	\toprule
+	\textbf{Symbol} & \textbf{Description} & \textbf{Simulation} \\
+	\midrule
+	$D$ & network delay between game client and server & $D \sim TNorm(\mu_D;\sigma_D)$, $\mu_D = \SI{20}{\milli\second}$; $\sigma_D = \SI{5}{\milli\second}$\\
+	$P$ & game server processing time & $P \sim TNorm(\mu_P;\sigma_P)$, $ \mu_P = \SI{3}{\milli\second}; \sigma_P = \SI{0.1}{\milli\second}$\\
+	$T$ & end-to-end lag & key performance measure \\
+	$U$ & (inter arrival) time between user inputs & $U \sim Exp(\lambda)$; $\lambda = \SI{50}{\milli\second}$\\
+	\midrule
+	$c$ & command rate & $c=g$ \\
+	$c^{-1}$ & interval to gather input events before sending & \\
+	$d$ & decode delay & \SI{5}{\milli\second} \\
+	$e$ & encode delay & \SI{15}{\milli\second} \\
+	$f$ & framerate & $f \in \SIrange{10}{200}{\hertz}$ \\
+	$f^{-1}$ & frame duration & $f^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
+	$g$ & game tickrate & $g \in \SIrange{10}{200}{\hertz}$ \\
+	$g^{-1}$ & game tick duration & $g^{-1} \in \SIrange{5}{100}{\milli\second}$ \\
+	\bottomrule
+	\end{tabu}
+\end{table}
+
+
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{Influence of the rendering and streaming framerate on the \gls{E2E} lag in the cloud scenario. Vertical intercept denotes the average server, network and codec delay of \SI{68}{\milli\second}.}
-\label{fig:cloud-e2e-delay-sim}
+	\includegraphics[width=1.0\columnwidth]{../../../models/tickrate-timeseries-notation.pdf}
+	\caption{Exemplary flow of events in an online client-server game, and resulting end-to-end lag with the notation of Tab.~\ref{tab:notation}.
+	% \hoss{Notation aus Tabelle ~\ref{tab:notation} waere gut im Bild. }
+	} %Delay values are given for a framerate of \SI{60}{\hertz} and a server tickrate of \SI{30}{\hertz}, the network latency will only show minor variations.}
+\label{fig:tickrate-timeseries}
 \end{figure}
-
-
-These scenarios reveal the necessity of a tight control over game parameters, such as the framerate, resolution, or input devices, in accordance with the game's type. In order to properly determine this type, novel ways to classify games are needed, as games from the same genre can be vastly different in terms of game speed and necessary reaction times. Better applicable criteria can, e.g., be the \gls{APM}, input accuracy, or the reaction time. A better understanding of these will go a long way in improving the selection of representative games for any evaluation.
-
-
-
-% \begin{figure}[!t]
-% 	% TODO: adjust the bounding box of the 3dbar plot, instead of playing with fire (aka \vspace)
-% 	\centering
-% 	\vspace{-6mm}
-% 	\includegraphics[width=1.0\columnwidth]{../../simulation/visualization/e2e-lag-3dbars.pdf}
-% 	\vspace{-15mm}
-% 	\caption{Influence of client framerate and server tickrate on the median end-to-end lag in the online game scenario. For high rates $f$, $g$, the lag approaches \SI{43}{\milli\second}.}
-% 	% TODO: \hoss{Kann man hier einen stacked bar plot bauen, bei dem man den Networking Anteil sieht? Das wuerde die Aussage gut unterstuetzen.}
-% 	% TODO: nicht rechtzeitig für submission deadline, aber für eine nächste version
-% \label{fig:3dbars-framerate-tickrate-lag}
-% \end{figure}

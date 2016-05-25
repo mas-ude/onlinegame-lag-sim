@@ -18,3 +18,41 @@ Some fundamental gaming terms and concepts need to be introduced first. At their
 
 The outcome of user studies in gaming depends on a wide selection of factors, e.g., on the precise setup, the game, and the choice of players. This makes comparing their results quite difficult. Generalizing the game \acrshort{QoS} and \gls{QoE} assessments and their results has been a topic in past researches, for example correlating online cloud gaming quality with network \acrshort{QoS} (e.g. \cite{5976180}). In order to avoid some of the issues with subjective user studies, other approaches examine the player objective performance through in-game metrics such as the game's highscore or the duration to achieve a certain task. The ``kills per minute'' of players in the \gls{FPS} \textsc{Quake 3} are, for example, investigated by \cite{1266180}, which sees a steady decline of this subjective performance metric when increasing the network delay.
 %Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
+
+
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{../../../models/game_loop.pdf}
+	\caption{Basic model of a continuous main video game loop.}
+	\label{fig:gameloop1}
+\end{figure}
+
+\begin{table}[!t]
+\caption{Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
+% \hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
+% fm: inoffizielle, nicht-wissenschaftliche quellen, da diese werte normalerweise nicht durch den entwickler veröffentlicht werden; für framerates gibt es keine werte, da diese normalerweise unlocked laufen (zumindest für pc, bei konsolen für alle entweder 30 oder 60), ist eigentlich zu komplex um an der stelle darauf einzugehen
+\label{tbl:tickrates}
+	\centering
+	\begin{tabu}{X[0.45]X}
+		\toprule
+		\textbf{Video Game} & \textbf{Tickrate} \\
+		\midrule
+		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
+		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
+		Minecraft & max. \SI{20}{\hertz} \\
+		League of Legends & \SI{30}{\hertz} (estimated) \\
+		Dota 2 & \SI{30}{\hertz} \\
+		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
+		Eve Online & \SI{1}{\hertz} \\
+		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
+		\bottomrule
+	\end{tabu}
+\end{table}
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../../../models/component_interaction_full.pdf}
+  \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
+  \label{fig:component-models}
+\end{figure*}

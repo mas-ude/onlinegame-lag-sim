@@ -1,0 +1,119 @@
+================================================================================
+======= Review 1 =======
+
+*** Relevance and Timeliness: Is the paper appropriate for the PQS workshop? Is the topic of timely interest?
+Good match (4)
+
+*** Originality of Contribution: What is your assessment of the presented results? How original or novel is the contribution of this paper?
+Interesting or useful variations of known results (3)
+
+*** Quality of Presentation: How well is the paper organized? Is the text well written, clear and logical?  Are the graphs and tables well presented?
+Excellent (5)
+
+*** Recommendation: Please provide your overall rating.
+The abstract can be accepted unconditionally. (4)
+
+*** Reasons for Accept/Reject: What is the reason to accept/reject the paper? Please be brief.
+
+Strength:
+- Queueing lag model for online games
+- Motivation that video compression (framerate) and network update (tickrate) dealys can dominate the pure network delay
+
+Weaknesses:
+- Pure QoS perspective. Paper does not touch the perceptual level (and thus could be considered out of scope of a workshop on perceptual quality).
+
+*** Detailed Comments to Authors (Mandatory): Please provide detailed comments and feedback to the authors, including justification for your scores.
+Please provide also recommendations which aspects to be addressed in the final paper.
+
+- The paper motivates a relevant problem, i.e., gaming experience is not only impacted by network delays, but other delay components can yield even higher impacts. This fact is known in the community but not well assessed and modelled, which is the core contribution of this paper. The main finding that network delay can even be a minor component in the end-to-end delay is well in line with related work, e.g., focusing on the local input delay that can also dominate the network delay: http://dl.acm.org/citation.cfm?id=2702123.2702432
+
+- The abstract does not provide details on the proposed queueing models, so this part cannot be assessed in this review.
+
+- Open questions:
+- Which cases does the proposed queueing model cover and which does it not?
+- How was the model verified? Are the authors comparing their model against a game? It could be an open-source game where the mechanics are known.
+
+Nits:
+- The first sentence in the abstract seems to be broken
+
+*** Reviewer's Familiarity: Please rate your familiarity with the topic of the paper.
+Expert (4)
+================================================================================
+
+
+================================================================================
+======= Review 2 =======
+
+*** Relevance and Timeliness: Is the paper appropriate for the PQS workshop? Is the topic of timely interest?
+Weak match (3)
+
+*** Originality of Contribution: What is your assessment of the presented results? How original or novel is the contribution of this paper?
+Limited new results (2)
+
+*** Quality of Presentation: How well is the paper organized? Is the text well written, clear and logical?  Are the graphs and tables well presented?
+Average (3)
+
+*** Recommendation: Please provide your overall rating.
+The abstract can be accepted provided that the mentioned substantial changes are made to the final paper. (2)
+
+*** Reasons for Accept/Reject: What is the reason to accept/reject the paper? Please be brief.
+
+- Too little information on the processes inside the queuing models makes it hard to judge the contribution
+
+- Very vague definitions of the performance measures under study cause confusion
+
+- Very loose connection to user perception and QoE weaken the relevance of the work for PQS
+
+*** Detailed Comments to Authors (Mandatory): Please provide detailed comments and feedback to the authors, including justification for your scores.
+Please provide also recommendations which aspects to be addressed in the final paper.
+
+- The end-to-end lag model in Figure 2 is a really generic one (two network stacks and inter-connecting network); with the proper processes, almost any networked system could the modeled. Though, as pointed out by the authors, they need to be "parameterized in a realistic fashion". So (a) how is this done (model matching and validation), and (b) which choices have been made to produce the results shown in Figure 3? (c) Furthermore, the authors might motivate why analytic models cannot be used to assess the performance. All this is stuff for the full paper, which hopefully will contain a detailed description of the queuing models; a pointer to code on github would not be sufficient.
+
+- Indeed, Figure 3 raises a couple of questions. (a) For instance, there are no E2E-lag results shorter than 1/framerate, which communicates that the time for "packing" the information seemingly has been taken into account. This is a major problem for any streaming data, which has been heavily discussed in the networking community when voice became packet-switched. The reviewer might be wrong here... but in this case, it is probably the lack of a proper definition of the performance measures of interest. (b) Which processes and settings gave raise to the specific shape of the curves? (c) Why are the curves scaled versions of each other, obviously governed by the framerate?
+
+- In the final version of the paper, it is highly recommended to link the performance parameter of interest to perception and QoE results that are reported in the literature.
+
+- Some text in Figure 1 is basically unreadable in the print-out.
+
+*** Reviewer's Familiarity: Please rate your familiarity with the topic of the paper.
+Expert (4)
+================================================================================
+
+
+================================================================================
+======= Review 3 =======
+
+*** Relevance and Timeliness: Is the paper appropriate for the PQS workshop? Is the topic of timely interest?
+Excellent match (5)
+
+*** Originality of Contribution: What is your assessment of the presented results? How original or novel is the contribution of this paper?
+Limited new results (2)
+
+*** Quality of Presentation: How well is the paper organized? Is the text well written, clear and logical?  Are the graphs and tables well presented?
+Average (3)
+
+*** Recommendation: Please provide your overall rating.
+The abstract can be accepted provided that the mentioned substantial changes are made to the final paper. (2)
+
+*** Reasons for Accept/Reject: What is the reason to accept/reject the paper? Please be brief.
+
+
+
+*** Detailed Comments to Authors (Mandatory): Please provide detailed comments and feedback to the authors, including justification for your scores.
+Please provide also recommendations which aspects to be addressed in the final paper.
+
+This article propose an interesting idea about modeling the E2E lag with three major factors, framerate, network delay, and tickrate. I agree with authors that there are lots of interesting topics between them. 
+
+In the article, authors propose some viewpoints about gaming, 
+1) providing lower tickrate and framerate under higher network delay in online gaming
+2) framerate is the serious factor which affects E2E lag under 40 ms network latency in cloud gaming
+
+Smaller framerate will make the human perceive the situation of game scenario changing longer. Longer tickrate will make the game system perceive the human input longer, and the response time will become longer also. In this case, the network delay becomes less important factor. However, the user QoE will be going to trend unsatisfied. Therefore, there is no direct evidence shows that 1) will effect the user QoE. 
+
+The result of 2) is obvious, but what are the factors making the standard deviations different between 5 to 120 Hz framerate to each other in fig. 3? There is no discussion in the article. 
+
+References [2] and [4] are not referred in the article, and there are some typos in the article, such as “tick rates” should be “tickrates” in section 1.
+
+*** Reviewer's Familiarity: Please rate your familiarity with the topic of the paper.
+Familiar (3)
+================================================================================
