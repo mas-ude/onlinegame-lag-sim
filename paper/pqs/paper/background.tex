@@ -3,22 +3,14 @@
 \section{Background}
 \label{sec:background}
 
-Some fundamental gaming terms and concepts need to be introduced first. At their core video games are essentially feedback-directed real-time simulators. The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image. Examples for the tickrates of popular networked games and their servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}. Below the threshold of \textit{apparent motion} (about $16.67$ frames per per second) objects will appear as two distinct objects between two consecutive still images. Video games are more flexible but also much more demanding on the framerate than traditional media, whose framerates hover at the lower end of motion perception. Video games have to target higher framerates, e.g., \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}. This enables smoother camera and object movement and help increase the interactivity and reactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Lag is a critically important factor for almost all games, as it governs the reaction time to in-game events and such the chance of success. But this lag is often described solely on the basis of the \textit{network delay} in an online game, neglecting other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in, the complete \gls{E2E} lag is captured, which can be highly variable. Fig.~\ref{fig:measurement-methods} depicts three distinct vantage points to measure portions of \gls{E2E} lag. Only external methods can capture the complete lag.
-
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=1.0\columnwidth]{../../../models/e2e-lag.pdf}
-    \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
-\label{fig:measurement-methods}
-\end{figure}
+Some fundamental gaming terms and concepts need to be introduced first.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\subsection{Related Work}
+\subsection{Basic Game Model}
+\label{subsec:game-model}
 
-The outcome of user studies in gaming depends on a wide selection of factors, e.g., on the precise setup, the game, and the choice of players. This makes comparing their results quite difficult. Generalizing the game \acrshort{QoS} and \gls{QoE} assessments and their results has been a topic in past researches, for example correlating online cloud gaming quality with network \acrshort{QoS} (e.g. \cite{5976180}). In order to avoid some of the issues with subjective user studies, other approaches examine the player objective performance through in-game metrics such as the game's highscore or the duration to achieve a certain task. The ``kills per minute'' of players in the \gls{FPS} \textsc{Quake 3} are, for example, investigated by \cite{1266180}, which sees a steady decline of this subjective performance metric when increasing the network delay.
-%Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
-
+At their core video games are essentially feedback-directed real-time simulators. Figure~\ref{fig:gameloop1} overviews a simplified simulation loop consisting of three parts. The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces.
 
 
 \begin{figure}[!t]
@@ -28,27 +20,9 @@ The outcome of user studies in gaming depends on a wide selection of factors, e.
 	\label{fig:gameloop1}
 \end{figure}
 
-\begin{table}[!t]
-\caption{Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
-% \hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
-% fm: inoffizielle, nicht-wissenschaftliche quellen, da diese werte normalerweise nicht durch den entwickler veröffentlicht werden; für framerates gibt es keine werte, da diese normalerweise unlocked laufen (zumindest für pc, bei konsolen für alle entweder 30 oder 60), ist eigentlich zu komplex um an der stelle darauf einzugehen
-\label{tbl:tickrates}
-	\centering
-	\begin{tabu}{X[0.45]X}
-		\toprule
-		\textbf{Video Game} & \textbf{Tickrate} \\
-		\midrule
-		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
-		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
-		Minecraft & max. \SI{20}{\hertz} \\
-		League of Legends & \SI{30}{\hertz} (estimated) \\
-		Dota 2 & \SI{30}{\hertz} \\
-		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
-		Eve Online & \SI{1}{\hertz} \\
-		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
-		\bottomrule
-	\end{tabu}
-\end{table}
+For example, the state of the game world is updated even if the player character does not move. In this simplified model, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image.
+
+This basic makeup can be found in almost any kind of game architectures of which three are depicted in Fig.~\ref{fig:component-models}. The game server in client/-server games is the single authoritative point of state synchronization for other connected clients. Peer-to-peer architectures are not investigated here. Player input events are usually also only sent to the server according to a specific clocked \textit{command message rate}.
 
 \begin{figure*}[!t]
   \centering
@@ -56,3 +30,94 @@ The outcome of user studies in gaming depends on a wide selection of factors, e.
   \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
   \label{fig:component-models}
 \end{figure*}
+
+Note that actual game implementations sometimes choose to update parts of the game state on different fixed frequencies. For example, a physics effect that does not influence gameplay directly could be updated at only half the tickrate. Also, the parameters of the player input process depend on the game genre and on the player action currently performed. Examples for the tickrates of popular networked games and their servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Framerate}
+\label{sec:framerate}
+
+
+Below the threshold of \textit{apparent motion} (about $16.67$ frames per per second) objects will appear as two distinct objects between two consecutive still images. Video games are more flexible but also much more demanding on the framerate than traditional media, whose framerates hover at the lower end of motion perception. Video games have to target higher framerates, e.g., \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}. This enables smoother camera and object movement and help increase the interactivity and reactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback.
+
+
+In contrast to traditional video media that play back at fixed framerates, e.g., \SI{24}{\hertz}, video games are more flexible but also much more demanding on the framerate. First, the framerate in a game may fluctuate as the processing time of the render process depends on the scene complexity.
+Then, video games usually target higher framerates than other media do: \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on the type of game. Higher framerates enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos; they also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate influences the reactivity of a game, but can also be a source of latency itself.
+
+%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{End-to-End Lag}
+\label{sec:e2e-lag}
+
+Lag in video gaming is often described solely on the basis of the network delay in an online game. It should be evident that the lag is a critically important factor for almost all games, as it governs the reaction time to in-game events.
+
+However, focussing solely on network delay neglects other components that contribute to the lag, including the input device, the time to sample and process the input, the game engine and server and their tickrates, frame rendering time, and ultimately the time to display the frame on the monitor. Only if all sources are factored in the complete \textit{\gls{E2E} lag} is captured. Notably, this lag is usually not constant but can vary depending on the type of action triggered by the input. While some simple actions, say opening the menu, may have a very short lag, more complex interactions, e.g., issuing command that moves the player character in the game world, may take considerable longer to complete. %, partly due to the actions taking more than one game tick to complete.
+Therefore, each video game will have a distinct ``lag profile''.
+
+Fig.~\ref{fig:measurement-methods} depicts three distinct vantage points to measure portions of \gls{E2E} lag. Only external methods can capture the complete lag.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=1.0\columnwidth]{../../../models/e2e-lag.pdf}
+    \caption{Location of three measurement approaches to capture end-to-end lag in an online video game.}
+\label{fig:measurement-methods}
+\end{figure}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Related Work}
+\label{sec:relatedwork}
+
+The outcome of user studies in gaming depends on a wide selection of factors, e.g., on the precise setup, the game, and the choice of players. This makes comparing their results quite difficult. Generalizing the game \acrshort{QoS} and \gls{QoE} assessments and their results has been a topic in past researches, for example correlating online cloud gaming quality with network \acrshort{QoS} (e.g. \cite{5976180}). In order to avoid some of the issues with subjective user studies, other approaches examine the player objective performance through in-game metrics such as the game's highscore or the duration to achieve a certain task. The ``kills per minute'' of players in the \gls{FPS} \textsc{Quake 3} are, for example, investigated by \cite{1266180}, which sees a steady decline of this subjective performance metric when increasing the network delay.
+%Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
+
+
+
+
+
+The assessment of video games has been a topic in many past papers. Due to the strong interactivity of games and the large number of different game mechanics most of the research is focused on conducting user studies and noting the subjective quality of the users. The outcome of these studies depends strongly on a wide selection of factors (e.g., on the precise setup, the game, and the choice of players) which makes comparing their results quite difficult. This section presents a few examples of such studies.
+
+In \cite{5976180} Jarschel et al. identify some influence factors on the subjective quality of cloud gaming through a user survey for certain games and three different game categories (slow, medium, fast games) that have been subjected to worsening \gls{QoS} parameters. Downstream packet loss and delay was noted be be especially problematic for achieving a good quality. Similarly, the authors of \cite{4591393} observed the relationship of players quitting a \gls{MMO} game with deteriorating \gls{QoS} and noted an impact proportion of 1:2:4:3 for delay, jitter, and packet loss on both the client-to-server and server-to-client connections respectively. Additionally, a user study in \cite{4604397} also showed a correlation of the \gls{QoE} to the delay as well as the jitter for another \gls{MMO}, in this case the total delay had more impact than the delay variation. Regarding the subjective quality in first person shooters, the authors of \cite{6614351} find a strong impact of the delay and packet loss on the experienced quality. The authors of \cite{6404025} and \cite{beyerusing} use \gls{fEMG} and \gls{EEG} approaches respectively to examine individual gamers' reaction to various cloud games and measure the quality they are experiencing in terms of real-time strictness and \gls{QoE}. Finally, an ITU-T Recommendation \cite{mollertowards} concerning subjectively measuring video game \gls{QoE} is also in preparation, which discusses game-relevant \gls{QoS}-metrics as well as the selection of players and games.
+
+In order to avoid some of the issues with subjective user studies, other approaches examine the player objective performance through in-game metrics such as the game's highscore or the duration to achieve a certain task. For example, a user study in \cite{Chen:2006:SOG:1167838.1167859} observes a decrease in the objective quality assessment metrics (the playing duration) in an \gls{MMO} due to the influence of network factors. A 2006 paper \cite{Claypool:2006:LPA:1167838.1167860} categorizes player actions and their relationship to latency, with special regards for the precision and deadlines of actions. However, the in-game metrics under study can not represent short-term effects of latency as they operate on much larger time-scales. 
+%(e.g. researching the whole technology tree in Warcraft 3 is neither a representative action of the game nor delay-sensitive at all). Also the presence of lag compensation techniques is not considered. The end result is a delay tolerance table which probably is not very representative of modern video games.
+A second paper by Claypool et al. \cite{claypool2007} furthers this notion of the influence of network \gls{QoS} on in-game actions and specifically looks at player performance in first person games. A user study records the performance in artificially created in-game environments. Here, the performance gets worse with a degraded network, albeit at a very slow pace. %Players were also subjected to very low framerates of \SI{7}{\hertz} and \SI{3}{\hertz}, which is such an unrealistic setting, that it should not even have been tested. The reasons for this are laid out in Section~\ref{sec:framerate}.
+The ``kills per minute'' of normal players in the \gls{FPS} \textsc{Quake 3} are investigated by \cite{1266180}, which sees a steady decline of this subjective performance metric when increasing the network delay. However, another paper \cite{Beigbeder:2004:ELL:1016540.1016556}, looking at player performance in \textsc{Unreal Tournament 2003} in a controlled in-game environment, finds almost no influence of increased delay and packet loss, even at high values of \SI{200}{\milli\second}. %The discrepancy between the otherwise similar studies could potentially be attributed to the specific construction of the in-game test environment. 
+A 2002 paper \cite{Pantel:2002:IDR:507670.507674}, which gathered objective \gls{QoE} measurements from a custom-made RC racing video game, again sees a strong dependence of the player's performance on the delay, and suggests that a network \acrshort{RTT} of \SI{200}{\milli\second} is barely usable and \SI{500}{\milli\second} completely unusable. Finally, the authors of \cite{Bredel:2010:MSR:1944796.1944797} also find a strong and negative influence of high delay on the player's performance, in this case again in \textsc{Quake 3}. 
+
+It is interesting to note the discrepancies between the studies both in terms of the influencing parameters as well as their degree. Considering the complexity and variability of video games and the difficulties of finding and setting up good comparable scenarios and testbeds, it is understandable that some studies come to different results. This makes it much more important to understand the basic components and underlying objective metrics better. Quality estimations of video games could be much more representative if models for these metrics would exist to easily understand their influences without having to conduct a full user study.
+
+
+
+
+
+
+
+% \begin{table}[!t]
+% \caption{Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.}
+% % \hoss{Welche rel. bzw. unreliable sources? Gibt es auch typische framerates dazu?}
+% % fm: inoffizielle, nicht-wissenschaftliche quellen, da diese werte normalerweise nicht durch den entwickler veröffentlicht werden; für framerates gibt es keine werte, da diese normalerweise unlocked laufen (zumindest für pc, bei konsolen für alle entweder 30 oder 60), ist eigentlich zu komplex um an der stelle darauf einzugehen
+% \label{tbl:tickrates}
+% 	\centering
+% 	\begin{tabu}{X[0.45]X}
+% 		\toprule
+% 		\textbf{Video Game} & \textbf{Tickrate} \\
+% 		\midrule
+% 		CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
+% 		Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
+% 		Minecraft & max. \SI{20}{\hertz} \\
+% 		League of Legends & \SI{30}{\hertz} (estimated) \\
+% 		Dota 2 & \SI{30}{\hertz} \\
+% 		StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
+% 		Eve Online & \SI{1}{\hertz} \\
+% %		Sports Game 1 & \\ \midrule
+% 		Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
+% 		\bottomrule
+% 	\end{tabu}
+% \end{table}
