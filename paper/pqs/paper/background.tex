@@ -20,16 +20,16 @@ At their core video games are essentially feedback-directed real-time simulators
 	\label{fig:gameloop1}
 \end{figure}
 
-For example, the state of the game world is updated even if the player character does not move. In this simplified model, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image.
+For example, the state of the game world is updated even if the player character does not move. In this simplified model, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image. This basic makeup can be found in almost any kind of game architecture.
+%of which three are depicted in Fig.~\ref{fig:component-models}.
+The game server in client/-server games is the single authoritative point of state synchronization for other connected clients. Peer-to-peer architectures are not investigated here. Player input events are usually also only sent to the server according to a specific clocked \textit{command message rate}.
 
-This basic makeup can be found in almost any kind of game architectures of which three are depicted in Fig.~\ref{fig:component-models}. The game server in client/-server games is the single authoritative point of state synchronization for other connected clients. Peer-to-peer architectures are not investigated here. Player input events are usually also only sent to the server according to a specific clocked \textit{command message rate}.
-
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=0.9\columnwidth]{../../../models/component_interaction_full.pdf}
-  \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
-  \label{fig:component-models}
-\end{figure}
+% \begin{figure}[!t]
+%   \centering
+%   \includegraphics[width=0.9\columnwidth]{../../../models/component_interaction_full.pdf}
+%   \caption{Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.}
+%   \label{fig:component-models}
+% \end{figure}
 
 Note that actual game implementations sometimes choose to update parts of the game state on different fixed frequencies. For example, a physics effect that does not influence gameplay directly could be updated at only half the tickrate. Also, the parameters of the player input process depend on the game genre and on the player action currently performed. Examples for the tickrates of popular networked games and their servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
@@ -42,8 +42,7 @@ Note that actual game implementations sometimes choose to update parts of the ga
 Below the threshold of \textit{apparent motion} (about $16.67$ frames per per second) objects will appear as two distinct objects between two consecutive still images. Video games are more flexible but also much more demanding on the framerate than traditional media, whose framerates hover at the lower end of motion perception. Video games have to target higher framerates, e.g., \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}. This enables smoother camera and object movement and help increase the interactivity and reactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback.
 
 
-In contrast to traditional video media that play back at fixed framerates, e.g., \SI{24}{\hertz}, video games are more flexible but also much more demanding on the framerate. First, the framerate in a game may fluctuate as the processing time of the render process depends on the scene complexity.
-Then, video games usually target higher framerates than other media do: \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on the type of game. Higher framerates enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos; they also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate influences the reactivity of a game, but can also be a source of latency itself.
+In contrast to traditional video media that play back at fixed framerates, e.g., \SI{24}{\hertz}, video games are more flexible but also much more demanding on the framerate. First, the framerate in a game may fluctuate as the processing time of the render process depends on the scene complexity. Then, video games usually target higher framerates than other media do: \SI{30}{\hertz}, \SI{60}{\hertz}, or even \SI{120}{\hertz}, depending on the type of game. Higher framerates enable smoother camera movement and scene transitions, as games often present faster scenes when compared to videos; they also help in increasing the interactivity as video games constantly require input on short time scales to which the game reacts and displays the feedback. Therefore, the framerate influences the reactivity of a game, but can also be a source of latency itself.
 
 %%%%
 
