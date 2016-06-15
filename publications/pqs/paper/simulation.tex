@@ -15,10 +15,6 @@ First, the input is modeled by an exponential distribution with a rate of $20$ e
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Basic Game Results}
 
-
-Looking at typical \SI{60}{\hertz} local games (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances, there is already a considerable amount of \gls{E2E} lag (even without factoring in the delay of the screen and input devices) caused by the interactions of several random and clocked processes. Higher framerates alleviate this somewhat.
-
-
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
@@ -30,10 +26,6 @@ The first and simplest scenario to be investigated here is the case of the local
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
-
-
- In the online scenario the framerate has a larger influence on the lag than the tickrate. For low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations examine the influence of the network delay without considering other contributions to the \gls{E2E} lag. These results indicate that this might not be the best course of action. The effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined.
-
 
 % \begin{figure}[!t]
 % 	\centering
