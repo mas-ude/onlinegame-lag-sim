@@ -3,18 +3,23 @@
 \section{An End-to-End Lag Model}
 \label{sec:model}
 
-%The proposed abstract lag model can be adapted to any gaming use case, be it either local, networked, or cloud games. Depending on the specific scenario, more or less components have to be factored in (e.g., the network path and game server with its discrete game ticks for an online game, or the video encoding and decoding elements in cloud gaming). Generally, it derives the \gls{E2E} lag from those factors, specifically including the framerate, tickrate, network \gls{QoS}, client/server messaging rates, and I/O characteristics. The \gls{E2E} lag is here defined to be the time elapsed between the player supplying commands to the input devices and the corresponding audio/video output. Figure~\ref{fig:queuing-model} depicts the overall queuing model.
-
-We define the \gls{E2E} lag $T$ to be the time elapsed from when the player supplies commands to the input devices until the results of this command are displayed. We assume the player input to be a stochastic process $U$. Furthermore, input events are queued up and sent en bloc at specific intervals defined by the command rate $c$. Second, the online game variant focuses solely on modeling a single connected client and its interaction with the game server. Next, a fixed tickrate $g$ is associated with the computation process of the game server, and a framerate $f$ with the render process. The server updates the state of the game world at every tick, and may spend some processing time $P$ in order to do so. The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations. Once finished, an update message is sent to the client. Since the client needs time to render this update, it is displayed only after the next, upcoming frame. Independent of the update process, the game client outputs the next video frame in accordance to the framerate.
-%The round-trip to the server and back implies that the lag between an input event and the earliest frame containing a perceptible result of that event can take multiple frame times.
-While the command, tick, and framerates to be constant (though not necessarily identical), there is no inherent synchronization between them. This is represented in the simulation by a random initial phase offset for each rate.
-
-\begin{figure}[!t]
+\begin{figure*}[!t]
 	\centering
-	\includegraphics[width=1.0\columnwidth]{../../../models/e2e-lag-model.pdf}
+	\includegraphics[width=1.0\textwidth]{../../../models/e2e-lag-model.pdf}
 	\caption{Queuing lag model in an online video game case.}
 \label{fig:queuing-model}
-\end{figure}
+\end{figure*}
+
+The \gls{E2E} lag $T$ can be defined as the elapsed time between a player inputting some commands and the results of these commands being displayed on screen. The section describes this lag as a model for the case of an online dedicated client/server game. The player input is assumed to be a stochastic process $U$. Furthermore, input events are queued up and sent en bloc at specific intervals defined by the command rate $c$. A fixed tickrate $g$ is associated with the computation process of the game server, and a framerate $f$ with the rendering process. The server updates the state of the game world at every tick, and may spend some processing time $P \leq \frac{1}{g}$ in order to do so. The processing time is a random variable which is assumed to follow a truncated normal distribution in our simulations. Once finished, an update message is sent to the client. The contents of this update message can then only be incorporated into the next rendering cycle and not the one that is currently in progress. While the rates of the command, tick, and render cycles are assumed to be constant for the sake of this model (though not necessarily identical), they are not operating in lockstep but independently of each other. This is represented in the model by a random initial phase offset for each rate. Since the model's focus is on depicting an online game, it includes the network paths between the different entities. A random variable $D$ represents the networking delay between game client and server. Fig.~\ref{fig:queuing-model} gives a graphical representation of the queuing model for the online video game case, especially including the three clocked processes responsible for the game's interactions.
+
+The model for cloud gaming is slight variation of this online game model, adapting its notions of $D$, $P$, $T$, $U$, $c$, and $f$. However, the server now handles only one client, and becomes a \textit{streaming server} that also renders and encodes the screen contents, adding a constant encoding delay $e$. On the client side, the stream is decoded (adding decoding delay $d$) before being displayed.
+
+
+\subsection{Model Limitations}
+
+These models do not attempt to capture all possible sources of lag that occur in actual gaming. Indeed, the models simplify the following aspects in the hope to make the results more tractable. First, the models ignore the delays contributed by input devices like keyboards, mice, and game controllers, estimated to be below \SI{10}{\milli\second}. The same goes for the lag of the display device which is typically in the range of \SIrange{9}{40}{\milli\second} for a PC monitor, and often larger for TVs. The models can be extended to take those delay factors into account, but they were exempted for the sake of simplicity in this paper. Modern games go to great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not easy to examine, providing a good opportunity for future work. Such techniques can typically be subsumed under the term ``lag compensation'', e.g., the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviations and re-synchronization artifacts. % Lastly, player actions in a game might take multiple command time intervals to perform.
+It should be noted that none of these techniques alter the \gls{E2E} lag itself, rather they just try to conceal it on a higher level. Therefore, the mechanisms do not invalidate our examination.
+
 
 
 % \begin{table}[!t]
@@ -51,15 +56,7 @@ While the command, tick, and framerates to be constant (though not necessarily i
 % \label{fig:tickrate-timeseries}
 % \end{figure}
 
-Finally, since we are simulating online games, the simulation obviously includes the network paths between the different components. The delay distributions are freely configurable, but may be omitted entirely as well. We assume a random variable $D$ representing the networking delay between game client and server. Fig.~\ref{fig:queuing-model} gives a graphical representation of the queuing model for the online video game case, especially including the three clocked processes responsible for the game's interactions. 
-%Moreover, Fig.~\ref{fig:tickrate-timeseries} shows the flow of events between game client and server for the simplified case of an online video game.
-The model variant for cloud gaming is based on the online game model, adapting its notions of $D$, $P$, $T$, $U$, $c$, and $f$. However, the server now handles only one client, and becomes a \textit{streaming server} that also renders and encodes the screen contents, adding a constant encoding delay $e$. On the client side, the stream is decoded (adding decoding delay $d$) before being displayed.
 
-
-
-\subsection{Model Limitations}
-
-These simulation models do not attempt to capture all possible sources of lag that. Indeed, we simplify the models in the following aspects in the hope to make the results more tractable. The models ignore the delays contributed by input devices like keyboards, mice, and game controllers. We estimate these at below \SI{10}{\milli\second}. The same goes for the lag of the display device (from after rendering or decoding until the frame is actually visible) which is typically in the range of $1-3$ frame times for a computer monitor, and larger for TV sets. The models can be extended to take those delay factors into account, but they were exempted for the sake of simplicity in this paper. Modern games go great lengths to handle lag gracefully, and try to ``work around it'' in various ways. The methods for this vary, and implementations usually are not open for examination, so we leave them for further study. Techniques include lag compensation (the game client tries to predict the server state from past knowledge, allowing for smoother local updates but possibly causing slight deviation and re-synchronization artifacts), and tick- and framerate adaptation at the game server and client, respectively. Lastly, player actions in a game might take multiple command time intervals to perform. The simulation currently assumes that every single batch of commands that reaches the server will result in state updates and thus changes in the perceptible output of the game client. It should be noted that none of these techniques alter the end-to-end lag itself, rather they just try to conceal it on some higher level. Therefore, the mechanisms do not invalidate our examination.
 
 % \textbf{Factors in human perception and strategy}
 
