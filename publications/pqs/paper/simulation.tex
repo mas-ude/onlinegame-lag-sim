@@ -24,6 +24,7 @@ Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
+\label{subsec:online-gaming}
 
 
 \begin{figure}[!t]
@@ -31,11 +32,11 @@ Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario. For high rates $f$, $g$, the lag approaches $2\mu_D+\mu_P=\SI{43}{\milli\second}$.}
+	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip, $T\approx2\mu_D=\SI{40}{\milli\second}$.}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
-Next up is a more realistic online video game scenario, now with added network delay $D$ and server processing time $P$. For this exemplary scenario, the one-way delay $D$ was assumed to follow a zero-truncated normal distribution, with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$. Typical competitive online games today are expected to operate in such ranges. An \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience. $P$ is similarly left-truncated. Two things can be noted of the influence of frame and tickrates in this scenario as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}. First, the framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations solely examine the influence of the network delay, without any consideration to other contributing factors. Our results indicate that this might not be the best course of action. The masking effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined.
+Next up is a more realistic online video game scenario, now with added network delay $D$ and server processing time $P$. For this exemplary scenario, the one-way delay $D$ was assumed to follow a left-truncated normal distribution, with $\mu_D = \SI{20}{\milli\second}$ and $\sigma_D = \SI{5}{\milli\second}$. Typical competitive online games today are expected to operate in such ranges. An \acrshort{RTT} of \SI{100}{\milli\second} is often considered to be the upper limit for a good playing experience. Two things can be noted of the influence of frame and tickrates in this scenario as depicted in Fig.~\ref{fig:3dbars-framerate-tickrate-lag}. First, the framerate has a larger influence on the lag than the tickrate. Second, for low framerates and tickrates, the impact of network delay on the \gls{E2E} lag is almost completely masked. Only if both rates are high enough, the network delay will play a more significant role. This masking effect has large implications for video games and their evaluation. Many evaluations solely examine the influence of the network delay, without any consideration to other contributing factors. Our results indicate that this might not be the best course of action. The masking effect likely shifts to lower values of the frame- and tickrates when a higher network delay is examined.
 
 %Another interesting result (not plotted here) is the much larger variance of lag in the framerate dimension when compared to the tickrate. This requires video game studies to have a very high repetition rate to provide meaningful results.
 
