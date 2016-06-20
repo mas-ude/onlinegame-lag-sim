@@ -14,13 +14,13 @@ Based on the introduced model a stochastic \textsc{Gnu R}-based \gls{DES} was cr
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
-	\caption{Median \acrshort{E2E} lag under various frame and tick durations for a locally-running game (§\ref{subsec:local-game}). Lower lag values are achieved at lower frame and tick durations.}
+	\caption{Median \gls{E2E} lag under various frame and tick durations for a locally-running game (§\ref{subsec:local-game}). Lower lag values are achieved at lower frame and tick durations; the frame duration has a larger influence on the \gls{E2E} lag.}
 \label{fig:nwless-scatter}
 \end{figure}
 
 The first and simplest scenario to be investigated here is the case of the local game. In the version implemented here, the tickrate at a locally running quasi-server component is still present, therefore representing the best case an online multiplayer game could achieve without any network influences. Figure~\ref{fig:nwless-scatter} plots the relationship between the frame duration (i.e., the inverse of the framerate), the tick duration, and the resulting median \gls{E2E} lag. Every user input event traverses three queues with fixed-rate outputs ($c=g$, $g$, and $f$). In the ideal case, an input event occurs just before the command queue cycles, correctly aligned with the following server tick and frame render cycles. In this case the \gls{E2E} lag will be slightly above the frame time that must elapse before the update can be rendered to screen, $T_{min}>f^{-1}$. In case the events are unfavorably offset against one another, an input event has to wait almost a full input cycle until it is processed further, reaching the server just after a tick has occurred, so it waits almost a full server tick. Ultimately, it has to wait for almost two frames until it is displayed.
 
-Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c^{-1}+g^{-1}+2f^{-1}$. The mid-interval point between these two limits is $T_{mid}=\frac{3}{2} f^{-1} + g^{-1}|_{c=g}$ which coincides roughly with the medians of the stochastic simulation. Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances and without factoring in the delay of the screen and input devices, there is already a considerable amount of \gls{E2E} lag that can only increase with the presence of network delay. This result indicates that video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize its influence on the \gls{E2E} lag and thus \gls{QoE}.
+Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c^{-1}+g^{-1}+2f^{-1}$. The mid-interval point between these two limits is $T_{mid}=\frac{3}{2} f^{-1} + g^{-1}|_{c=g}$ which coincides roughly with the medians of the stochastic simulation. Looking at a typical \SI{60}{\hertz} video game with an equal tickrate (i.e. a frame duration of $\approx \SI{16.6}{\milli\second}$) the median lag is in the range of \SIrange{45}{50}{\milli\second}. So even under quasi-optimal circumstances and without factoring in the delay of the network and screen and input devices, there is already a considerable amount of \gls{E2E} lag. The expression for $T_{mid}$ and the simulation results also indicate that video games (and quality assessments thereof) should try to achieve the highest framerate possible to minimize its influence on the \gls{E2E} lag and thus \gls{QoE}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Online Gaming}
@@ -32,7 +32,7 @@ Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip, $T\approx2\mu_D=\SI{40}{\milli\second}$.}
+	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip and server processing time, $T\approx2\mu_D+P=\SI{43}{\milli\second}$.}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
