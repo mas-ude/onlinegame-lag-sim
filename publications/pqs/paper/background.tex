@@ -10,7 +10,7 @@ Some fundamental gaming terms and concepts need to be introduced first.
 \subsection{Basic Game Model}
 \label{subsec:game-model}
 
-At their core video games are essentially feedback-directed real-time simulators. Figure~\ref{fig:gameloop1} overviews a simplified simulation loop consisting of three parts. The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces.
+At their core video games are essentially feedback-directed real-time simulators. Figure~\ref{fig:gameloop1} overviews a simplified simulation loop: The game reads player input, updates the game state, and renders new screen contents. This loop repeats as long as the game is running. While the three parts are interrelated, and every component provides some form of input to the next, they may still proceed at their own intrinsic paces.
 
 
 \begin{figure}[!t]
@@ -31,7 +31,8 @@ The game server in client/-server games is the single authoritative point of sta
 %   \label{fig:component-models}
 % \end{figure}
 
-Note that actual game implementations sometimes choose to update parts of the game state on different fixed frequencies. For example, a physics effect that does not influence gameplay directly could be updated at only half the tickrate. Also, the parameters of the player input process depend on the game genre and on the player action currently performed. Examples for the tickrates of popular networked games and their servers include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
+Actual game implementations may choose to update parts of the game state on different frequencies. For example, a physics effect that does not influence gameplay directly could be updated at only half the tickrate. Also, the parameters of the player input process depend on the game genre and on the player action currently performed. Examples for the tickrates of popular networked games %and their servers 
+include \SI{64}{\hertz} or \SI{128}{\hertz} for \textsc{CS:GO}, \SI{20}{\hertz} for \textsc{Minecraft}, or \SI{30}{\hertz} for \textsc{Dota 2}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
