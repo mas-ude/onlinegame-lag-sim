@@ -3,7 +3,7 @@
 \section{Lag Simulation}
 \label{sec:simulation}
 
-Based on the introduced model a stochastic \textsc{Gnu R}-based \gls{DES} was created\footnote{\url{https://github.com/mas-ude/onlinegame-lag-sim/}} and several distinct game scenarios investigated. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$, server processing time $P$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. The investigations here are intended to highlight some particular aspect in each of the scenarios. First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$. Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the \gls{E2E} lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle. The evaluation of the presented scenarios was conducted on the basis of $\np{1000}$ repetitions for each setting. Each run consisted of a series of $\np{100}$ input events and their associated \gls{E2E} lag values. On this basis a median lag was calculated.
+Based on the introduced model a stochastic \textsc{Gnu R}-based \gls{DES} was created~\cite{onlinegame-lag-sim-repo} and several distinct game scenarios investigated. Due to the influence of several stochastic processes (user inputs $U$, network delay $D$, server processing time $P$) and the differing offset of the clocked processes, a sufficient number of repetitions is required to provide meaningful results. The investigations here are intended to highlight some particular aspect in each of the scenarios. First, the input is modeled by an exponential distribution with a rate of $20$ events per second. The offsets between the clocked processes are uniformly distributed in their respective intervals. It is further assumed that the server processing time $P$ follows a left-truncated normal distribution with $\mu_P = \SI{3}{\milli\second}$ and $\sigma_P = \SI{0.1}{\milli\second}$. Additionally, the rate $c$ at which command messages are sent to the game server is set equal to the server's tickrate $g$ as the server would not process more commands either way. This might however increase the \gls{E2E} lag in some situations if a command message just misses one of the server's ticks and has to wait another full cycle. The evaluation of the presented scenarios was conducted on the basis of $\np{1000}$ repetitions for each setting. Each run consisted of a series of $\np{100}$ input events and their associated \gls{E2E} lag values. On this basis a median lag was calculated.
 % over the $n$ input events for each run $i$, and finally an overall mean lag out of the individual medians of each repetition, i.e. $\overline{T}=\frac{1}{n}\sum_{i=1}^r\widetilde{T_i}$.
 
 
@@ -32,7 +32,7 @@ Combined with the previous result the lag is bounded as follows, $f^{-1} < T < c
 	\vspace{-6mm}
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
 	\vspace{-15mm}
-	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip and server processing time, $T\approx2\mu_D+P=\SI{43}{\milli\second}$.}
+	\caption{Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip and server processing time, $T\approx2\mu_D+\mu_P=\SI{43}{\milli\second}$.}
 \label{fig:3dbars-framerate-tickrate-lag}
 \end{figure}
 
@@ -48,7 +48,7 @@ Next up is a more realistic online video game scenario, now with added network d
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=1.0\columnwidth]{../../../simulation/visualization/cloudgaming-lag-cdf.pdf}
-	\caption{Influence of the rendering and streaming framerate on the \gls{E2E} lag in the cloud scenario (§\ref{subsec:cloud-gaming}). The vertical reference line denotes the average server, network and codec delay $P+2\mu_D+e+d=\SI{68}{\milli\second}$.}
+	\caption{Influence of the rendering and streaming framerate on the \gls{E2E} lag in the cloud scenario (§\ref{subsec:cloud-gaming}). The vertical reference line denotes the average server processing time, network round-trip and codec delay $\mu_P+2\mu_D+e+d=\SI{68}{\milli\second}$.}
 \label{fig:cloud-e2e-delay-sim}
 \end{figure}
 
