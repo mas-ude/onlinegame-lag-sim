@@ -16,7 +16,7 @@ At their core video games are essentially feedback-directed real-time simulators
 
 For example, the state of the game world is updated even if the player character does not move. For modeling purposes, we distinguish a generic process for player input, a \textit{tickrate} that governs the frequency of game state updates, and a \textit{framerate} determining how often the screen is updated every second. The \textit{tickrate} governs the frequency of game state updates, and the \textit{framerate} determines the update rate of the output image. This basic makeup can be found in almost any kind of game architecture.
 %of which three are depicted in Fig.~\ref{fig:component-models}.
-In client/-server games, the game server is the single authoritative point of state synchronization for other connected clients. Peer-to-peer architectures are not investigated here. Player input events are usually also only sent to the server according to a specific clocked \textit{command message rate}.
+In client/server games, the game server is the single authoritative point of state synchronization for other connected clients. Peer-to-peer architectures are not investigated here. Player input events are usually also only sent to the server according to a specific clocked \textit{command message rate}.
 
 % \begin{figure}[!t]
 %   \centering
