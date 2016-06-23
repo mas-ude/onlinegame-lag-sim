@@ -6,16 +6,9 @@
 %These scenarios reveal the necessity of a tight control over game parameters, such as the framerate, resolution, or input devices, in accordance with the game's type.
 
 This paper presents a model for \acrfull{E2E} lag in video games, including online and cloud variants. The \gls{E2E} lag represents the time elapsed between a player input event such as mouse movement or keystrokes and the display of the event's results in the game on the local display. This lag is a main governing factor for \acrfull{QoE} in human-computer interaction in general, and video games in particular. The model is parameterized on the command rate at which batched user events are forwarded, the server tickrate and state processing time, the game's local framerate, the network delay (for online games), and codec delays (for cloud games). % Note: We don't look at local latencies really: Mice and keyboards, USB, TV sets, multibuffering, ...
-The model is simulated using \acrfull{DES}, showing the dominant influence of the game framerate on the \gls{E2E} lag particularly for low framerates. This contribution to \gls{E2E} lag may even mask the influence of network delay, yet it appears underrepresented in previous work.  On an abstracted level, the model helps to explain the mechanics behind lag in different game types and architectures. This is of interest to both actual implementations of games and study design for game \gls{QoE} assessment. To foster participation and independent replication, the model simulation code is available as free, open-source software from the authors' repository~\cite{onlinegame-lag-sim-repo}, as are the raw data.
-%
-%results, meta: explains lag mechanics, helps judge correctness of qoe models
-%results, numbers: parameter study for local, online, cloud games.
-%
-%fuwo: use this to make better studies
-%
-%
-%, , is an important influence 
-%The \acrfull{QoE} of depends partially on the lag 
-%The models presented here serve to provide initial insights into the complex interactions of \gls{E2E} game lag. Although the underlying abstract model adopts some simplifications and some properties are not incorporated yet, the results are still very revealing. Using the model and simulator as baseline, one can get a good estimation of the expected video game \gls{QoS} values. 
-%%Alternatively, it can help in choosing representative games for select scenarios.
-%A proper setup of gaming \gls{QoS}/\gls{QoE} studies is of critical importance to their validity. The \gls{E2E} lag queuing model set up in this work can support these endeavors a long way through an improved understanding of relevant game properties and their interactions. The role of the framerate, and its lag-inducing effects has been undervalued in the past, which these models and simulations aim to rectify. Of special interest is the masking effect low values of the framerate or tickrate have on the network delay on the \gls{E2E} lag. This and similar side effect need to be considered for subsequent research efforts.
+
+The model is simulated using \acrfull{DES}, showing the dominant influence of the game framerate on the \gls{E2E} lag particularly for low framerates. It may even mask the influence of network delay, yet it appears underrepresented in previous work.  On an abstracted level, the model helps to explain the mechanics behind lag in different game types and architectures. This is of interest to both actual implementations of games and study design for game \gls{QoE} assessment.
+
+Going forward, the model could be included in larger \gls{QoE} frameworks; also, an analytical approach may provide further structural insights, and other lag sources such as input and output devices could extend the model. Lastly, the model should be validated in a practical setting.\\
+
+\textit{Note: To foster participation and independent replication, the model simulation code is available as free, open-source software from the authors' repository~\cite{onlinegame-lag-sim-repo}, as are the raw data.}
