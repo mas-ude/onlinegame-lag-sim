@@ -1,4 +1,4 @@
-%!TEX program = lualatex
+%!TEX program = pdflatex
 
 \documentclass{UDEbeamerEN}
 
@@ -39,8 +39,9 @@
 \usepackage{algorithm}
 \usepackage{url}
 
-\usepackage{multimedia}
-\usepackage{xmpmulti}
+\usepackage{multimedia} % WARNING: \movie command does not seem to work with lualatex; use pdflatex instead
+%\usepackage{xmpmulti}
+\usepackage{media9}
 
 \usepackage[defernumbers=true, style=alphabetic, citestyle=alphabetic, firstinits=true, backend=biber, doi=false, url=false, block=ragged, maxnames=6]{biblatex}
 \addbibresource{literature.bib}
@@ -257,22 +258,41 @@
 
 % unfortunately no frame animations work with preview/skim/presentation
 % either skip it, or consider installing adobe reader?
-% \begin{frame}
-% 	\frametitle{10}
-% 	\animate<2-162>
-% 	 \multiinclude[format=png, start=0, end=163, graphics={width=1.0\textwidth}]{extras/framerate} 
+\begin{frame}
+	\frametitle{10}
 
-% 	\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}
-% \end{frame}
+	%\begin{columns}[T]
+		%\column{0.5\textwidth}
+			\begin{center}
+				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{extras/framerate.mov}\\
+				\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}
+			\end{center}
 
-% \begin{frame}
-% 	\frametitle{11}
+		%\pause
+		%\column{0.5\textwidth}
+		%	\vspace{2mm}
+		%\movie[width=5cm, height=3cm, autostart, loop, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
+		%\url{http://hugelol.com/lol/364250}
+	%\end{columns}
 
-% 	\animate<2-162>
-% 	 \multiinclude[format=png, start=0, end=220, graphics={width=1.0\textwidth}]{extras/eli5-framerate} 
+	% create with ffmpeg:
+	% ffmpeg -f gif -i framerate.gif -pix_fmt yuv420p framerate.mov
+	% \begin{center}
+	% 	\movie[width=5cm, height=4cm]{}{extras/framerate.mov}
+	% 	\movie[width=5cm, height=4cm]{}{extras/eli5-framerate.mov}
 
-% 	\url{http://hugelol.com/lol/364250}
-% \end{frame}
+	% 	\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}
+	% \end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{11}
+
+	\begin{center}
+		\movie[width=9cm, height=6cm, autostart, repeat, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
+		\url{http://hugelol.com/lol/364250}
+	\end{center}
+\end{frame}
 
 \begin{frame}
 	\frametitle{12}
