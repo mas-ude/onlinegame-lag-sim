@@ -69,27 +69,37 @@
 
 \begin{frame}
 	\frametitle{Motivation}
-	\framesubtitle{QoS and QoE of TCP Streaming in Mobile Networks?}
+	%\framesubtitle{QoS and QoE of TCP Streaming in Mobile Networks?}
 	\vspace{-0.5cm}
-	%\begin{center}\end{center}
-	%\vspace{-1cm}
-	% \begin{columns}[T]
-	% 	\column{0.5\textwidth}
-	% 		\begin{center}
-	% 			\includegraphics[width=\columnwidth]{extras/r-cisco-vni-2014.pdf}\\\vspace{-4mm}
-	% 			{\tiny source: Cisco VNI 2014}\\\vspace{-2mm}
-	% 			\includegraphics[height=1.8cm]{extras/YouTube-logo.png}\\\vspace{-5mm}
-	% 			\includegraphics[height=1.3cm]{extras/Netflix-logo.png}
-	% 		\end{center}
 
-	% 	\pause
-	% 	\column{0.5\textwidth}
-	% 		\vspace{2mm}
-	% 		\includegraphics[height=6cm]{extras/3gpp-physical-arch.pdf}
-	% \end{columns}
+% clip generation:
+% download source with youtube-dl
+% ffmpeg -i csgo.mp4 -ss 00:24:24 -t 00:00:08 -an -vcodec copy clip1.mp4
+% ffmpeg -i clip1.mp4 -vf "select=not(mod(n\,6))" clip1_6.mp4 
+% ffmpeg -i clip1_6.mp4 -pix_fmt yuv420p clip1_6.mov 
 
-	% \pause
-	% \Put(50,180){\fcolorbox{white}{white}{\Huge Interactions and Optimizations?}}
+
+			% \begin{center}
+			% 	{\small same clip at 6fps}\\
+			% 	\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{clip1_6.mov}\\
+			% 	{\small clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+			% \end{center}
+
+
+	\begin{overprint}
+		\only<1>{
+			\begin{center}
+				{\small CS:GO gameplay at 30fps}\\
+				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{clip1.mov}\\
+				{\small clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+			\end{center}}
+		\only<2>{
+			\begin{center}
+				{\small same clip at 6fps}\\
+				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{clip1_6.mov}\\
+				{\small clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+			\end{center}}
+	\end{overprint}
 \end{frame}
 
 \begin{frame}
@@ -264,25 +274,10 @@
 	%\begin{columns}[T]
 		%\column{0.5\textwidth}
 			\begin{center}
+				%ffmpeg -f gif -i eli5-framerate.gif -pix_fmt yuv420p eli5-framerate.mov
 				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{extras/framerate.mov}\\
-				\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}
+				{\small\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}}
 			\end{center}
-
-		%\pause
-		%\column{0.5\textwidth}
-		%	\vspace{2mm}
-		%\movie[width=5cm, height=3cm, autostart, loop, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
-		%\url{http://hugelol.com/lol/364250}
-	%\end{columns}
-
-	% create with ffmpeg:
-	% ffmpeg -f gif -i framerate.gif -pix_fmt yuv420p framerate.mov
-	% \begin{center}
-	% 	\movie[width=5cm, height=4cm]{}{extras/framerate.mov}
-	% 	\movie[width=5cm, height=4cm]{}{extras/eli5-framerate.mov}
-
-	% 	\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}
-	% \end{center}
 \end{frame}
 
 \begin{frame}
