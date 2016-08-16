@@ -68,7 +68,7 @@
 
 
 \begin{frame}
-	\frametitle{Motivation}
+	\frametitle{Games and Frames}
 	%\framesubtitle{QoS and QoE of TCP Streaming in Mobile Networks?}
 	\vspace{-0.5cm}
 
@@ -89,18 +89,123 @@
 	\begin{overprint}
 		\only<1>{
 			\begin{center}
-				{\small CS:GO gameplay at 30fps}\\
+				{\small CS:GO gameplay at 30fps (normally played at 120+)}\\
 				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{clip1.mov}\\
-				{\small clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 		\only<2>{
 			\begin{center}
 				{\small same clip at 6fps}\\
 				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{clip1_6.mov}\\
-				{\small clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 	\end{overprint}
 \end{frame}
+
+\begin{frame}
+	\frametitle{Motivation}
+
+	\begin{itemize}
+		\item Increasing research interest for (networked) video game QoS and QoE
+		\item Past approaches treated video games similar to video streaming
+		\item Studies focused only on network delay, not E2E lag
+		\item Many interlocked mechanics in play
+		\item Need for a better understanding of these mechanics
+		\item Looking only at authoritative client/server games here, not peer-to-peer
+	\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Issues of Past Studies}
+
+	\begin{itemize}
+		\item Insufficient framerates (actual examples: \SI{3}{\hertz}, \SI{7}{\hertz}, \SI{15}{\hertz})
+		\item Wrong choice of metrics (e.g. time-scale wise)
+		\item Observation periods too short
+		\item No understanding of core gameplay mechanics
+		\item Cannot generalize results from individual games to a whole ``genre''
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Frame- and Tickrates}
+
+	\begin{itemize}
+		\item Framerate and tickrate are governing factors in input latency
+		\item Low framerates are a source of lag
+		\item Principle of apparent motion: objects are perceived to be in motion at a min. refresh rate of \SI{16}{\hertz}
+		\item Common game frame rates: \SI{30}{\hertz} (considered to be the absolute minimum), \SI{60}{\hertz}, \SI{120}{\hertz}, \SI{144}{\hertz}
+		%\item Reasoning: display refresh rates: lock to certain fractions of monitor refresh rate, else VSYNC or tearing issues
+	\end{itemize}
+
+	\begin{center}
+		\includegraphics[height=3cm]{../../../models/game_loop.pdf}
+
+		Basic model of a continuous main video game loop.
+	\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Information Deficit through Low Framerate}
+
+	\begin{center}
+		%ffmpeg -f gif -i eli5-framerate.gif -pix_fmt yuv420p eli5-framerate.mov
+		\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{extras/framerate.mov}\\
+		{\tiny\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}}
+	\end{center}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Simplified Video Game Main Loops}
+
+	\begin{center}
+		\includegraphics[height=3cm]{../../../models/game-tick-rate-streamed.pdf}
+
+		\includegraphics[width=1.0\textwidth]{../../../models/component_interaction_full.pdf}
+
+		 \textit{(a)} local game, \textit{(b)} networked game, \textit{(c)} cloud game
+	\end{center}
+
+\end{frame}
+
+
+
+
+\begin{frame}
+	\frametitle{Tickrates in Video Games}
+
+	\begin{center}
+	Command message rates and client update rates can differ from server tickrates
+	{\small
+		\begin{tabu}{X[0.45]X}
+			\toprule
+			\textbf{Video Game} & \textbf{Tickrate} \\
+			\midrule
+			CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
+			Battlefield 4 & Configurable \SI{60}{\hertz}/\SI{120}{\hertz}; previously \SI{30}{\hertz} with \SI{10}{\hertz} for state outside of close proximity  \\
+			Minecraft & max. \SI{20}{\hertz} \\
+			League of Legends & \SI{30}{\hertz} \\
+			Dota 2 & \SI{30}{\hertz} \\
+			StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
+			Eve Online & \SI{1}{\hertz} \\
+%			Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
+			Overwatch & 60 (client update rate previously was 20) \\
+			\bottomrule
+		\end{tabu}}
+
+	Note: Values are considered to be unofficial and may be unreliable
+
+	\end{center}
+
+\end{frame}
+
 
 \begin{frame}
 	\frametitle{What is Lag?}
@@ -114,6 +219,55 @@
 	\end{itemize}
 \end{frame}
 
+
+\begin{frame}
+	\frametitle{Attributes and Measures of Lag}
+
+	\begin{itemize}
+		\item Lag affects gameplay
+		\item Every game is influenced differently by lag and exhibits a distinct lag profile
+		\item Different viewpoints observe different lags, full E2E lag can only be captured externally
+	\end{itemize}
+
+	\begin{center}
+		\includegraphics[height=4cm]{../../../models/e2e-lag.pdf}
+
+	    Location of three measurement approaches to capture end-to-end lag in an online video game.
+	\end{center}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{E2E Lag Example}
+
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{../../../models/tickrate-timeseries-poster.pdf}
+	\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Modeling and Simulating Lag}
+
+	\begin{itemize}
+		\item End-to-End lag sources modeled as a queuing system
+		\item Goal: investigate alternate lag sources not typically attributed to lag: frame- and tickrate, message rates, input and display devices
+		\item Critical factor: interaction of multiple, independently clocked processes
+	\end{itemize}
+
+	\begin{center}
+		\includegraphics[height=2cm]{../../../models/e2e-lag-model.pdf}
+	\end{center}
+
+	\begin{itemize}
+		\item Implemented as R simulation
+		\item Evaluated for several scenarios and parameter combinations
+	\end{itemize}
+
+\end{frame}
+
+
 \begin{frame}
 	\frametitle{Model Limitations: Lag-Concealing Features}
 		These have to be present in actual authoritative client-server video games, but are not yet considered in the model
@@ -125,99 +279,12 @@
 \end{frame}
 
 
-\begin{frame}
-	\frametitle{1}
-
-	\begin{center}
-		\includegraphics[width=.5\textwidth]{../../../models/game_loop.pdf}
-
-		Basic model of a continuous main video game loop.
-	\end{center}
-
-\end{frame}
 
 \begin{frame}
-	\frametitle{2}
+	\frametitle{Results: Local Game}
 
 	\begin{center}
-
-		\includegraphics[width=1.0\textwidth]{../../../models/component_interaction_full.pdf}
-
-		Interactions between components in different video game models. \textit{(a)} Single-player, \textit{(b)} online, \textit{(c)} cloud game.
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{3}
-
-	\begin{center}
-	    \includegraphics[width=0.9\textwidth]{../../../models/e2e-lag.pdf}
-
-	    Location of three measurement approaches to capture end-to-end lag in an online video game.
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{4}
-
-	\begin{center}
-	Tickrates in competitive and popular video games that are either known, speculated upon, or derived by counting update and command messages. Data was collected from various sources and should be taken as-is.
-
-	{\small
-		\begin{tabu}{X[0.45]X}
-			\toprule
-			\textbf{Video Game} & \textbf{Tickrate} \\
-			\midrule
-			CS: GO & Configurable \SI{64}{\hertz}/\SI{128}{\hertz} \\
-			Battlefield 4 & \SI{30}{\hertz}; \SI{10}{\hertz} for state outside of close proximity to player; \SI{60}{\hertz}/\SI{120}{\hertz} on test servers. \\
-			Minecraft & max. \SI{20}{\hertz} \\
-			League of Legends & \SI{30}{\hertz} (estimated) \\
-			Dota 2 & \SI{30}{\hertz} \\
-			StarCraft II & supposedly either \SI{16}{\hertz} or \SI{32}{\hertz} \\
-			Eve Online & \SI{1}{\hertz} \\
-	%		Sports Game 1 & \\ \midrule
-			Project Cars & \SI{600}{\hertz} (Physics), \SI{250}{\hertz} (Input) \\ %https://twitter.com/projectcarsgame/status/551340759858040833
-			\bottomrule
-		\end{tabu}
-	}
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{5}
-
-	\begin{center}
-		\includegraphics[width=0.9\textwidth]{../../../models/e2e-lag-model.pdf}
-
-		Queuing lag model in an online video game case.
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{6}
-
-	\begin{center}
-		\includegraphics[width=0.7\textwidth]{../../../models/tickrate-timeseries-poster.pdf}
-
-		Exemplary flow of events in an online client-server game, and resulting end-to-end lag with the notation of Tab.~\ref{tab:notation}
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{7}
-
-	\begin{center}
-		\includegraphics[width=0.7\textwidth]{../../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
+		\includegraphics[height=5cm]{../../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
 
 		Median \gls{E2E} lag under various frame and tick durations for a locally-running game (§\ref{subsec:local-game}). Lower lag values are achieved at lower frame and tick durations; the frame duration has a larger influence on the \gls{E2E} lag.
 	\end{center}
@@ -225,21 +292,26 @@
 
 
 \begin{frame}
-	\frametitle{8}
+	\frametitle{Results: Networked Game}
 
 	\begin{center}
 		\vspace{-9mm}
-		\includegraphics[width=0.6\textwidth]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
+		\includegraphics[height=5cm]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
 		\vspace{-10mm}
-
-		Influence of client framerate and server tickrate on the median \gls{E2E} lag in the online game scenario (§\ref{subsec:online-gaming}). Only for high rates $f$, $g$, the lag is dominated by the network round-trip and server processing time, $T\approx2\mu_D+\mu_P=\SI{43}{\milli\second}$.
 	\end{center}
+
+	\begin{itemize}
+		\item Networked game at \SIrange{10}{200}{\hertz} frame- and tickrates; median of $1000$ rounds for each bar
+		\item \SI{40}{\milli\second} base network RTT
+		\item Large influence of frame-/tickrate on E2E lag
+		\item Negligible network influence at low frame-/tickrates
+	\end{itemize}
 
 \end{frame}
 
 
 \begin{frame}
-	\frametitle{9}
+	\frametitle{Results: Cloud Game}
 
 	\begin{center}
 		\includegraphics[width=0.7\textwidth]{../../../simulation/visualization/cloudgaming-lag-cdf.pdf}
@@ -248,59 +320,58 @@
 	\end{center}
 \end{frame}
 
+
+
+
 \begin{frame}
-	\frametitle{10}
+	\frametitle{Conclusions}
+
+	\begin{itemize}
+		\item Expected influence guidelines for future user studies
+	\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Thanks!}
+
+	\Put(130,25){\fcolorbox{black}{white}{\Huge Questions!}}
+
+	\vfill
+	Contact: \url{florian.metzger@uni-due.de}\\
+	Key fingerprint: \texttt{C98A 32B7 554F C5CC 4E5A  60FB 1CE5 B541 7B20 99C7}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\newcounter{finalframe}
+\setcounter{finalframe}{\value{framenumber}}
+
+
+\begin{frame}
+	\frametitle{Backup Slides}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Static Framerate Figure Backup}
 
 	\begin{center}
 		\includegraphics[width=0.25\textwidth]{../../../models/framerate-poster.pdf}
 	\end{center}
 \end{frame}
 
-
 \begin{frame}
-	\frametitle{10}
-
-	\begin{center}
-		\includegraphics[width=0.7\textwidth]{../../../models/game-tick-rate-streamed.pdf}
-	\end{center}
-\end{frame}
-
-
-% unfortunately no frame animations work with preview/skim/presentation
-% either skip it, or consider installing adobe reader?
-\begin{frame}
-	\frametitle{10}
-
-	%\begin{columns}[T]
-		%\column{0.5\textwidth}
-			\begin{center}
-				%ffmpeg -f gif -i eli5-framerate.gif -pix_fmt yuv420p eli5-framerate.mov
-				\movie[width=9cm, height=6cm, autostart, repeat=true, poster]{}{extras/framerate.mov}\\
-				{\small\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}}
-			\end{center}
-\end{frame}
-
-\begin{frame}
-	\frametitle{11}
+	\frametitle{Alternate Framerate Animation Backup}
 
 	\begin{center}
 		\movie[width=9cm, height=6cm, autostart, repeat, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
-		\url{http://hugelol.com/lol/364250}
+		{\tiny\url{http://hugelol.com/lol/364250}}
 	\end{center}
 \end{frame}
 
-\begin{frame}
-	\frametitle{12}
-
-
-\end{frame}
-
-\begin{frame}
-	\frametitle{13}
-
-
-\end{frame}
-
+\setcounter{framenumber}{\value{finalframe}}
 
 
 \end{document}
