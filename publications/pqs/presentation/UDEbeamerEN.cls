@@ -1,4 +1,4 @@
-\ProvidesClass{UDEbeamerEN}[09/04/2015 v1.0-mas0.2 Englische Vorlage fuer Universitaet Duisburg-Essen]
+\ProvidesClass{UDEbeamerEN}[08/17/2016 v1.0-mas0.3 Englische Vorlage fuer Universitaet Duisburg-Essen]
 % aktualisiert durch Florian Metzger, April 2015
 % Änderungen:
 % UTF8
@@ -8,16 +8,12 @@
 
 
 %Wichtige Optionen zur Funktionstüchtigkeit
-\PassOptionsToPackage{english,ngerman}{babel}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
 \ProcessOptions \relax
 \LoadClass[xcolor=table,8pt,covered,hyperref={bookmarks,colorlinks}]{beamer}%PPT-Folien sind nahezu doppelt so groß wie Standard-Beamerfolien, weswegen die Standardschriftgröße n Beamer (hier 8pt) der Hälfte in PPT (16pt beim UDE-Format) entsprechen muss
 
 %Definition von Schriftart und Zeichensatz
 \renewcommand{\baselinestretch}{1.50}
-%\RequirePackage[utf8]{inputenc}
-%\RequirePackage[T1]{fontenc}
-%\RequirePackage{babel}
 \RequirePackage{setspace}
 \RequirePackage{graphicx}
 \RequirePackage[scaled]{helvet}
