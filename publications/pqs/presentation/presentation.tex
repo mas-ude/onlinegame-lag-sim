@@ -99,7 +99,7 @@
 	\begin{itemize}
 		\item Increasing research interest for (networked) video game QoS and QoE
 		\item Increasing focus on and demands of \textbf{competitive games}
-		\item But many past endeavors treated video games similar to video streaming and faced issues
+		\item But: many past endeavors treated video games similar to video streaming and faced issues
 			\begin{itemize}
 				\item Insufficient framerates (actual examples: \SI{3}{\hertz}, \SI{7}{\hertz}, \SI{15}{\hertz})
 				\item Wrong choice of metrics (e.g. time-scale wise)
@@ -252,28 +252,31 @@
 	\frametitle{Local Game Simulation}
 	\framesubtitle{A.K.A.: Best Case Lag Scenario}
 
+	\begin{center}
+		Locally running C/S-game, no network interactions involved, average of $1000$ runs.
+	\end{center}
+			%
 	\begin{overprint}
 		\only<1>{
 		\begin{center}
-			Locally running C/S-game, no network interactions involved.
 
-			\includegraphics[height=5cm]{../../../simulation/visualization/nwless-onlinegame-1000rounds.pdf}
+			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-base.pdf}
 
 			(Note \SI{16.67}{\milli\second} frame duration $\hat{=}$ \SI{60}{\hertz} framerate)
 		\end{center}}
 
 		\only<2>{
 			\begin{center}
-			Locally running C/S-game, no network interactions involved.
-
+			%~\\%Locally running C/S-game, no network interactions involved.
+			%
 			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
-			Linear decrease of E2E lag!
+			Linear decrease of E2E lag; \SI{50}{\milli\second} less going from $30$ to $60$.
 			\end{center}}
 		\only<3>{
 			\begin{center}
-			Locally running C/S-game, no network interactions involved.
-
+			%~\\%Locally running C/S-game, no network interactions involved.
+			%
 			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-30v60.pdf}
 
 			Bigger impact of framerate than tickrate!
@@ -331,7 +334,7 @@
 		\item Larger influence of framerates than generally accepted
 	\end{itemize}
 	\vspace{1cm}
-	
+
 	\pause
 	In the future:
 	\begin{itemize}
