@@ -99,19 +99,21 @@
 	\begin{itemize}
 		\item Increasing research interest for (networked) video game QoS and QoE
 		\item Increasing focus on and demands of \textbf{competitive games}
-		\item But: many past endeavors treated video games similar to video streaming and faced issues
+		\item But: many past endeavors treated video games similar to video streaming and faced issues:
+			\pause
 			\begin{itemize}
-				\item Insufficient framerates (actual examples: \SI{3}{\hertz}, \SI{7}{\hertz}, \SI{15}{\hertz})
-				\item Wrong choice of metrics (e.g. time-scale wise)
-				\item Studies focused only on network delay, not E2E lag
+				\item Insufficient framerates (e.g. $\leq \SI{15}{\hertz}$)
+				\item Wrong choice of metrics to detect influence of lag (e.g. time-scale wise)
+				\item Focus just on network delay, not full E2E lag
 				\item Observation periods too short
 				\item No understanding of core gameplay mechanics
-				\item Cannot generalize results from individual games to a whole ``genre''
+				\item Inability to generalize results from individual games to whole ``genres''
 			\end{itemize}
 
-		\item Many interlocked mechanics in play
-		\item Need for a better understanding of these mechanics
-		\item Looking only at authoritative client/server games here, not peer-to-peer
+		\pause
+		\item Many interlocked mechanics in play, we need to understand their effects!
+		\item[$\Rightarrow$] Set up a small sim to to get some rough numbers
+		%\item Looking only at authoritative client/server games here, not peer-to-peer
 	\end{itemize}
 
 \end{frame}
@@ -120,6 +122,8 @@
 
 \begin{frame}
 	\frametitle{Frame- and Tickrates}
+
+	\vspace{-2mm}
 
 	\begin{block}{Framerate and Frametime}
 		Rate at which the game renders distinct images. Frametime is the time between two such images.
@@ -144,13 +148,34 @@
 			Framerate constraints:
 			\vspace{-1mm}
 			\begin{itemize}
-				\item Motion perception in video: Based on principle of apparent motion according to \cite{wertheimer1912experimentelle}starting at a min. frame rate of \SI{16}{\hertz}
+				\item Motion perception in video: Based on principle of apparent motion according to \cite{wertheimer1912experimentelle}, starting at a min. frame rate of \SI{16}{\hertz}
 				\item But framerate and tickrate are also governing factors for input latency
 
 				\item Common game frame rates:\\ \SI{30}{\hertz}, \SI{60}{\hertz}, \SI{120}{\hertz}, \SI{144}{\hertz}
 				%\item Reasoning: display refresh rates: lock to certain fractions of monitor refresh rate, else VSYNC or tearing issues
 			\end{itemize}
 	\end{columns}
+
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{What is End-to-End (E2E) Lag?}
+
+	\begin{itemize}
+		\item Perceived delay and delay variation between input action and visible reaction
+		\item Caused by various latency sources, e.g. network QoS, I/O devices, game engine, game mechanics
+		\item But also through the interplay of framerate and tickrate
+		\item Examples of tickrates in c/s-games: CS:GO \SIrange{64}{128}{\hertz}; Dota 2 \SI{30}{\hertz}; Overwatch \SI{60}{\hertz}
+		%\item Command message and client update message rates may also differ from tick- and framerate
+	\end{itemize}
+
+	\pause
+	\vspace{-3mm}
+	\begin{center}
+		\includegraphics[height=4cm]{../../../models/tickrate-timeseries-poster.pdf}
+	\end{center}
 
 \end{frame}
 
@@ -168,33 +193,16 @@
 
 
 \begin{frame}
-	\frametitle{What is End-to-End Lag?}
-
-	\begin{itemize}
-		\item Perceived delay or inconsistency from an input action to the reaction
-		\item Caused by various latency sources, e.g. network QoS, I/O devices, game engine, game mechanics
-		\item But also through the interplay of Sometimes caused by game mechanics
-		\item Examples of tickrates in c/s-games: CS:GO \SIrange{64}{128}{\hertz}; Dota 2 \SI{30}{\hertz}; Overwatch \SI{60}{\hertz}
-		\item Command message and client update message rates may also differ from tick- and framerate
-	\end{itemize}
-		\vspace{-4mm}
-		\begin{center}
-		\includegraphics[height=4cm]{../../../models/tickrate-timeseries-poster.pdf}
-	\end{center}
-
-\end{frame}
-
-
-\begin{frame}
 	\frametitle{Attributes and Measures of Lag}
 
 	\begin{itemize}
-		\item Lag affects reaction and timings, gameplay, player performance 
-		\item[$\Rightarrow$] potentially largest \textbf{QoE} influencer
-		\item Every game is influenced differently by lag and exhibits a distinct lag profile
-		\item Different viewpoints observe different lags, full E2E lag can only be captured externally
+		\item Lag affects reaction and timings, gameplay, player performance
+		\item[$\Rightarrow$] Potentially largest \textbf{QoE} influencer
+		\item Every game, every gameplay action, can behave differently under lag
+		\item Different viewpoints to observe lag, but full E2E lag can only be captured externally
 	\end{itemize}
 
+	\pause
 	\begin{center}
 		\vspace{-2mm}
 		%Location of three measurement approaches to capture end-to-end lag
@@ -209,17 +217,20 @@
 	\frametitle{Modeling and Simulating Lag}
 
 	\begin{itemize}
-		\item End-to-End lag sources modeled as a queuing system
-		\item Goal: investigate alternate lag sources not typically attributed to lag: frame- and tickrate, message rates, input and display devices
-		\item Critical factor: interaction of multiple, independently clocked processes
+		\item Lag sources modeled in a queuing system
+		\item Goal: investigate lag sources not typically attributed to lag
+		\item Especially: frame- and tickrate; but also: message rates, input and display devices
+		\item Frame- and tickrate modeled as independently clocked processes
 	\end{itemize}
 
+	\pause
 	\begin{center}
 		\includegraphics[height=2cm]{../../../models/e2e-lag-model.pdf}
 	\end{center}
 
+	\vspace{-4mm}
 	\begin{itemize}
-		\item Implemented as R simulation\footnote[frame]{\url{https://github.com/mas-ude/onlinegame-lag-sim}}
+		\item Implemented as \texttt{R} simulation\footnote[frame]{\url{https://github.com/mas-ude/onlinegame-lag-sim}}
 		\item Evaluated for several scenarios and parameter combinations
 	\end{itemize}
 
@@ -227,19 +238,25 @@
 
 
 \begin{frame}
-	\frametitle{Model Limitations and Caveats: Lag-Concealing Features in Games}
+	\frametitle{Model Limitations and Caveats}
+	\framesubtitle{Lag-Concealing Features in Games}
 
-	Features that can reduce lag impact in games, not considered in the model
+	Examples of features that can reduce lag impact in games, but are not considered in the model and sim:
 
 	\begin{columns}[T]
 		\column{0.5\textwidth}
 			\begin{itemize}
-				\item Immediate visualization through client-side prediction of object actions (e.g. player movement) (without waiting for authoritative answer)
-				\item Visualization interpolation between snapshots // extrapolation from last two server game state snapshots
-				\item Lag compensation by doing hit detection on object positions slightly in the past
+				\item Immediate visualization and output  of object actions through client-side \textbf{prediction} (e.g. player movement) without waiting for authoritative answer
+				\begin{itemize}
+					\item Roll back action if prediction wrong
+				\end{itemize}
+
+				\item \textbf{Interpolate} motion between consecutive game simulation snapshots from the server, or extrapolate from last two snapshots
+
+				\item Lag \textbf{compensation} by doing hit detection on object positions slightly in the past
 			\end{itemize}
 		\column{0.5\textwidth}
-			\vspace{-1mm}
+			%\vspace{-1mm}
 			\includegraphics[height=3cm]{Lag_compensation.jpg}\\
 			{\tiny\url{developer.valvesoftware.com/wiki/Lag_compensation}}
 	\end{columns}
@@ -387,7 +404,7 @@
 	\frametitle{Alternate Framerate Animation Backup}
 
 	\begin{center}
-		\movie[width=9cm, height=6cm, autostart, repeat, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
+		\movie[width=9cm, height=6cm, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
 		{\tiny\url{http://hugelol.com/lol/364250}}
 	\end{center}
 \end{frame}
