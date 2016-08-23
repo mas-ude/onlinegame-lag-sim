@@ -30,7 +30,7 @@
 
 \usepackage{csquotes}
 \usepackage[load-configurations={abbreviations,binary}]{siunitx}
-\sisetup{load-configurations = abbreviations,binary-units, range-phrase = {\text{~to~}}, per-mode=fraction}
+\sisetup{load-configurations = abbreviations,binary-units, range-phrase = {\text{~to~}}, per-mode=fraction, detect-weight, detect-shape}
 \usepackage{multirow}
 \usepackage{tabu}
 \usepackage{booktabs}
@@ -287,7 +287,7 @@
 
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
-				\textbf{Linear decrease of E2E lag; \SI{50}{\milli\second} less going from $30$ to $60$.}
+				\textbf{Linear decrease of E2E lag; \SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$.}
 			\end{center}}
 		\only<3>{
 			\begin{center}
@@ -325,13 +325,13 @@
 	\frametitle{Cloud Game Simulation}
 
 	\begin{center}
-		Similar to networked C/S but with added video en-/decoding delay and frame transmission times\\
-		(Vertical line denotes average base networking and en-/decoding delay)
+		Similar to networked C/S but with added video en-/decoding delay and frame transmission times.
+		%(Vertical line denotes average base networking and en-/decoding delay)
 
-		\includegraphics[height=4.5cm]{../../../simulation/visualization/cloudgaming-lag-cdf.pdf}
+		\includegraphics[height=5cm]{extras/cloudgaming-lag-cdf.pdf}
 
-		Large E2E lag and (more importantly) broad spread of lag values\\
-		$\Rightarrow$ input actions are experienced as ``stuttering''
+		Large E2E lag and wide spread of lag values\\
+		\textbf{$\Rightarrow$ Gameplay actions appear to be ``stuttering''!}
 	\end{center}
 \end{frame}
 
@@ -341,18 +341,22 @@
 \begin{frame}
 	\frametitle{Conclusions}
 
+	Recap:
 	\begin{itemize}
+		\item Examining framerates and tickrates as a large QoE factor
 		\item Simplified simulation of typical gaming scenarios
 		\item Complex scenario due to interactivity and diversity of video games
-		\item Reexamine and focus on framerates as a large QoE factor
-		\item Larger influence of framerates than generally accepted
+		\item Larger influence of framerates than generally thought in academia
 	\end{itemize}
-	\vspace{1cm}
+
+	\vspace{4mm}
 
 	\pause
 	In the future:
 	\begin{itemize}
-		\item More extensive simulation setup with more influence factors
+		\item More extensive simulation setup (more influence factors, variable framerates, ...)
+		\item Focus on frametimes and resulting stuttering
+		\item Cross-check with E2E lag measurements
 		\item Derive guidelines for future user studies
 	\end{itemize}
 \end{frame}
@@ -362,7 +366,7 @@
 \begin{frame}
 	\frametitle{Thanks!}
 
-	\Put(130,25){\fcolorbox{black}{white}{\Huge Questions?}}
+	\Put(130,25){\Huge Questions?}
 
 	\begin{center}
 		\url{https://github.com/mas-ude/onlinegame-lag-sim}

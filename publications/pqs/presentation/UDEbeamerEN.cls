@@ -85,9 +85,9 @@
 
 %Definition der UDE-Logos
 \pgfdeclareimage[height=0.86cm,width=2.225cm]{ude_logo}{logo_claim_en.pdf}
-\pgfdeclareimage[height=1.985cm]{mas_logo}{Logo-nontransparent.pdf}
-\pgfdeclareimage[height=0.2cm]{mas_logo_footline}{Logo-nontransparent.pdf}
-\pgfdeclareimage[height=0.86cm]{mas_logo_headline}{Logo-nontransparent.pdf}
+\pgfdeclareimage[height=1.985cm]{mas_logo}{logo-nontransparent.pdf}
+\pgfdeclareimage[height=0.2cm]{mas_logo_footline}{logo-nontransparent.pdf}
+\pgfdeclareimage[height=0.86cm]{mas_logo_headline}{logo-nontransparent.pdf}
 \pgfdeclareimage[height=1.985cm,width=5.14cm]{ude_logo_titelseite}{logo_claim_en.pdf}
 
 %Definition eines Templates für Titelseite
