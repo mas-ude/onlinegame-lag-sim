@@ -284,19 +284,16 @@
 
 		\only<2>{
 			\begin{center}
-			%~\\%Locally running C/S-game, no network interactions involved.
-			%
-			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
-			Linear decrease of E2E lag; \SI{50}{\milli\second} less going from $30$ to $60$.
+				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
+
+				\textbf{Linear decrease of E2E lag; \SI{50}{\milli\second} less going from $30$ to $60$.}
 			\end{center}}
 		\only<3>{
 			\begin{center}
-			%~\\%Locally running C/S-game, no network interactions involved.
-			%
-			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-30v60.pdf}
+				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-30v60.pdf}
 
-			Bigger impact of framerate than tickrate!
+				\textbf{Bigger impact of framerate than tickrate!}
 			\end{center}}
 	\end{overprint}
 
@@ -311,13 +308,13 @@
 	\begin{center}
 	\vspace{-9mm}
 		Networked game at \SIrange{10}{200}{\hertz} frame- and tickrates; \\
-		median of $1000$ rounds for each bar; \SI{40}{\milli\second} base network RTT
+		median of $1000$ rounds for each bar; \SI{40}{\milli\second} base network RTT.
 
-		\includegraphics[height=6cm]{../../../simulation/visualization/e2e-lag-3dbars.pdf}
+		\includegraphics[height=6cm]{extras/e2e-lag-3dbars-annotated.pdf}
 		\vspace{-10mm}
 
 		%Large influence of frame-/tickrate on E2E lag;
-		negligible network influence at low frame-/tickrates
+		\textbf{Network is not the main source of lag at low frame-/tickrates!}
 
 	\end{center}
 
