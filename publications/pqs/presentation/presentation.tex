@@ -81,13 +81,13 @@
 		\only<1>{
 			\begin{center}
 				{\small CS:GO gameplay at 30fps (normally played at 120+)}\\
-				\movie[width=9cm, height=6cm, repeat=true, poster]{}{clip1.mov}\\
+				\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/clip1-frame1.png}}{extras/clip1.mov}\\
 				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 		\only<2>{
 			\begin{center}
 				{\small same clip at 6fps}\\
-				\movie[width=9cm, height=6cm, repeat=true, poster]{}{clip1_6.mov}\\
+				\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/clip1-frame1.png}}{extras/clip1_6.mov}\\
 				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 	\end{overprint}
@@ -186,7 +186,7 @@
 
 	\begin{center}
 		%ffmpeg -f gif -i eli5-framerate.gif -pix_fmt yuv420p eli5-framerate.mov
-		\movie[width=9cm, height=6cm, repeat=true, poster]{}{extras/framerate.mov}\\
+		\movie[width=9cm, height=6cm, loop]{\includegraphics[width=9cm, height=6cm]{extras/framerate-frame1.png}}{extras/framerate.mov}\\
 		{\tiny\url{http://blog.logicalincrements.com/2015/04/does-fps-matter-decide-for-yourself/}}
 	\end{center}
 \end{frame}
@@ -230,7 +230,7 @@
 
 	\vspace{-4mm}
 	\begin{itemize}
-		\item Implemented as \texttt{R} simulation\footnote[frame]{\url{https://github.com/mas-ude/onlinegame-lag-sim}}
+		\item Implemented as \texttt{R} simulation\only<2->{\footnote[frame]{\url{https://github.com/mas-ude/onlinegame-lag-sim}}}
 		\item Evaluated for several scenarios and parameter combinations
 	\end{itemize}
 
@@ -287,13 +287,16 @@
 
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
-				\textbf{Linear decrease of E2E lag; \SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$.}
+				\textbf{Linear decrease of E2E lag}\\
+				\textbf{\SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$.}
 			\end{center}}
 		\only<3>{
 			\begin{center}
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-30v60.pdf}
 
 				\textbf{Bigger impact of framerate than tickrate!}
+
+				%Real world examples: Dota 2 (30 ticks), CS:GO (64 ticks) being run at 120fps+ for better player performance
 			\end{center}}
 	\end{overprint}
 
@@ -307,8 +310,8 @@
 
 	\begin{center}
 	\vspace{-9mm}
-		Networked game at \SIrange{10}{200}{\hertz} frame- and tickrates; \\
-		median of $1000$ rounds for each bar; \SI{40}{\milli\second} base network RTT.
+		Median lag of a networked game at \SIrange{10}{200}{\hertz} frame- and tickrates% \\
+		%median of $1000$ sim rounds for each bar%; \SI{40}{\milli\second} base network RTT.
 
 		\includegraphics[height=6cm]{extras/e2e-lag-3dbars-annotated.pdf}
 		\vspace{-10mm}
@@ -405,7 +408,7 @@
 	\frametitle{Alternate Framerate Animation Backup}
 
 	\begin{center}
-		\movie[width=9cm, height=6cm, poster]{}{extras/eli5-framerate.mov}\vspace{2mm}
+		\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/eli5-framerate-frame1.png}}{extras/eli5-framerate.mov}\vspace{2mm}
 		{\tiny\url{http://hugelol.com/lol/364250}}
 	\end{center}
 \end{frame}
