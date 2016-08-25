@@ -82,13 +82,13 @@
 			\begin{center}
 				{\small CS:GO gameplay at 30fps (Competitively played at 120+)}\\
 				\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/clip1-frame1.png}}{extras/clip1.mov}\\
-				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+				{\tiny scene from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 		\only<2>{
 			\begin{center}
-				{\small same clip at 6fps}\\
+				{\small same scene at 6fps}\\
 				\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/clip1-frame1.png}}{extras/clip1_6.mov}\\
-				{\tiny clip extracted from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
+				{\tiny scene from \url{https://www.youtube.com/watch?v=02I5vVxlJhU}}
 			\end{center}}
 	\end{overprint}
 \end{frame}
@@ -99,19 +99,20 @@
 	\begin{itemize}
 		\item Increasing research interest for (networked) video game QoS and QoE
 		\item Increasing focus on and demands of \textbf{competitive games}
-		\item But: many past endeavors treated video games similar to video streaming and faced issues:
+		\item But: past quality studies treated video games akin to video streaming:
 			\pause
 			\begin{itemize}
 				\item Insufficient framerates (e.g. $\leq \SI{15}{\hertz}$)
-				\item Wrong choice of metrics to detect influence of lag (e.g. time-scale wise)
+				\item Wrong choice of metrics to detect effects of lag (e.g. time-scale wise)
 				\item Focus just on network delay, not full E2E lag
-				\item Observation periods too short
-				\item No understanding of core gameplay mechanics
-				\item Inability to generalize results from individual games to whole ``genres''
+				\item Often short observation periods
+				\item Influences of gameplay mechanics not considered
+				\item Difficulties to generalize results from individual games to whole ``genres''
 			\end{itemize}
 
 		\pause
 		\item Many interlocked mechanics in play, we need to understand their effects!
+		\item Specifically: framerate and tickrate
 		\item[$\Rightarrow$] Set up a small simulation to get some rough numbers
 		%\item Looking only at authoritative client/server games here, not peer-to-peer
 	\end{itemize}
@@ -125,8 +126,8 @@
 
 	\vspace{-2mm}
 
-	\begin{block}{Framerate and Frametime}
-		Rate at which the game renders distinct images. Frametime is the time between two such images.
+	\begin{block}{Framerate and Frametime (or Duration)}
+		Rate at which the game renders distinct images. Frametime is the duration a frame is displayed.
 	\end{block}
 
 	\pause
@@ -144,12 +145,12 @@
 
 		\pause
 		\column{0.5\textwidth}
-			\vspace{-1mm}
+			%\vspace{-1mm}
 			Framerate constraints:
-			\vspace{-1mm}
+			%\vspace{-1mm}
 			\begin{itemize}
 				\item Motion perception in video: Based on principle of apparent motion according to \cite{wertheimer1912experimentelle}, starting at a min. frame rate of \SI{16}{\hertz}
-				\item But framerate and tickrate are also governing factors for input latency
+				%\item But framerate and tickrate are also governing factors for input latency
 
 				\item Common game frame rates:\\ \SI{30}{\hertz}, \SI{60}{\hertz}, \SI{120}{\hertz}, \SI{144}{\hertz}
 				%\item Reasoning: display refresh rates: lock to certain fractions of monitor refresh rate, else VSYNC or tearing issues
@@ -161,12 +162,12 @@
 
 
 \begin{frame}
-	\frametitle{What is End-to-End (E2E) Lag?}
+	\frametitle{End-to-End (E2E) Lag}
 
 	\begin{itemize}
 		\item Perceived delay and delay variation between input action and visible reaction
 		\item Caused by various latency sources, e.g. network QoS, I/O devices, game engine, game mechanics
-		\item But also through the interplay of framerate and tickrate
+		\item But also through the \textbf{interplay of framerate and tickrate}
 		\item Examples of tickrates in c/s-games: CS:GO \SIrange{64}{128}{\hertz}; Dota 2 \SI{30}{\hertz}; Overwatch \SI{60}{\hertz}
 		%\item Command message and client update message rates may also differ from tick- and framerate
 	\end{itemize}
@@ -196,10 +197,11 @@
 	\frametitle{Attributes and Measures of Lag}
 
 	\begin{itemize}
-		\item Lag affects reaction and timings, gameplay, player performance
+		\item Lag affects reaction and timings in gameplay $\Rightarrow$ player performance
 		\item[$\Rightarrow$] Potentially largest \textbf{QoE} influencer
 		\item Every game, every gameplay action, can behave differently under lag
-		\item Different viewpoints to observe lag, but full E2E lag can only be captured externally
+		\item Difficult to observe E2E lag and attribute to individual lag sources
+		% and can only be captured externally
 	\end{itemize}
 
 	\pause
@@ -217,10 +219,12 @@
 	\frametitle{Modeling and Simulating Lag}
 
 	\begin{itemize}
-		\item Lag sources modeled in a queuing system
-		\item Goal: investigate lag sources not typically attributed to lag
-		\item Especially: frame- and tickrate; but also: message rates, input and display devices
-		\item Frame- and tickrate modeled as independently clocked processes
+		\item Instead of measurements: lag sources modeled in a queuing system
+		\item \textbf{Goal}: investigate lag sources not typically attributed to lag
+		\begin{itemize}
+			\item Especially: frame- and tickrate; but also: message rates, input and display devices, \ldots
+		\end{itemize}
+		\item Frame- and tickrate modeled as independent, clocked processes
 	\end{itemize}
 
 	\pause
@@ -230,7 +234,7 @@
 
 	\vspace{-4mm}
 	\begin{itemize}
-		\item Implemented as \texttt{R} simulation\footnote[frame]<2->{\url{https://github.com/mas-ude/onlinegame-lag-sim}}
+		\item Implemented as an \texttt{R} simulation\footnote[frame]<2->{\url{https://github.com/mas-ude/onlinegame-lag-sim}}
 		\item Evaluated for several scenarios and parameter combinations
 	\end{itemize}
 
@@ -288,7 +292,7 @@
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
 				\textbf{Linear decrease of E2E lag}\\
-				\textbf{\SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$.}
+				\textbf{e.g.: \SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$ fps and ticks.}
 			\end{center}}
 		\only<3>{
 			\begin{center}
@@ -357,10 +361,10 @@
 	\pause
 	In the future:
 	\begin{itemize}
-		\item More extensive simulation setup (more influence factors, variable framerates, ...)
+		\item More extensive simulation setup (more influence factors, variable framerates, triple buffering, ...)
 		\item Focus on frametimes and resulting stuttering
-		\item Cross-check with E2E lag measurements
-		\item Derive guidelines for future user studies
+		\item Cross-check with real world E2E lag measurements
+		\item Derive guidelines for future gaming user studies
 	\end{itemize}
 \end{frame}
 
@@ -392,12 +396,12 @@
 
 
 \begin{frame}
-	\frametitle{Backup Slides}
+	\frametitle{Appendix}
 \end{frame}
 
 
 \begin{frame}
-	\frametitle{Static Framerate Figure Backup}
+	\frametitle{Static Framerate Figure}
 
 	\begin{center}
 		\includegraphics[width=0.25\textwidth]{../../../models/framerate-poster.pdf}
@@ -405,7 +409,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Alternate Framerate Animation Backup}
+	\frametitle{Alternate Framerate Animation}
 
 	\begin{center}
 		\movie[width=9cm, height=6cm]{\includegraphics[width=9cm, height=6cm]{extras/eli5-framerate-frame1.png}}{extras/eli5-framerate.mov}\vspace{2mm}
@@ -451,7 +455,7 @@
 			\bottomrule
 		\end{tabu}}
 
-	Note: Values are considered to be unofficial and may be unreliable
+	Note: Values are not verified and may be unreliable
 
 	\end{center}
 
