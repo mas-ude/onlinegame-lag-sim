@@ -51,7 +51,7 @@
 
 
 \title{A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming}
-\author{Florian Metzger, Albert Rafetseder, Christian Schwartz}
+\author{Florian Metzger, Albert Rafetseder, Christian Schwartz\\\vspace{2mm} CC BY-SA 4.0}
 \webadresse{https://www.mas.wiwi.uni-due.de/en}
 \lehrstuhl{Modeling of Adaptive Systems}
 \date[]{2016/08/29}
@@ -99,7 +99,7 @@
 	\begin{itemize}
 		\item Increasing research interest for (networked) video game QoS and QoE
 		\item Increasing focus on and demands of \textbf{competitive games}
-		\item But: past quality studies treated video games akin to video streaming:
+		\item But: past user studies treated video games akin to video streaming:
 			\pause
 			\begin{itemize}
 				\item Insufficient framerates (e.g. $\leq \SI{15}{\hertz}$)
@@ -113,7 +113,7 @@
 		\pause
 		\item Many interlocked mechanics in play, we need to understand their effects!
 		\item Specifically: framerate and tickrate
-		\item[$\Rightarrow$] Set up a small simulation to get some rough numbers
+		\item[$\Rightarrow$] Set up a small simulation to investiate the impact of the framerate
 		%\item Looking only at authoritative client/server games here, not peer-to-peer
 	\end{itemize}
 
@@ -135,27 +135,29 @@
 		Rate at which the server in a client/server-game updates its game simulation state.
 	\end{block}
 
-
 	\pause
-	\begin{columns}[T]
-		\column{0.5\textwidth}
-			\begin{center}
-				\includegraphics[width=0.7\columnwidth]{../../../models/game_loop.pdf}
-			\end{center}
+	\begin{center}
+		\includegraphics[height=4cm]{../../../models/game_loop.pdf}
+	\end{center}
+	% \begin{columns}[T]
+	% 	\column{0.5\textwidth}
+	% 		\begin{center}
+	% 			\includegraphics[width=0.7\columnwidth]{../../../models/game_loop.pdf}
+	% 		\end{center}
 
-		\pause
-		\column{0.5\textwidth}
-			%\vspace{-1mm}
-			Framerate constraints:
-			%\vspace{-1mm}
-			\begin{itemize}
-				\item Motion perception in video: Based on principle of apparent motion according to \cite{wertheimer1912experimentelle}, starting at a min. frame rate of \SI{16}{\hertz}
-				%\item But framerate and tickrate are also governing factors for input latency
+	% 	\pause
+	% 	\column{0.5\textwidth}
+	% 		%\vspace{-1mm}
+	% 		Framerate constraints:
+	% 		%\vspace{-1mm}
+	% 		\begin{itemize}
+	% 			\item Motion perception in video: Based on principle of apparent motion according to \cite{wertheimer1912experimentelle}, starting at a min. frame rate of \SI{16}{\hertz}
+	% 			%\item But framerate and tickrate are also governing factors for input latency
 
-				\item Common game frame rates:\\ \SI{30}{\hertz}, \SI{60}{\hertz}, \SI{120}{\hertz}, \SI{144}{\hertz}
-				%\item Reasoning: display refresh rates: lock to certain fractions of monitor refresh rate, else VSYNC or tearing issues
-			\end{itemize}
-	\end{columns}
+	% 			\item Common game frame rates:\\ \SI{30}{\hertz}, \SI{60}{\hertz}, \SI{120}{\hertz}, \SI{144}{\hertz}
+	% 			%\item Reasoning: display refresh rates: lock to certain fractions of monitor refresh rate, else VSYNC or tearing issues
+	% 		\end{itemize}
+	% \end{columns}
 
 \end{frame}
 
@@ -166,7 +168,7 @@
 
 	\begin{itemize}
 		\item Perceived delay and delay variation between input action and visible reaction
-		\item Caused by various latency sources, e.g. network QoS, I/O devices, game engine, game mechanics
+		\item \textbf{Cause}: various sources, including network QoS, I/O devices, game engine, game mechanics
 		\item But also through the \textbf{interplay of framerate and tickrate}
 		\item Examples of tickrates in c/s-games: CS:GO \SIrange{64}{128}{\hertz}; Dota 2 \SI{30}{\hertz}; Overwatch \SI{60}{\hertz}
 		%\item Command message and client update message rates may also differ from tick- and framerate
@@ -283,7 +285,8 @@
 
 			\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-base.pdf}
 
-			(Note \SI{16.67}{\milli\second} frame duration $\hat{=}$ \SI{60}{\hertz} framerate)
+			(Note \SI{16.67}{\milli\second} frame duration $\hat{=}$ \SI{60}{\hertz} framerate)\\
+			~
 		\end{center}}
 
 		\only<2>{
@@ -298,7 +301,8 @@
 			\begin{center}
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-30v60.pdf}
 
-				\textbf{Bigger impact of framerate than tickrate!}
+				\textbf{Bigger impact of framerate than tickrate!}\\
+				~
 
 				%Real world examples: Dota 2 (30 ticks), CS:GO (64 ticks) being run at 120fps+ for better player performance
 			\end{center}}
@@ -348,18 +352,19 @@
 \begin{frame}
 	\frametitle{Conclusions}
 
-	Recap:
+	\textbf{Recap:}
 	\begin{itemize}
 		\item Examining framerates and tickrates as a large QoE factor
 		\item Simplified simulation of typical gaming scenarios
 		\item Complex scenario due to interactivity and diversity of video games
 		\item Larger influence of framerates than generally thought in academia
+		\item \textbf{Keep lag sources other than network in mind!}
 	\end{itemize}
 
-	\vspace{4mm}
+	%\vspace{2mm}
 
 	\pause
-	In the future:
+	\textbf{In the future:}
 	\begin{itemize}
 		\item More extensive simulation setup (more influence factors, variable framerates, triple buffering, ...)
 		\item Focus on frametimes and resulting stuttering
