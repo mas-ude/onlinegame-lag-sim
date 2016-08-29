@@ -99,12 +99,12 @@
 	\begin{itemize}
 		\item Increasing research interest for (networked) video game QoS and QoE
 		\item Increasing focus on and demands of \textbf{competitive games}
-		\item But: past user studies treated video games akin to video streaming:
+		\item But: past user studies treated video games akin to video streaming, e.g.:
 			\pause
 			\begin{itemize}
-				\item Insufficient framerates (e.g. $\leq \SI{15}{\hertz}$)
-				\item Wrong choice of metrics to detect effects of lag (e.g. time-scale wise)
-				\item Focus just on network delay, not full E2E lag
+				\item \textbf{Very low framerates (e.g. $\leq \SI{15}{\hertz}$)}
+				%\item Wrong choice of metrics to detect effects of lag (e.g. time-scale wise)
+				\item \textbf{Focus just on network delay, not full E2E lag}
 				\item Often short observation periods
 				\item Influences of gameplay mechanics not considered
 				\item Difficulties to generalize results from individual games to whole ``genres''
@@ -166,8 +166,11 @@
 \begin{frame}
 	\frametitle{End-to-End (E2E) Lag}
 
+	\begin{definition}
+		Perceived delay (and delay variation) between input action and visible reaction.
+	\end{definition}
+	\vspace{-3mm}
 	\begin{itemize}
-		\item Perceived delay and delay variation between input action and visible reaction
 		\item \textbf{Cause}: various sources, including network QoS, I/O devices, game engine, game mechanics
 		\item But also through the \textbf{interplay of framerate and tickrate}
 		\item Examples of tickrates in c/s-games: CS:GO \SIrange{64}{128}{\hertz}; Dota 2 \SI{30}{\hertz}; Overwatch \SI{60}{\hertz}
@@ -243,32 +246,6 @@
 \end{frame}
 
 
-\begin{frame}
-	\frametitle{Model Limitations and Caveats}
-	\framesubtitle{Lag-Concealing Features in Games}
-
-	Examples of features that can reduce lag impact in games, but are not considered in the model and sim:
-
-	\begin{columns}[T]
-		\column{0.5\textwidth}
-			\begin{itemize}
-				\item Immediate visualization and output  of object actions through client-side \textbf{prediction} (e.g. player movement) without waiting for authoritative answer
-				\begin{itemize}
-					\item Roll back action if prediction wrong
-				\end{itemize}
-
-				\item \textbf{Interpolate} motion between consecutive game simulation snapshots from the server, or extrapolate from last two snapshots
-
-				\item Lag \textbf{compensation} by doing hit detection on object positions slightly in the past
-			\end{itemize}
-		\column{0.5\textwidth}
-			%\vspace{-1mm}
-			\includegraphics[height=3cm]{Lag_compensation.jpg}\\
-			{\tiny\url{developer.valvesoftware.com/wiki/Lag_compensation}}
-	\end{columns}
-
-\end{frame}
-
 
 
 \begin{frame}
@@ -295,7 +272,7 @@
 				\includegraphics[height=5cm]{extras/nwless-onlinegame-1000rounds-15to120.pdf}
 
 				\textbf{Linear decrease of E2E lag}\\
-				\textbf{e.g.: \SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$ fps and ticks.}
+				e.g.: \SI{50}{\milli\second} less when going from $\mathbf{30}$ to $\mathbf{60}$ fps and ticks.
 			\end{center}}
 		\only<3>{
 			\begin{center}
@@ -463,6 +440,34 @@
 	Note: Values are not verified and may be unreliable
 
 	\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Model Limitations and Caveats}
+	\framesubtitle{Lag-Concealing Features in Games}
+
+	Examples of features that can reduce lag impact in games, but are not considered in the model and sim:
+
+	\begin{columns}[T]
+		\column{0.5\textwidth}
+			\begin{itemize}
+				\item Immediate visualization and output  of object actions through client-side \textbf{prediction} (e.g. player movement) without waiting for authoritative answer
+				\begin{itemize}
+					\item Roll back action if prediction wrong
+				\end{itemize}
+
+				\item \textbf{Interpolate} motion between consecutive game simulation snapshots from the server, or extrapolate from last two snapshots
+
+				\item Lag \textbf{compensation} by doing hit detection on object positions slightly in the past
+			\end{itemize}
+		\column{0.5\textwidth}
+			%\vspace{-1mm}
+			\includegraphics[height=3cm]{Lag_compensation.jpg}\\
+			{\tiny\url{developer.valvesoftware.com/wiki/Lag_compensation}}
+	\end{columns}
 
 \end{frame}
 
