@@ -18,9 +18,11 @@ Our current iteration is a collection of semi-documented [R files](https://githu
 ### QoMEX 2016
 
 [Short paper "Games and Frames: A Strange Tale of QoE Studies"](https://github.com/mas-ude/onlinegame-lag-sim/blob/master/publications/qomex/qomex-2016-short-paper.pdf)
+
 [Poster](https://github.com/mas-ude/onlinegame-lag-sim/blob/master/publications/qomex/poster/poster-A1.pdf)
 
 ### PQS Workshop 2016
 
 [Paper "A Comprehensive End-to-End Lag Model for Online and Cloud Video Gaming"]()
+
 [Presentation slides](https://github.com/mas-ude/onlinegame-lag-sim/blob/master/publications/pqs/presentation/presentation.pdf)
