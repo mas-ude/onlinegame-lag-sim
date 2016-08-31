@@ -5,7 +5,7 @@ This is a small set of R scripts that aim to simulate the end-to-end lag that oc
 
 ## Model
 
-![sim model](https://github.com/mas-ude/onlinegame-lag-sim/raw/master/models/e2e-lag-model.pdf "Game Simulation Model")
+![sim model](https://github.com/mas-ude/onlinegame-lag-sim/raw/master/models/e2e-lag-model.png "Game Simulation Model")
 
 
 ## Simulator
